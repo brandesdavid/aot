@@ -1,0 +1,164 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+class Manager {
+  +grid: Grid
+  +agents: list[Agent]
+  +tick: int
+  +max_ticks: int
+  +item_configs: dict[str, ItemConfig]
+  +agent_type_configs: dict
+  +spawns: dict[str, Spawn]
+  +logger: Logger
+  --
+  +load_model(config: dict)
+  +run()
+  -process_actions()
+  -trigger_agents()
+  -evaporate_pheromones()
+  -check_deaths()
+  -refresh_energy_at_special_fields()
+  -build_perception(agent): dict
+  -apply_action(agent, action): ActionResult
+  -log_tick_summary()
+}
+
+class Parser {
+  +load(filepath: str): dict
+}
+
+class Logger {
+  +output_file: str
+  --
+  +log_food_found(tick, agent_id, x, y)
+  +log_food_delivered(tick, agent_id, src_x, src_y)
+  +log_agent_death(tick, agent_id, x, y)
+  +log_tick_summary(tick, alive, food_at_nest, searchers, carriers)
+  +save()
+}
+
+class Grid {
+  +width: int
+  +height: int
+  +fields: dict[tuple, Field]
+  --
+  +get_field(x, y): Field
+  +get_neighbors(x, y, n): list[Field]
+  +in_bounds(x, y): bool
+  +get_all_fields(): list[Field]
+}
+
+class Field {
+  +x: int
+  +y: int
+  +capacity: int
+  +items: list[ItemInstance]
+  +agents: list[Agent]
+  +spawn_id: str
+  --
+  +is_obstacle(): bool
+  +is_full(): bool
+  +get_pheromone_strength(type): float
+  +get_item_quantity(type): float
+  +add_item(type, quantity)
+  +remove_item(type, quantity): bool
+}
+
+class Spawn {
+  +id: str
+  +name: str
+  +agent_spawn_configs: list[AgentSpawnConfig]
+  --
+  +create_agents(type_configs, spawn_field): list[Agent]
+}
+
+class AgentSpawnConfig {
+  +agent_type_id: str
+  +count: int
+}
+
+class ItemConfig {
+  +id: str
+  +name: str
+  +evaporation_rate: float
+}
+
+class ItemInstance {
+  +item_type: str
+  +quantity: float
+  --
+  +evaporate(rate): bool
+}
+
+class FoodConfig extends ItemConfig
+class NestPheromoneConfig extends ItemConfig
+class FoodPheromoneConfig extends ItemConfig
+
+abstract class Agent {
+  +id: str
+  +energy: int
+  +max_energy: int
+  +position: Field
+  +inbox: list
+  +pending_action: Action
+  +alive: bool
+  --
+  +{abstract} sense(perception: dict)
+  +{abstract} reason()
+  +{abstract} act(): Action
+}
+
+class AntAgent extends Agent {
+  +carrying: str
+  +perception_range: int
+  +pheromone_drop_amount: float
+  --
+  +sense(perception: dict)
+  +reason()
+  +act(): Action
+  -climb_gradient(type, neighbors): Action
+}
+
+abstract class Action {
+  +agent_id: str
+}
+
+class MoveAction extends Action {
+  +dx: int
+  +dy: int
+}
+
+class PickupAction extends Action {
+  +item_type: str
+  +quantity: float
+}
+
+class DropAction extends Action {
+  +item_type: str
+  +quantity: float
+}
+
+class WaitAction extends Action
+
+class ActionResult {
+  +success: bool
+  +action: Action
+  +message: str
+}
+
+Manager --> Grid
+Manager --> "1..*" Agent
+Manager --> Logger
+Manager --> "1..*" Spawn
+Parser ..> Manager : liefert config
+Grid --> "1..*" Field
+Field --> "0..*" ItemInstance
+Field --> "0..1" Spawn : referenziert via spawn_id
+Field --> "0..*" Agent
+Spawn --> "1..*" AgentSpawnConfig
+Agent --> Field : position
+Agent --> "0..1" Action : pending_action
+Manager ..> ActionResult
+
+@enduml

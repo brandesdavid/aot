@@ -1,0 +1,57 @@
+{
+  "experiment": {
+    "id": "exp2_warmstart_gap",
+    "name": "Warm Start",
+    "description": "warmstartexperiment: vorhandene nest-pheromonroute von nahrungsquelle zum nest mit einer absichtlichen lücke (felder 4,4 und 5,5 ohne pheromon). zeigt, ob ameisen die lücke durch zufallsbewegung schließen und die route wiederherstellen. vergleichssimulation ohne lücke: experiment2_warmstart_complete.json.",
+    "max_ticks": 600,
+    "warmstart": true
+  },
+  "item_types": [
+    { "id": "food",           "name": "Nahrung",          "evaporation_rate": 0.0 },
+    { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.3 },
+    { "id": "pheromone_food", "name": "Nahrung-Pheromon", "evaporation_rate": 0.3 }
+  ],
+  "agent_types": [
+    {
+      "id": "ant",
+      "name": "Ameise",
+      "energy": 150,
+      "perception_range": 4,
+      "pheromone_drop_amount": 10.0,
+      "capacity": [
+        { "item_type_id": "food",           "max": 1  },
+        { "item_type_id": "pheromone_nest", "max": -1 },
+        { "item_type_id": "pheromone_food", "max": -1 }
+      ]
+    }
+  ],
+  "spawns": [
+    {
+      "id": "nest_main",
+      "name": "Hauptnest",
+      "agent_spawns": [
+        { "agent_type_id": "ant", "count": 10 }
+      ]
+    }
+  ],
+  "grid": {
+    "width": 12,
+    "height": 12,
+    "default_capacity": 5,
+    "fields": [
+      { "x": 6, "y": 6, "capacity": 999, "spawn_id": "nest_main", "items": [] },
+      { "x": 1, "y": 1, "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 30 }] },
+      { "x": 2, "y": 2, "capacity": 5,   "items": [{ "item_type_id": "pheromone_food", "quantity": 8.0 }] },
+      { "x": 3, "y": 3, "capacity": 5,   "items": [{ "item_type_id": "pheromone_food", "quantity": 8.0 }] },
+      { "x": 6, "y": 6, "capacity": 999, "items": [{ "item_type_id": "pheromone_nest", "quantity": 8.0 }] },
+      { "x": 5, "y": 5, "capacity": 5,   "items": [] },
+      { "x": 4, "y": 4, "capacity": 5,   "items": [] },
+      { "x": 3, "y": 9, "capacity": 0,   "items": [] },
+      { "x": 3, "y": 10, "capacity": 0,  "items": [] }
+    ]
+  },
+  "logging": {
+    "output_file": "logs/exp2_warmstart_gap.jsonl",
+    "events": ["food_found", "food_delivered", "agent_death", "tick_summary"]
+  }
+}

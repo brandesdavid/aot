@@ -1,0 +1,35 @@
+@startuml
+
+participant "Parser" as P
+participant "Manager" as M
+participant "Agent i" as A
+participant "Logger" as L
+
+P -> M: load(config)
+activate M
+M -> M: build_grid()
+M -> M: spawn_agents()
+M -> L: init(output_file)
+
+loop tick = 1 .. max_ticks
+  M -> M: process_actions()\n[Warteschlange aus Vorperiode\nauf Gültigkeit prüfen & ausführen]
+  M -> A: inbox.append(ActionResult)
+  M -> M: evaporate_pheromones()
+  M -> M: check_deaths()
+  M -> M: refresh_energy_at_special_fields()
+  M -> L: log_tick_summary(tick)
+
+  loop jeder lebende Agent i
+    M -> A: trigger(perception)
+    activate A
+    A -> A: sense(perception)
+    A -> A: reason()
+    A -> M: enqueue(action)
+    deactivate A
+  end
+end
+
+M -> L: save()
+deactivate M
+
+@enduml

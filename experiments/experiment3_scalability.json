@@ -1,0 +1,63 @@
+{
+  "experiment": {
+    "id": "exp3_scalability_large",
+    "name": "Skalierung",
+    "description": "skalierungsexperiment: 25x25-grid mit vier weit entfernten nahrungsquellen in den ecken und 30 ameisen. schnellere pheromonverdunstung erzeugt höheren konkurrenzdruck. zeigt grenzen der skalierbarkeit: stabilisieren sich mehrere parallele routen, oder dominiert eine? weitere simulationen variieren ameisenanzahl (10, 20, 39) bei fixem grid.",
+    "max_ticks": 1200,
+    "warmstart": false
+  },
+  "item_types": [
+    { "id": "food",           "name": "Nahrung",          "evaporation_rate": 0.0 },
+    { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 1.0 },
+    { "id": "pheromone_food", "name": "Nahrung-Pheromon", "evaporation_rate": 1.0 }
+  ],
+  "agent_types": [
+    {
+      "id": "ant",
+      "name": "Ameise",
+      "energy": 200,
+      "perception_range": 4,
+      "pheromone_drop_amount": 12.0,
+      "capacity": [
+        { "item_type_id": "food",           "max": 1  },
+        { "item_type_id": "pheromone_nest", "max": -1 },
+        { "item_type_id": "pheromone_food", "max": -1 }
+      ]
+    }
+  ],
+  "spawns": [
+    {
+      "id": "nest_main",
+      "name": "Hauptnest",
+      "agent_spawns": [
+        { "agent_type_id": "ant", "count": 30 }
+      ]
+    }
+  ],
+  "grid": {
+    "width": 25,
+    "height": 25,
+    "default_capacity": 5,
+    "fields": [
+      { "x": 12, "y": 12, "capacity": 999, "spawn_id": "nest_main", "items": [] },
+      { "x": 1,  "y": 1,  "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 40 }] },
+      { "x": 23, "y": 1,  "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 40 }] },
+      { "x": 1,  "y": 23, "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 40 }] },
+      { "x": 23, "y": 23, "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 40 }] },
+      { "x": 8,  "y": 10, "capacity": 0,   "items": [] },
+      { "x": 8,  "y": 11, "capacity": 0,   "items": [] },
+      { "x": 8,  "y": 12, "capacity": 0,   "items": [] },
+      { "x": 8,  "y": 13, "capacity": 0,   "items": [] },
+      { "x": 16, "y": 12, "capacity": 0,   "items": [] },
+      { "x": 16, "y": 13, "capacity": 0,   "items": [] },
+      { "x": 16, "y": 14, "capacity": 0,   "items": [] },
+      { "x": 12, "y": 8,  "capacity": 0,   "items": [] },
+      { "x": 13, "y": 8,  "capacity": 0,   "items": [] },
+      { "x": 14, "y": 8,  "capacity": 0,   "items": [] }
+    ]
+  },
+  "logging": {
+    "output_file": "logs/exp3_scalability_large.jsonl",
+    "events": ["food_found", "food_delivered", "agent_death", "tick_summary"]
+  }
+}

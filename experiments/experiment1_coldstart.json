@@ -1,0 +1,59 @@
+{
+  "experiment": {
+    "id": "exp1_coldstart_basic",
+    "name": "Cold Start",
+    "description": "kaltstartexperiment zur verifikation des algorithmus. 15x15-grid mit zwei hindernisreihen, zwei nahrungsquellen in unterschiedlicher entfernung zum nest im zentrum. drei simulationen mit 5, 10 und 20 ameisen zeigen den einfluss der populationsgrösse auf die versorgungseffizienz. hypothesentest: gibt es eine optimale ameisenanzahl?",
+    "max_ticks": 800,
+    "warmstart": false
+  },
+  "item_types": [
+    { "id": "food",           "name": "Nahrung",          "evaporation_rate": 0.0 },
+    { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.5 },
+    { "id": "pheromone_food", "name": "Nahrung-Pheromon", "evaporation_rate": 0.5 }
+  ],
+  "agent_types": [
+    {
+      "id": "ant",
+      "name": "Ameise",
+      "energy": 120,
+      "perception_range": 4,
+      "pheromone_drop_amount": 10.0,
+      "capacity": [
+        { "item_type_id": "food",           "max": 1  },
+        { "item_type_id": "pheromone_nest", "max": -1 },
+        { "item_type_id": "pheromone_food", "max": -1 }
+      ]
+    }
+  ],
+  "spawns": [
+    {
+      "id": "nest_main",
+      "name": "Hauptnest",
+      "agent_spawns": [
+        { "agent_type_id": "ant", "count": 10 }
+      ]
+    }
+  ],
+  "grid": {
+    "width": 15,
+    "height": 15,
+    "default_capacity": 5,
+    "fields": [
+      { "x": 7,  "y": 7,  "capacity": 999, "spawn_id": "nest_main", "items": [] },
+      { "x": 2,  "y": 2,  "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 25 }] },
+      { "x": 12, "y": 12, "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 25 }] },
+      { "x": 4,  "y": 6,  "capacity": 0,   "items": [] },
+      { "x": 5,  "y": 6,  "capacity": 0,   "items": [] },
+      { "x": 6,  "y": 6,  "capacity": 0,   "items": [] },
+      { "x": 7,  "y": 6,  "capacity": 0,   "items": [] },
+      { "x": 8,  "y": 8,  "capacity": 0,   "items": [] },
+      { "x": 9,  "y": 8,  "capacity": 0,   "items": [] },
+      { "x": 10, "y": 8,  "capacity": 0,   "items": [] },
+      { "x": 11, "y": 8,  "capacity": 0,   "items": [] }
+    ]
+  },
+  "logging": {
+    "output_file": "logs/exp1_coldstart.jsonl",
+    "events": ["food_found", "food_delivered", "agent_death", "tick_summary"]
+  }
+}
