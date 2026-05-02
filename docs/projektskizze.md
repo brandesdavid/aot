@@ -1,41 +1,40 @@
-# projektskizze
-
+# Projektskizze
 TU Berlin -Soße 2026 - Agententechnologien
 
 ---
 
 ## 1. Systemdesign – Klassendiagramm
 
-
 ![klassendiag](klassendiag.png)
 
 
 ### Erläuterung
 
-**Manager** ist der zentrale Koordinator
-- liest die modelldatei per `parser`, baut die gridwelt auf,
--  instanziiert die agenten und steuert den zeittakt.
--  pro takt verarbeitet er zuerst die ausstehenden aktionen, aktualisiert die umgebung (pheromonverdunstung, energieauffrischung, tode) 
-- und triggert dann jeden lebenden agenten für einen neuen sense-reason-act-zyklus. 
-- konflikte nach dem "first come, first served" aufgelöst.
+Der `Manager` ist die zentrale Instanz des Systems.
+Der `Manager` liest die Modelldatei für ein Experiment per `parser` ein und führt die zu dem Experiment gehörenden Simulationen durch. Die relevanten Ereignisse loggt der `Manager` mithilfe des `Logger`.
 
-**grid** ist eine n x   m-matrix von `field`-objekten. koordinatenursprung (0,0) ist unten links.
+Ein `Grid` ist eine n x m-matrix von `field`-objekten. Koordinatenursprung (0,0) ist unten links.
 
-**field** repräsentiert eine zelle. `capacity == 0` bedeutet hindernis. felder mit `spawn_id` sind nester und frischen die energie eintreffender agenten sofort und kostenlos auf.
+Ein `Field` repräsentiert eine Zelle. `capacity == 0` bedeutet Hindernis. Felder mit einer `spawn_id="nest_*"` sind Nester und frischen die Energie eines eintreffenden `AntAgent` sofort und kostenlos auf.
 
-**spawn (nest)** konfiguriert, welche agenten in welcher anzahl erzeugt werden. für diese aufgabe gibt es ein nest, die abstraktion erlaubt mehrere.
+Ein `Spawn` konfiguriert, welche Agenten in welcher Anzahl erzeugt werden. Für diese Aufgabe gibt es ein `Spawn` an dem ausschließlich Ant-Agenten gespawnt werden, die Abstraktion erlaubt mehrere Spawnpunkte und auch, dass verschiedene Agententypen an der gleichen Stelle gespawnt werden können.
 
-**item** ist in drei konkrete konfigurationstypen unterteilt: `foodconfig`, `nestpheromoneconfig`, `foodpheromoneconfig`. zur laufzeit existieren `iteminstance` objekte auf den feldern. pheromone haben eine `evaporation_rate` und werden nach jedem takt vom manager dekrementiert; bei stärke 0 wird die instanz entfernt.
+`ItemInstance` ist nicht ein einzelnes Item, sondern eine Anzahl von Items, da nicht jedes Item einzeln instantiiert wird. Über `item_type` wird definiert um welches Item es sich handelt und in den Subklassen von `ItemConfig` werden die Details zu einem Item definiert. Aktuell sind diese Infos nur `id` (diese dient zum linken zwischen `ItemInstance` und der jeweiligen `ItemConfig`), `name` und `evaporation_rate`.
 
-**agent** ist abstrakt. `antagent` implementiert den reaktiven ameisenalgorithmus. die wahrnehmung umfasst die items auf dem eigenen feld (nahrung, nest) sowie die pheromonwerte der direkten nachbarfelder (4-nachbarschaft). die navigation erfolgt probabilistisch: der agent bewegt sich mit wahrscheinlichkeit 0,8 entlang des stärksten relevanten pheromons, sonst zufällig.
+> Info: Config Klassen wie ItemConfig werden in Python benutzt für Daten, die nur gespeichert werden. In den ItemConfig Subklassen werden lediglich Daten über die Eigenschaften von Items gespeichert, deswegen wurde diese Namenskonvention gewählt.
 
-**action** kapselt die absicht eines agenten. gültige aktionen: `moveaction`, `pickupaction`, `dropaction`, `waitaction`. der manager prüft jede aktion auf gültigkeit und legt das ergebnis (`actionresult`) in die inbox des agenten.
+Die `quantity` von einer `ItemInstance` mit `item_type="food"` wird durch Ant-Agenten dekrementiert. Die `quantity` von einer `ItemInstance` mit `item_type="pheromone_nest"` oder `item_type="pheromone_food"` wird in jedem Zeittakt von dem `Manager` basierend auf ihrer `evaporation_rate` dekrementiert, bei Stärke 0 wird die Pheromonen-Instanz entfernt.
+Es gibt lediglich zwei Pheremonentypen, Food- und Nestpheremone.
+
+Die Klasse `Agent` ist abstrakt, sodass potentiell weitere Agententypen eingeführt werden können. Die konkrete Subklasse `AntAgent` implementiert den reaktiven Ameisenalgorithmus. Die Wahrnehmung umfasst die Items auf dem eigenen Feld sowie die Pheromonwerte der direkten Nachbarfelder (4-Nachbarschaft). Die Navigation erfolgt probabilistisch: Der Agent bewegt sich mit wahrscheinlichkeit 0,8 entlang des stärksten relevanten Pheromons, sonst zufällig.
+
+In einer `Action` steckt die Absicht eines Agenten. Die konkreten Subklassen der abstrakten `Action` Klasse sind: `MoveAction`, `PickupAction`, `DropAction`, `WaitAction`. Der `Manager` prüft jede Aktion auf Gültigkeit und legt das `ActionResult` in die Inbox des Agenten.
 
 ---
 
-## 2. simulationsmodell (json)
+## 2. Simulationsmodell (json)
 
-das folgende beispiel zeigt die struktur der modelldatei für experiment 1. 
+Das folgende Beispiel zeigt die Struktur der Modelldatei für Experiment 1.
 
 ```json
 {
@@ -116,10 +115,10 @@ das folgende beispiel zeigt die struktur der modelldatei für experiment 1.
 }
 ```
 
-felder: die nicht explizit in `fields` aufgeführt sind, erhalten `default_capacity`. 
-hindernisse werden durch `capacity: 0` ausgedrückt. 
+Felder, die nicht explizit in `fields` aufgeführt sind, erhalten die für das Grid definierte `default_capacity`.
+Hindernisse werden durch `capacity: 0` ausgedrückt.
 
-warmstart szenarien können beliebige pheromonmengen auf feldern vorbelegen. das feld `description` dient als experiment-kommentar.
+Warmstart Szenarien können beliebige Pheromonmengen auf Feldern vorbelegen. Das Feld `description` dient dazu, dass durchgeführte Experiment zu beschreiben.
 
 ---
 
@@ -127,26 +126,31 @@ warmstart szenarien können beliebige pheromonmengen auf feldern vorbelegen. das
 
 ![ablaufsim](ablaufsim.png)
 
-### erläuterung
+### Erläuterung
 
-parser übergibt alle konfigurationen an manager, der daraus gridwelt und agenten aufbaut. in jedem takt verarbeitet manager zuerst die aktionswarteschlange aus vorperiode, validiert jede aktion und legt das ergebnis in die inbox des jeweiligen agenten. danach erfolgen pheromonverdunstung, todeskontrolle und energieauffrischung bei nestern und nahrungsfeldern. anschließend triggert manager sequenziell jeden lebenden agenten: dieser liest seine wahrnehmung (inklusive inbox-feedback), entscheidet probabilistisch und stellt die nächste aktion in die warteschlange. logger erhält nach jedem takt eine zusammenfassung.
-
----
-
-## 4. Loggin
-
-geloggt wird im jsonl-format (eine json-zeile pro ereignis). folgende ereignisse werden erfasst:
-
-1. `food_found`: zeittakt, agent-id, position der nahrungsquelle
-2. `food_delivered`: zeittakt, agent-id, ursprungsposition der nahrung
-3. `agent_death`: zeittakt, agent-id, letzte position
-4. `tick_summary`: zeittakt, anzahl lebender agenten, gesamtnahrung im nest, anzahl nahrungssucher, anzahl nahrungsträger
-
-
+`Parser` übergibt alle Konfigurationen an den `Manager`, der daraus die Gridwelt aufbaut und die Agenten spawnt.
+In jedem Takt verarbeitet der `Manager` zuerst die Aktionswarteschlange aus der Vorperiode indem er jede Aktion validiert und das Ergebnis in die Inbox des jeweiligen Agenten legt.
+Konflikte zwischen den Aktionen werden nach dem First-Come-First-Serve Prinzip aufgelöst.
+Anschließend erfolgen Pheromonverdunstung, Todeskontrolle und Energieauffrischung für alle Ant-Agenten, die sich beim Nest oder bei einem Nahrungsfeld befinden. Zu guter Letzt triggert der Manager sequenziell jeden lebenden `Agent i`, sodass dieser seinen Sense-Reason-Act-Zyklus durchführt.
+`Agent i` liest seine Wahrnehmung (inklusive Inbox-Feedback), entscheidet probabilistisch und stellt die nächste Aktion in die Warteschlange. Somit wird die in Zyklus /k/ von `Agent i` beschlossene Aktion erst in Zyklus /k+1/ von dem `Manager` ausgeführt (oder als ungültig zurückgewiesen).
+Der `Logger` erhält nach jedem Takt eine Zusammenfassung.
 
 ---
 
-## 5. forschungsfrage
+## 4. Logging
+
+Geloggt wird im jsonl-format (eine json-Zeile pro Ereignis). Folgende Ereignisse werden erfasst:
+
+1. `food_found`: zeittakt, agent-id, position der nahrungsquelle ("Ant Agent hat Nahrung aufgenommen")
+2. `food_delivered`: zeittakt, agent-id, ursprungsposition der nahrung ("Ant Agent hat Nahrung im Nest abgelegt")
+3. `agent_death`: zeittakt, agent-id, letzte position ("Ant Agent ist gestorben")
+4. `tick_summary`: zeittakt, anzahl lebender agenten, gesamtnahrung im nest, anzahl nahrungssucher, anzahl nahrungsträger ("Ein Zeittakt ist vorbei")
+
+
+
+---
+
+## 5. Forschungsfrage
 
 Was ist der Zusammenhang mit der Größe des Ameisenarmees und der Lebensdauer einer Ameise, bspw. 1 Ameise mit 1000 Lebenszyklen vs 1000 Ameisen mit 1 Lebenszyklus
 
