@@ -9,17 +9,21 @@ def main() -> None:
         print("Usage: python main.py <experiment.json>")
         sys.exit(1)
 
-    config = Parser.load(sys.argv[1])
-    manager = Manager()
-    manager.load_model(config)
+    configs = Parser.load(sys.argv[1])
+    exp = configs[0].get("experiment", {}) if configs else {}
+    print(f"Experiment: {exp.get('name', 'Unnamed')} ({len(configs)} simulation(s))\n")
 
-    exp = config.get("experiment", {})
-    print(f"Running: {exp.get('name', 'Unnamed')} ({exp.get('max_ticks', '?')} ticks)")
+    for config in configs:
+        sim = config.get("simulation", {})
+        sim_name = sim.get("name") or sim.get("id", "Unnamed")
+        print(f"  Running: {sim_name} ({config.get('experiment', {}).get('max_ticks', '?')} ticks)")
 
-    manager.run()
+        manager = Manager()
+        manager.load_model(config)
+        manager.run()
 
-    log_file = manager.logger.output_file if manager.logger else "N/A"
-    print(f"Done. Log: {log_file}")
+        log_file = manager.logger.output_file if manager.logger else "N/A"
+        print(f"  Done.    Log: {log_file}")
 
 
 if __name__ == "__main__":

@@ -1,8 +1,8 @@
 {
   "experiment": {
-    "id": "exp3_scalability_large",
+    "id": "exp3_scalability",
     "name": "Skalierung",
-    "description": "skalierungsexperiment: 25x25-grid mit vier weit entfernten nahrungsquellen in den ecken und 30 ameisen. schnellere pheromonverdunstung erzeugt höheren konkurrenzdruck. zeigt grenzen der skalierbarkeit: stabilisieren sich mehrere parallele routen, oder dominiert eine? weitere simulationen variieren ameisenanzahl (10, 20, 39) bei fixem grid.",
+    "description": "Skalierungsexperiment: 25x25-Grid mit vier Nahrungsquellen in den Ecken. Schnellere Pheromonverdunstung erzeugt höheren Konkurrenzdruck. Vier Simulationen mit 10, 20, 30 und 39 Ameisen zeigen die Grenzen der Skalierbarkeit: stabilisieren sich mehrere parallele Routen, oder dominiert eine?",
     "max_ticks": 1200,
     "warmstart": false
   },
@@ -57,7 +57,33 @@
     ]
   },
   "logging": {
-    "output_file": "logs/exp3_scalability_large.jsonl",
     "events": ["food_found", "food_delivered", "agent_death", "tick_summary"]
-  }
+  },
+  "simulations": [
+    {
+      "id": "sim_10ants",
+      "name": "10 Ameisen",
+      "spawns": [
+        { "id": "nest_main", "name": "Hauptnest", "agent_spawns": [{ "agent_type_id": "ant", "count": 10 }] }
+      ]
+    },
+    {
+      "id": "sim_20ants",
+      "name": "20 Ameisen",
+      "spawns": [
+        { "id": "nest_main", "name": "Hauptnest", "agent_spawns": [{ "agent_type_id": "ant", "count": 20 }] }
+      ]
+    },
+    {
+      "id": "sim_30ants",
+      "name": "30 Ameisen"
+    },
+    {
+      "id": "sim_39ants",
+      "name": "39 Ameisen",
+      "spawns": [
+        { "id": "nest_main", "name": "Hauptnest", "agent_spawns": [{ "agent_type_id": "ant", "count": 39 }] }
+      ]
+    }
+  ]
 }

@@ -1,8 +1,8 @@
 {
   "experiment": {
     "id": "exp1_coldstart_basic",
-    "name": "Cold Start",
-    "description": "kaltstartexperiment zur verifikation des algorithmus. 15x15-grid mit zwei hindernisreihen, zwei nahrungsquellen in unterschiedlicher entfernung zum nest im zentrum. drei simulationen mit 5, 10 und 20 ameisen zeigen den einfluss der populationsgrösse auf die versorgungseffizienz. hypothesentest: gibt es eine optimale ameisenanzahl?",
+    "name": "Experiment 1: Cold Start – Grundlegende Nahrungsversorgung",
+    "description": "Kaltstartexperiment zur Verifikation des Algorithmus. 15x15-Grid mit Hindernisreihen, zwei Nahrungsquellen in unterschiedlicher Entfernung zum Nest. Drei Simulationen mit 5, 10 und 20 Ameisen zeigen den Einfluss der Populationsgröße auf die Versorgungseffizienz.",
     "max_ticks": 800,
     "warmstart": false
   },
@@ -45,15 +45,32 @@
       { "x": 4,  "y": 6,  "capacity": 0,   "items": [] },
       { "x": 5,  "y": 6,  "capacity": 0,   "items": [] },
       { "x": 6,  "y": 6,  "capacity": 0,   "items": [] },
-      { "x": 7,  "y": 6,  "capacity": 0,   "items": [] },
       { "x": 8,  "y": 8,  "capacity": 0,   "items": [] },
       { "x": 9,  "y": 8,  "capacity": 0,   "items": [] },
-      { "x": 10, "y": 8,  "capacity": 0,   "items": [] },
-      { "x": 11, "y": 8,  "capacity": 0,   "items": [] }
+      { "x": 10, "y": 8,  "capacity": 0,   "items": [] }
     ]
   },
   "logging": {
-    "output_file": "logs/exp1_coldstart.jsonl",
     "events": ["food_found", "food_delivered", "agent_death", "tick_summary"]
-  }
+  },
+  "simulations": [
+    {
+      "id": "sim_5ants",
+      "name": "5 Ameisen",
+      "spawns": [
+        { "id": "nest_main", "name": "Hauptnest", "agent_spawns": [{ "agent_type_id": "ant", "count": 5 }] }
+      ]
+    },
+    {
+      "id": "sim_10ants",
+      "name": "10 Ameisen"
+    },
+    {
+      "id": "sim_20ants",
+      "name": "20 Ameisen",
+      "spawns": [
+        { "id": "nest_main", "name": "Hauptnest", "agent_spawns": [{ "agent_type_id": "ant", "count": 20 }] }
+      ]
+    }
+  ]
 }

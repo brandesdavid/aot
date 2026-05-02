@@ -91,9 +91,28 @@ das folgende beispiel zeigt die struktur der modelldatei für experiment 1.
     ]
   },
   "logging": {
-    "output_file": "logs/exp1_coldstart.jsonl",
     "events": ["food_found", "food_delivered", "agent_death", "tick_summary"]
-  }
+  },
+  "simulations": [
+    {
+      "id": "sim_5ants",
+      "name": "5 Ameisen",
+      "spawns": [
+        { "id": "nest_main", "name": "Hauptnest", "agent_spawns": [{ "agent_type_id": "ant", "count": 5 }] }
+      ]
+    },
+    {
+      "id": "sim_10ants",
+      "name": "10 Ameisen"
+    },
+    {
+      "id": "sim_20ants",
+      "name": "20 Ameisen",
+      "spawns": [
+        { "id": "nest_main", "name": "Hauptnest", "agent_spawns": [{ "agent_type_id": "ant", "count": 20 }] }
+      ]
+    }
+  ]
 }
 ```
 

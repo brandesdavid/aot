@@ -1,8 +1,8 @@
 {
   "experiment": {
-    "id": "exp2_warmstart_gap",
+    "id": "exp2_warmstart",
     "name": "Warm Start",
-    "description": "warmstartexperiment: vorhandene nest-pheromonroute von nahrungsquelle zum nest mit einer absichtlichen lücke (felder 4,4 und 5,5 ohne pheromon). zeigt, ob ameisen die lücke durch zufallsbewegung schließen und die route wiederherstellen. vergleichssimulation ohne lücke: experiment2_warmstart_complete.json.",
+    "description": "Warmstartexperiment: vorhandene Pheromon-Route von der Nahrungsquelle zum Nest. Zwei Simulationen: eine mit vollständiger Route, eine mit einer absichtlichen Lücke bei (4,4) und (5,5). Zeigt, ob Ameisen die Lücke durch Zufallsbewegung schließen und die Route wiederherstellen.",
     "max_ticks": 600,
     "warmstart": true
   },
@@ -39,19 +39,39 @@
     "height": 12,
     "default_capacity": 5,
     "fields": [
-      { "x": 6, "y": 6, "capacity": 999, "spawn_id": "nest_main", "items": [] },
+      { "x": 6, "y": 6, "capacity": 999, "spawn_id": "nest_main", "items": [{ "item_type_id": "pheromone_nest", "quantity": 8.0 }] },
       { "x": 1, "y": 1, "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 30 }] },
       { "x": 2, "y": 2, "capacity": 5,   "items": [{ "item_type_id": "pheromone_food", "quantity": 8.0 }] },
       { "x": 3, "y": 3, "capacity": 5,   "items": [{ "item_type_id": "pheromone_food", "quantity": 8.0 }] },
-      { "x": 6, "y": 6, "capacity": 999, "items": [{ "item_type_id": "pheromone_nest", "quantity": 8.0 }] },
-      { "x": 5, "y": 5, "capacity": 5,   "items": [] },
-      { "x": 4, "y": 4, "capacity": 5,   "items": [] },
+      { "x": 4, "y": 4, "capacity": 5,   "items": [{ "item_type_id": "pheromone_food", "quantity": 8.0 }] },
+      { "x": 5, "y": 5, "capacity": 5,   "items": [{ "item_type_id": "pheromone_food", "quantity": 8.0 }] },
       { "x": 3, "y": 9, "capacity": 0,   "items": [] },
       { "x": 3, "y": 10, "capacity": 0,  "items": [] }
     ]
   },
   "logging": {
-    "output_file": "logs/exp2_warmstart_gap.jsonl",
     "events": ["food_found", "food_delivered", "agent_death", "tick_summary"]
-  }
+  },
+  "simulations": [
+    {
+      "id": "sim_complete",
+      "name": "Vollständige Route"
+    },
+    {
+      "id": "sim_gap",
+      "name": "Route mit Lücke",
+      "grid": {
+        "fields": [
+          { "x": 6, "y": 6, "capacity": 999, "spawn_id": "nest_main", "items": [{ "item_type_id": "pheromone_nest", "quantity": 8.0 }] },
+          { "x": 1, "y": 1, "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 30 }] },
+          { "x": 2, "y": 2, "capacity": 5,   "items": [{ "item_type_id": "pheromone_food", "quantity": 8.0 }] },
+          { "x": 3, "y": 3, "capacity": 5,   "items": [{ "item_type_id": "pheromone_food", "quantity": 8.0 }] },
+          { "x": 4, "y": 4, "capacity": 5,   "items": [] },
+          { "x": 5, "y": 5, "capacity": 5,   "items": [] },
+          { "x": 3, "y": 9, "capacity": 0,   "items": [] },
+          { "x": 3, "y": 10, "capacity": 0,  "items": [] }
+        ]
+      }
+    }
+  ]
 }
