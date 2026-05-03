@@ -158,6 +158,23 @@ Geloggt wird im jsonl-format (eine json-Zeile pro Ereignis). Folgende Ereignisse
 
 Sind wenige Ameisen mit höherer Maximalenergie effizienter in der Ausbeutung der Nahrungsquellen als eine größere Anzahl an Ameisen mit geringerer Maximalenergie?
 
-**simulation 1 1000 Ameisen mit Energiekapazität x:** 
-**simulation 2 5 Ameisen mit 5000 Energiekapazität:** 
-**simulation 3 500 Ameisen mit Energiekapazität y:** 
+Für jedes Experiment wird ein Grid mit der Größe 20x20 erzeugt und das Nest in der Mitte, auf dem Feld (10,10), platziert.
+Um zu berücksichtigen, dass mehr Ameisen, mehr Futter tragen können, sind die Futterquellen jeweils so groß wie die Ameisenkolonie.
+Die 3 Simulationen pro Experiment unterscheiden sich ausschließlich in der Anzahl der Ameisen und in dem maximalen Energievorrat jeder Ameise (und der aus der Anzahl der Ameisen abgeleiteten Größe einer Futterquelle).
+
+1. Simulation: 5 Ameisen mit einem maximalen Energievorrat von 160
+2. Simulation: 10 Ameisen mit einem maximalen Energievorrat von 80
+3. Simulation: 40 Ameisen mit einem maximalen Energievorrat von 20
+
+> Info: Ameisen haben einen Energievorrat von mindestens 20 damit sie bei einem 20x20 Grid (wo das Nest in der Mitte platziert ist) potentiel eine Futterquelle in einem Eckfeld findenkönnen.
+
+Experiment 1:
+Es gibt keine Hindernisse und 4 Futterquellen werden per Zufall auf dem Grid platziert.
+
+Experiment 2:
+Es gibt feste Positionen für 4 Futterquellen und es werden 4 Hindernisse zufällig auf dem Grid platziert.
+
+Experiment 3:
+Es gibt keine Hindernisse und 10 Futterquellen werden per Zufall auf dem Grid platziert.
+
+Zwischen den Simulationen wird die benötigte Zeit zur kompletten Ausbeutung der Futterquellen verglichen.
