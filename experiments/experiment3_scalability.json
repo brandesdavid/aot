@@ -1,21 +1,22 @@
 {
+  "_comment": "Experiment 3 – Skalierbarkeit: 25×25-Grid mit vier Nahrungsquellen in den Ecken (je 22 Schritte Manhattan vom Nest). Jede Quelle hat 50 Einheiten. Asymmetrische Hindernismauern um das Nest erzeugen Engpässe. Vier Simulationen mit 10, 20, 30 und 39 Ameisen zeigen Chancen und Grenzen der Skalierung: Kleine Populationen (10) finden kaum Ecken in akzeptabler Zeit. Mittlere (20-30) bauen parallele Routen zu mehreren Quellen auf. Größere (39) zeigen Konkurrenz um Engpassfelder und mögliche Trail-Interferenz. Verdunstungsrate 0,04 ist bewusst moderat: Spuren brauchen regelmäßige Verstärkung, bleiben aber stabil genug für parallele Routen.",
   "experiment": {
     "id": "exp3_scalability",
-    "name": "Skalierung",
-    "description": "Skalierungsexperiment: 25x25-Grid mit vier Nahrungsquellen in den Ecken. Schnellere Pheromonverdunstung erzeugt höheren Konkurrenzdruck. Vier Simulationen mit 10, 20, 30 und 39 Ameisen zeigen die Grenzen der Skalierbarkeit: stabilisieren sich mehrere parallele Routen, oder dominiert eine?",
-    "max_ticks": 1200,
+    "name": "Experiment 3: Skalierbarkeit – Populationsgröße vs. Nahrungsausbeute",
+    "description": "Skalierungsexperiment auf 25×25-Grid mit vier Ecknahrungsquellen (je 22 Schritte Manhattan vom Nest). Stärke: Mehr Ameisen parallelisieren die Erkundung und bauen mehrere stabile Routen gleichzeitig auf. Schwäche: Bei 39 Ameisen entstehen Engpässe an den Hindernismauern; konkurrierende Pheromonspuren interferieren miteinander. Zeigt Skalierungsvorteil bis ~30 Ameisen und Diminishing Returns darüber hinaus.",
+    "max_ticks": 1500,
     "warmstart": false
   },
   "item_types": [
-    { "id": "food",           "name": "Nahrung",          "evaporation_rate": 0.0 },
-    { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 1.0 },
-    { "id": "pheromone_food", "name": "Nahrung-Pheromon", "evaporation_rate": 1.0 }
+    { "id": "food",           "name": "Nahrung",          "evaporation_rate": 0.0  },
+    { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.04 },
+    { "id": "pheromone_food", "name": "Nahrung-Pheromon", "evaporation_rate": 0.04 }
   ],
   "agent_types": [
     {
       "id": "ant",
       "name": "Ameise",
-      "energy": 200,
+      "energy": 500,
       "perception_range": 4,
       "pheromone_drop_amount": 12.0,
       "capacity": [
@@ -40,20 +41,24 @@
     "default_capacity": 5,
     "fields": [
       { "x": 12, "y": 12, "capacity": 999, "spawn_id": "nest_main", "items": [] },
-      { "x": 1,  "y": 1,  "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 40 }] },
-      { "x": 23, "y": 1,  "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 40 }] },
-      { "x": 1,  "y": 23, "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 40 }] },
-      { "x": 23, "y": 23, "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 40 }] },
+      { "x": 1,  "y": 1,  "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 50 }] },
+      { "x": 23, "y": 1,  "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 50 }] },
+      { "x": 1,  "y": 23, "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 50 }] },
+      { "x": 23, "y": 23, "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 50 }] },
       { "x": 8,  "y": 10, "capacity": 0,   "items": [] },
       { "x": 8,  "y": 11, "capacity": 0,   "items": [] },
       { "x": 8,  "y": 12, "capacity": 0,   "items": [] },
       { "x": 8,  "y": 13, "capacity": 0,   "items": [] },
+      { "x": 16, "y": 11, "capacity": 0,   "items": [] },
       { "x": 16, "y": 12, "capacity": 0,   "items": [] },
       { "x": 16, "y": 13, "capacity": 0,   "items": [] },
       { "x": 16, "y": 14, "capacity": 0,   "items": [] },
+      { "x": 11, "y": 8,  "capacity": 0,   "items": [] },
       { "x": 12, "y": 8,  "capacity": 0,   "items": [] },
       { "x": 13, "y": 8,  "capacity": 0,   "items": [] },
-      { "x": 14, "y": 8,  "capacity": 0,   "items": [] }
+      { "x": 12, "y": 16, "capacity": 0,   "items": [] },
+      { "x": 13, "y": 16, "capacity": 0,   "items": [] },
+      { "x": 14, "y": 16, "capacity": 0,   "items": [] }
     ]
   },
   "logging": {

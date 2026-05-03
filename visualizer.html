@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ant Simulation Visualizer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f1f3f4;
+      color: #202124;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Loader ── */
+    #loader {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    #loader h1 { font-size: 26px; font-weight: 500; }
+    #loader p  { color: #5f6368; font-size: 13px; }
+    #loader code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      background: #e8eaed;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #202124;
+    }
+
+    .drop-zone {
+      width: 380px;
+      height: 160px;
+      border: 2px dashed #dadce0;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .drop-zone:hover, .drop-zone.over {
+      border-color: #1a73e8;
+      background: #f8fbff;
+    }
+
+    .drop-zone-icon {
+      width: 40px;
+      height: 40px;
+      color: #9aa0a6;
+    }
+
+    .drop-zone-label    { font-size: 14px; color: #5f6368; }
+    .drop-zone-sublabel { font-size: 12px; color: #9aa0a6; }
+
+    #file-input { display: none; }
+
+    .btn {
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 9px 22px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .btn:hover { background: #1557b0; }
+
+    /* ── Viewer ── */
+    #viewer { flex: 1; display: none; flex-direction: column; overflow: hidden; }
+
+    #header {
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+      min-height: 44px;
+    }
+
+    #header-title { font-size: 15px; font-weight: 500; }
+    #exp-name     { color: #5f6368; font-size: 13px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .badge {
+      background: #e8f0fe;
+      color: #1a73e8;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .btn-sm {
+      background: none;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      color: #5f6368;
+      flex-shrink: 0;
+    }
+    .btn-sm:hover { background: #f1f3f4; }
+
+    /* ── Main layout ── */
+    #main {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    #grid-panel {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      overflow: hidden;
+      padding: 12px;
+      position: relative;
+    }
+
+    #grid-canvas {
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    #no-grid-msg {
+      text-align: center;
+      color: #5f6368;
+      font-size: 13px;
+      line-height: 1.8;
+      display: none;
+    }
+    #no-grid-msg code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      background: #f1f3f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #202124;
+    }
+
+    /* ── Stats panel ── */
+    #stats-panel {
+      width: 210px;
+      flex-shrink: 0;
+      background: #f8f9fa;
+      border-left: 1px solid #e0e0e0;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: #9aa0a6;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 6px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      padding: 2px 0;
+    }
+    .stat-label { color: #5f6368; }
+    .stat-value { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+    .divider { height: 1px; background: #e0e0e0; flex-shrink: 0; }
+
+    /* Chart */
+    #chart-wrap {
+      position: relative;
+      height: 70px;
+    }
+    #chart-canvas { width: 100%; height: 100%; display: block; }
+
+    /* Events */
+    #events-list {
+      max-height: 130px;
+      overflow-y: auto;
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .ev-row {
+      display: flex;
+      gap: 5px;
+      align-items: baseline;
+      padding: 1px 0;
+    }
+    .ev-tag {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      padding: 1px 4px;
+      border-radius: 3px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .ev-food_found    .ev-tag { background: #e6f4ea; color: #1e8449; }
+    .ev-food_delivered .ev-tag { background: #e8f0fe; color: #1a73e8; }
+    .ev-agent_death   .ev-tag { background: #fce8e6; color: #c5221f; }
+    .ev-detail { color: #5f6368; }
+
+    /* Legend */
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      color: #5f6368;
+      padding: 2px 0;
+    }
+    .leg-swatch {
+      width: 13px;
+      height: 13px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .leg-circle {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Controls ── */
+    #controls {
+      background: #263238;
+      color: #cfd8dc;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .ctrl-btn {
+      background: none;
+      border: none;
+      color: #cfd8dc;
+      cursor: pointer;
+      padding: 4px 7px;
+      border-radius: 4px;
+      font-size: 15px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .ctrl-btn:hover { background: rgba(255,255,255,0.1); }
+    .ctrl-btn:disabled { opacity: 0.35; cursor: default; }
+
+    #tick-slider {
+      flex: 1;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #455a64;
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+      min-width: 0;
+    }
+    #tick-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #81d4fa;
+      cursor: pointer;
+    }
+    #tick-slider::-moz-range-thumb {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #81d4fa;
+      cursor: pointer;
+      border: none;
+    }
+
+    #tick-display {
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+      color: #81d4fa;
+      white-space: nowrap;
+      min-width: 90px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .speed-label { font-size: 11px; color: #78909c; flex-shrink: 0; }
+
+    #speed-select {
+      background: #37474f;
+      border: none;
+      color: #cfd8dc;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════ LOADER ══════════════════════════════ -->
+<div id="loader">
+  <h1>Ant Simulation Visualizer</h1>
+  <p>Benötigt eine JSONL-Logdatei mit <code>grid_state</code>-Events</p>
+
+  <div class="drop-zone" id="drop-zone">
+    <svg class="drop-zone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+      <path d="M12 11v5m0 0l-2-2m2 2l2-2"/>
+    </svg>
+    <div class="drop-zone-label">JSONL-Logdatei hier ablegen</div>
+    <div class="drop-zone-sublabel">oder klicken zum Ausw&#228;hlen</div>
+  </div>
+
+  <button class="btn" onclick="document.getElementById('file-input').click()">Datei ausw&#228;hlen</button>
+  <p>Tipp: <code>python main.py experiments/experiment1_coldstart.json --visual</code></p>
+  <input type="file" id="file-input" accept=".jsonl,.json">
+</div>
+
+<!-- ══════════════════════════════ VIEWER ══════════════════════════════ -->
+<div id="viewer">
+
+  <div id="header">
+    <span id="header-title">Ant Simulation Visualizer</span>
+    <span id="exp-name">&#8211;</span>
+    <span class="badge" id="grid-badge">&#8211;</span>
+    <button class="btn-sm" onclick="resetToLoader()">&#8592; Neue Datei</button>
+  </div>
+
+  <div id="main">
+
+    <div id="grid-panel">
+      <canvas id="grid-canvas"></canvas>
+      <div id="no-grid-msg">
+        <p>Diese Logdatei enth&#228;lt keine <code>grid_state</code>-Events.</p>
+        <p>Simulation erneut ausf&#252;hren mit:</p>
+        <p><code>python main.py experiment.json --visual</code></p>
+      </div>
+    </div>
+
+    <div id="stats-panel">
+
+      <div>
+        <div class="section-title">Tick-Status</div>
+        <div class="stat-row"><span class="stat-label">Alive</span><span class="stat-value" id="s-alive">&#8211;</span></div>
+        <div class="stat-row"><span class="stat-label">Sucher</span><span class="stat-value" id="s-searchers">&#8211;</span></div>
+        <div class="stat-row"><span class="stat-label">Tr&#228;ger</span><span class="stat-value" id="s-carriers">&#8211;</span></div>
+        <div class="stat-row"><span class="stat-label">Nahrung im Nest</span><span class="stat-value" id="s-food">&#8211;</span></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div>
+        <div class="section-title">Nahrungsverlauf</div>
+        <div id="chart-wrap"><canvas id="chart-canvas"></canvas></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div>
+        <div class="section-title">Events dieses Ticks</div>
+        <div id="events-list"><span style="color:#9aa0a6;">&#8211;</span></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div>
+        <div class="section-title">Legende</div>
+        <div class="legend-row"><div class="leg-swatch" style="background:#1a73e8;"></div><span>Nest</span></div>
+        <div class="legend-row"><div class="leg-swatch" style="background:#2e7d32;"></div><span>Nahrung (voll)</span></div>
+        <div class="legend-row"><div class="leg-swatch" style="background:#a5d6a7;"></div><span>Nahrung (leer)</span></div>
+        <div class="legend-row"><div class="leg-swatch" style="background:#37474f;"></div><span>Hindernis</span></div>
+        <div class="legend-row"><div class="leg-swatch" style="background:rgba(25,118,210,0.5); border:1px solid #c5cae9;"></div><span>Nest-Pheromon</span></div>
+        <div class="legend-row"><div class="leg-swatch" style="background:rgba(251,140,0,0.5); border:1px solid #ffe0b2;"></div><span>Nahrung-Pheromon</span></div>
+        <div class="legend-row"><div class="leg-circle" style="background:#fff; border:2px solid #616161;"></div><span>Sucher</span></div>
+        <div class="legend-row"><div class="leg-circle" style="background:#fb8c00; border:2px solid #bf360c;"></div><span>Tr&#228;ger</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="controls">
+    <button class="ctrl-btn" id="prev-btn" title="Vorheriger Tick (Pfeiltaste links)">&#9664;</button>
+    <button class="ctrl-btn" id="play-btn" title="Play / Pause (Leertaste)">&#9654;</button>
+    <button class="ctrl-btn" id="next-btn" title="N&#228;chster Tick (Pfeiltaste rechts)">&#9654;&#9654;</button>
+    <input type="range" id="tick-slider" min="1" max="1" value="1" step="1">
+    <span id="tick-display">Tick 1 / 1</span>
+    <span class="speed-label">Speed:</span>
+    <select id="speed-select">
+      <option value="500">0.5&#215;</option>
+      <option value="250">1&#215;</option>
+      <option value="100" selected>2&#215;</option>
+      <option value="40">5&#215;</option>
+      <option value="10">20&#215;</option>
+      <option value="0">Max</option>
+    </select>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// State
+// ══════════════════════════════════════════════════════════════
+const state = {
+  summaries:   {},   // tick -> { alive, food_at_nest, searchers, carriers }
+  gridStates:  {},   // tick -> { w, h, fields: [], agents: [] }
+  tickEvents:  {},   // tick -> [event, ...]
+  maxTick:     0,
+  currentTick: 1,
+  hasGrid:     false,
+  maxPhNest:   1,
+  maxPhFood:   1,
+};
+
+let playing    = false;
+let playTimer  = null;
+let cellSize   = 24;
+
+// ══════════════════════════════════════════════════════════════
+// Parse JSONL
+// ══════════════════════════════════════════════════════════════
+function parseLog(text) {
+  state.summaries  = {};
+  state.gridStates = {};
+  state.tickEvents = {};
+  state.maxTick    = 0;
+  state.hasGrid    = false;
+  state.maxPhNest  = 1;
+  state.maxPhFood  = 1;
+
+  const lines = text.split('\n');
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    let ev;
+    try { ev = JSON.parse(trimmed); } catch { continue; }
+
+    const t = ev.tick;
+    if (!t) continue;
+    if (t > state.maxTick) state.maxTick = t;
+
+    if (ev.event === 'grid_state') {
+      state.hasGrid = true;
+      state.gridStates[t] = { w: ev.w, h: ev.h, fields: ev.fields || [], agents: ev.agents || [] };
+      for (const f of (ev.fields || [])) {
+        if ((f.pn || 0) > state.maxPhNest) state.maxPhNest = f.pn;
+        if ((f.pf || 0) > state.maxPhFood) state.maxPhFood = f.pf;
+      }
+    } else if (ev.event === 'tick_summary') {
+      state.summaries[t] = {
+        alive: ev.alive,
+        food_at_nest: ev.food_at_nest,
+        searchers: ev.searchers,
+        carriers: ev.carriers,
+      };
+    } else {
+      if (!state.tickEvents[t]) state.tickEvents[t] = [];
+      state.tickEvents[t].push(ev);
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// Grid rendering
+// ══════════════════════════════════════════════════════════════
+function renderGrid(tick) {
+  const gs = state.gridStates[tick];
+  if (!gs) return;
+
+  const canvas = document.getElementById('grid-canvas');
+  const ctx    = canvas.getContext('2d');
+  const { w, h } = gs;
+  const pad    = 1;
+  const sz     = cellSize - pad;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const fieldMap = {};
+  for (const f of gs.fields) fieldMap[f.x + ',' + f.y] = f;
+
+  // Draw cells
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const px = x * cellSize;
+      const py = y * cellSize;
+      const f  = fieldMap[x + ',' + y];
+
+      if (!f) {
+        ctx.fillStyle = '#e0e4e8';
+        ctx.fillRect(px, py, sz, sz);
+        continue;
+      }
+
+      if (f.obs) {
+        ctx.fillStyle = '#37474f';
+        ctx.fillRect(px, py, sz, sz);
+        continue;
+      }
+
+      if (f.nest) {
+        ctx.fillStyle = '#1a73e8';
+        ctx.fillRect(px, py, sz, sz);
+      } else if (f.food > 0) {
+        const ratio = Math.min(f.food / 25, 1);
+        const r = Math.round(46  + (165 - 46)  * (1 - ratio));
+        const g = Math.round(125 + (210 - 125) * (1 - ratio));
+        const b = Math.round(46  + (180 - 46)  * (1 - ratio));
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
+        ctx.fillRect(px, py, sz, sz);
+      } else {
+        ctx.fillStyle = '#e0e4e8';
+        ctx.fillRect(px, py, sz, sz);
+      }
+
+      // Pheromone overlays
+      if (f.pn > 0) {
+        const a = Math.min(f.pn / state.maxPhNest, 1) * 0.6;
+        ctx.fillStyle = `rgba(25,118,210,${a.toFixed(3)})`;
+        ctx.fillRect(px, py, sz, sz);
+      }
+      if (f.pf > 0) {
+        const a = Math.min(f.pf / state.maxPhFood, 1) * 0.6;
+        ctx.fillStyle = `rgba(251,140,0,${a.toFixed(3)})`;
+        ctx.fillRect(px, py, sz, sz);
+      }
+    }
+  }
+
+  // Subtle grid lines
+  ctx.strokeStyle = 'rgba(0,0,0,0.07)';
+  ctx.lineWidth = 0.5;
+  for (let x = 0; x <= w; x++) {
+    ctx.beginPath(); ctx.moveTo(x * cellSize, 0); ctx.lineTo(x * cellSize, h * cellSize); ctx.stroke();
+  }
+  for (let y = 0; y <= h; y++) {
+    ctx.beginPath(); ctx.moveTo(0, y * cellSize); ctx.lineTo(w * cellSize, y * cellSize); ctx.stroke();
+  }
+
+  // Group agents by cell
+  const byPos = {};
+  for (const a of gs.agents) {
+    const key = a.x + ',' + a.y;
+    if (!byPos[key]) byPos[key] = { searchers: 0, carriers: 0, list: [] };
+    if (a.c) byPos[key].carriers++; else byPos[key].searchers++;
+    byPos[key].list.push(a);
+  }
+
+  const r0 = Math.max(2.5, cellSize * 0.21);
+
+  for (const [key, group] of Object.entries(byPos)) {
+    const [ax, ay] = key.split(',').map(Number);
+    const cx = ax * cellSize + cellSize / 2;
+    const cy = ay * cellSize + cellSize / 2;
+    const total = group.list.length;
+
+    if (total === 1) {
+      drawAgentDot(ctx, cx, cy, r0, group.list[0].c != null);
+    } else {
+      const positions = spreadPositions(cx, cy, Math.min(total, 7), r0 * 1.4);
+      const sorted = [...group.list].sort((a, b) => (b.c != null) - (a.c != null));
+      for (let i = 0; i < positions.length; i++) {
+        drawAgentDot(ctx, positions[i].x, positions[i].y, r0 * 0.8, sorted[i] && sorted[i].c != null);
+      }
+      if (total > 7) {
+        ctx.fillStyle = '#212121';
+        ctx.font = `bold ${Math.max(8, Math.floor(cellSize * 0.28))}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('+' + (total - 7), cx, cy);
+      }
+    }
+  }
+}
+
+function drawAgentDot(ctx, cx, cy, r, isCarrier) {
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fillStyle   = isCarrier ? '#fb8c00' : '#ffffff';
+  ctx.strokeStyle = isCarrier ? '#bf360c' : '#616161';
+  ctx.lineWidth   = Math.max(1, r * 0.35);
+  ctx.fill();
+  ctx.stroke();
+}
+
+function spreadPositions(cx, cy, n, spread) {
+  if (n === 1) return [{ x: cx, y: cy }];
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+    out.push({ x: cx + Math.cos(angle) * spread * 0.5, y: cy + Math.sin(angle) * spread * 0.5 });
+  }
+  return out;
+}
+
+// ══════════════════════════════════════════════════════════════
+// Chart rendering
+// ══════════════════════════════════════════════════════════════
+function renderChart() {
+  const canvas = document.getElementById('chart-canvas');
+  const ctx    = canvas.getContext('2d');
+  const W      = canvas.width;
+  const H      = canvas.height;
+
+  ctx.clearRect(0, 0, W, H);
+
+  if (state.maxTick === 0) return;
+
+  let maxFood = 1;
+  for (let t = 1; t <= state.maxTick; t++) {
+    const s = state.summaries[t];
+    if (s && s.food_at_nest > maxFood) maxFood = s.food_at_nest;
+  }
+
+  // Area fill
+  ctx.beginPath();
+  let started = false;
+  for (let t = 1; t <= state.maxTick; t++) {
+    const s = state.summaries[t];
+    if (!s) continue;
+    const x = (t / state.maxTick) * W;
+    const y = H - 2 - (s.food_at_nest / maxFood) * (H - 4);
+    if (!started) { ctx.moveTo(x, H); ctx.lineTo(x, y); started = true; }
+    else ctx.lineTo(x, y);
+  }
+  if (started) {
+    ctx.lineTo(W, H);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(26,115,232,0.12)';
+    ctx.fill();
+  }
+
+  // Line
+  ctx.beginPath();
+  started = false;
+  for (let t = 1; t <= state.maxTick; t++) {
+    const s = state.summaries[t];
+    if (!s) continue;
+    const x = (t / state.maxTick) * W;
+    const y = H - 2 - (s.food_at_nest / maxFood) * (H - 4);
+    if (!started) { ctx.moveTo(x, y); started = true; }
+    else ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = '#1a73e8';
+  ctx.lineWidth   = 1.5;
+  ctx.stroke();
+
+  // Current tick marker
+  const markerX = (state.currentTick / state.maxTick) * W;
+  ctx.beginPath();
+  ctx.moveTo(markerX, 0);
+  ctx.lineTo(markerX, H);
+  ctx.strokeStyle = 'rgba(234,67,53,0.7)';
+  ctx.lineWidth   = 1;
+  ctx.stroke();
+}
+
+// ══════════════════════════════════════════════════════════════
+// Stats + events update
+// ══════════════════════════════════════════════════════════════
+function updateStats(tick) {
+  const s = state.summaries[tick];
+  document.getElementById('s-alive').textContent     = s ? s.alive         : '\u2013';
+  document.getElementById('s-searchers').textContent = s ? s.searchers      : '\u2013';
+  document.getElementById('s-carriers').textContent  = s ? s.carriers       : '\u2013';
+  document.getElementById('s-food').textContent      = s ? s.food_at_nest   : '\u2013';
+
+  const evs   = state.tickEvents[tick] || [];
+  const evEl  = document.getElementById('events-list');
+
+  if (!evs.length) {
+    evEl.innerHTML = '<span style="color:#9aa0a6; font-size:11px;">Keine Events</span>';
+  } else {
+    const labels = { food_found: 'Gefunden', food_delivered: 'Geliefert', agent_death: 'Tod' };
+    evEl.innerHTML = evs.map(ev => {
+      const label  = labels[ev.event] || ev.event;
+      const detail =
+        ev.event === 'food_found'      ? ev.agent_id + ' \u2192 (' + ev.x + ',' + ev.y + ')' :
+        ev.event === 'food_delivered'  ? ev.agent_id :
+        ev.event === 'agent_death'     ? ev.agent_id + ' @ (' + ev.x + ',' + ev.y + ')' :
+        '';
+      return '<div class="ev-row ev-' + ev.event + '">' +
+             '<span class="ev-tag">' + label + '</span>' +
+             '<span class="ev-detail">' + detail + '</span>' +
+             '</div>';
+    }).join('');
+  }
+
+  document.getElementById('tick-slider').value   = tick;
+  document.getElementById('tick-display').textContent = 'Tick ' + tick + ' / ' + state.maxTick;
+  renderChart();
+}
+
+// ══════════════════════════════════════════════════════════════
+// Navigation
+// ══════════════════════════════════════════════════════════════
+function goToTick(tick) {
+  tick = Math.max(1, Math.min(state.maxTick, tick));
+  state.currentTick = tick;
+  if (state.hasGrid) renderGrid(tick);
+  updateStats(tick);
+}
+
+function prevTick() { goToTick(state.currentTick - 1); }
+function nextTick() { goToTick(state.currentTick + 1); }
+
+function togglePlay() {
+  if (playing) stopPlay(); else startPlay();
+}
+
+function startPlay() {
+  playing = true;
+  document.getElementById('play-btn').innerHTML = '&#9646;&#9646;';
+  scheduleNext();
+}
+
+function stopPlay() {
+  playing = false;
+  document.getElementById('play-btn').innerHTML = '&#9654;';
+  if (playTimer) { clearTimeout(playTimer); playTimer = null; }
+}
+
+function scheduleNext() {
+  if (!playing) return;
+  if (state.currentTick >= state.maxTick) { stopPlay(); return; }
+  nextTick();
+  const delay = parseInt(document.getElementById('speed-select').value, 10);
+  playTimer = setTimeout(scheduleNext, delay);
+}
+
+// ══════════════════════════════════════════════════════════════
+// Canvas sizing
+// ══════════════════════════════════════════════════════════════
+function setupCanvas(w, h) {
+  const panel  = document.getElementById('grid-panel');
+  const availW = panel.clientWidth  - 24;
+  const availH = panel.clientHeight - 24;
+  cellSize     = Math.max(4, Math.min(Math.floor(availW / w), Math.floor(availH / h)));
+  const canvas = document.getElementById('grid-canvas');
+  canvas.width  = w * cellSize;
+  canvas.height = h * cellSize;
+}
+
+// ══════════════════════════════════════════════════════════════
+// File loading
+// ══════════════════════════════════════════════════════════════
+function loadFile(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    parseLog(e.target.result);
+
+    if (state.maxTick === 0) {
+      alert('Keine verwertbaren Events in der Datei gefunden.');
+      return;
+    }
+
+    document.getElementById('loader').style.display  = 'none';
+    document.getElementById('viewer').style.display  = 'flex';
+    document.getElementById('exp-name').textContent  = file.name;
+
+    const firstGs = state.gridStates[Object.keys(state.gridStates)[0]];
+
+    if (firstGs) {
+      setupCanvas(firstGs.w, firstGs.h);
+      document.getElementById('grid-badge').textContent      = firstGs.w + '\u00d7' + firstGs.h;
+      document.getElementById('grid-canvas').style.display   = 'block';
+      document.getElementById('no-grid-msg').style.display   = 'none';
+    } else {
+      document.getElementById('grid-canvas').style.display   = 'none';
+      document.getElementById('no-grid-msg').style.display   = 'block';
+      document.getElementById('grid-badge').textContent      = 'kein Grid';
+    }
+
+    const slider = document.getElementById('tick-slider');
+    slider.min   = 1;
+    slider.max   = state.maxTick;
+    slider.value = 1;
+
+    const chartCanvas = document.getElementById('chart-canvas');
+    chartCanvas.width  = chartCanvas.parentElement.clientWidth;
+    chartCanvas.height = chartCanvas.parentElement.clientHeight;
+
+    goToTick(1);
+  };
+  reader.readAsText(file);
+}
+
+function resetToLoader() {
+  stopPlay();
+  document.getElementById('viewer').style.display = 'none';
+  document.getElementById('loader').style.display = 'flex';
+  document.getElementById('file-input').value     = '';
+}
+
+// ══════════════════════════════════════════════════════════════
+// Event listeners
+// ══════════════════════════════════════════════════════════════
+document.getElementById('file-input').addEventListener('change', e => {
+  if (e.target.files[0]) loadFile(e.target.files[0]);
+});
+
+const dropZone = document.getElementById('drop-zone');
+dropZone.addEventListener('click', () => document.getElementById('file-input').click());
+dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('over'); });
+dropZone.addEventListener('dragleave', ()  => dropZone.classList.remove('over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('over');
+  if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]);
+});
+
+document.getElementById('prev-btn').addEventListener('click', () => { stopPlay(); prevTick(); });
+document.getElementById('play-btn').addEventListener('click', togglePlay);
+document.getElementById('next-btn').addEventListener('click', () => { stopPlay(); nextTick(); });
+
+document.getElementById('tick-slider').addEventListener('input', e => {
+  stopPlay();
+  goToTick(parseInt(e.target.value, 10));
+});
+
+document.addEventListener('keydown', e => {
+  const tag = document.activeElement.tagName;
+  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+  if (e.key === 'ArrowLeft')  { stopPlay(); prevTick(); }
+  if (e.key === 'ArrowRight') { stopPlay(); nextTick(); }
+  if (e.key === ' ')          { e.preventDefault(); togglePlay(); }
+});
+
+window.addEventListener('resize', () => {
+  if (!state.hasGrid) return;
+  const firstGs = state.gridStates[Object.keys(state.gridStates)[0]];
+  if (!firstGs) return;
+  setupCanvas(firstGs.w, firstGs.h);
+  renderGrid(state.currentTick);
+  const cc = document.getElementById('chart-canvas');
+  cc.width  = cc.parentElement.clientWidth;
+  cc.height = cc.parentElement.clientHeight;
+  renderChart();
+});
+</script>
+</body>
+</html>

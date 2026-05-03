@@ -5,13 +5,19 @@ from sim.manager import Manager
 
 
 def main() -> None:
-    if len(sys.argv) < 2:
-        print("Usage: python main.py <experiment.json>")
+    args = sys.argv[1:]
+    visual_mode = "--visual" in args
+    pos_args = [a for a in args if not a.startswith("--")]
+
+    if not pos_args:
+        print("Usage: python main.py <experiment.json> [--visual]")
+        print("  --visual  Log full grid state per tick (required for visualizer.html)")
         sys.exit(1)
 
-    configs = Parser.load(sys.argv[1])
+    configs = Parser.load(pos_args[0])
     exp = configs[0].get("experiment", {}) if configs else {}
-    print(f"Experiment: {exp.get('name', 'Unnamed')} ({len(configs)} simulation(s))\n")
+    mode_label = " [visual mode]" if visual_mode else ""
+    print(f"Experiment: {exp.get('name', 'Unnamed')} ({len(configs)} simulation(s)){mode_label}\n")
 
     for config in configs:
         sim = config.get("simulation", {})
@@ -20,6 +26,7 @@ def main() -> None:
 
         manager = Manager()
         manager.load_model(config)
+        manager._visual_mode = visual_mode
         manager.run()
 
         log_file = manager.logger.output_file if manager.logger else "N/A"

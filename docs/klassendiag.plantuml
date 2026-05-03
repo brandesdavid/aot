@@ -113,6 +113,7 @@ class AntAgent extends Agent {
   +carrying: str
   +perception_range: int
   +pheromone_drop_amount: float
+  +isFacing: enum (UP, DOWN, LEFT, RIGHT)
   --
   +sense(perception: dict)
   +reason()

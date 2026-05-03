@@ -26,6 +26,7 @@ class Manager:
         self.logger: Optional[Logger] = None
         self._actions_queue: list[tuple[Agent, Action]] = []
         self._total_food_delivered: int = 0
+        self._visual_mode: bool = False
 
     def load_model(self, config: dict) -> None:
         exp = config.get("experiment", {})
@@ -261,4 +262,37 @@ class Manager:
             food_at_nest=self._total_food_delivered,
             searcher_count=len(searchers),
             carrier_count=len(carriers),
+        )
+        if self._visual_mode:
+            self._log_grid_state()
+
+    def _log_grid_state(self) -> None:
+        fields_data = []
+        for f in self.grid.get_all_fields():
+            food = f.get_item_quantity("food")
+            ph_nest = round(f.get_pheromone_strength("pheromone_nest"), 2)
+            ph_food = round(f.get_pheromone_strength("pheromone_food"), 2)
+            n_agents = len(f.agents)
+            if f.is_obstacle() or f.spawn_id or food > 0 or ph_nest > 0 or ph_food > 0 or n_agents > 0:
+                fields_data.append({
+                    "x": f.x, "y": f.y,
+                    "food": food,
+                    "pn": ph_nest,
+                    "pf": ph_food,
+                    "obs": f.is_obstacle(),
+                    "nest": f.spawn_id is not None,
+                    "n": n_agents,
+                })
+        agents_data = []
+        for a in self.agents:
+            if a.alive and a.position:
+                agents_data.append({
+                    "id": a.id,
+                    "x": a.position.x,
+                    "y": a.position.y,
+                    "c": getattr(a, "carrying", None),
+                    "e": a.energy,
+                })
+        self.logger.log_grid_state(
+            self.tick, self.grid.width, self.grid.height, fields_data, agents_data
         )

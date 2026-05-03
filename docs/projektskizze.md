@@ -1,5 +1,5 @@
 # Projektskizze
-TU Berlin -Soße 2026 - Agententechnologien
+TU Berlin - SoSe 2026 - Agententechnologien
 
 ---
 
@@ -30,7 +30,7 @@ Die Klasse `Agent` ist abstrakt, sodass potentiell weitere Agententypen eingefü
 
 In einer `Action` steckt die Absicht eines Agenten. Die konkreten Subklassen der abstrakten `Action` Klasse sind: `MoveAction`, `PickupAction`, `DropAction`, `WaitAction`. Der `Manager` prüft jede Aktion auf Gültigkeit und legt das `ActionResult` in die Inbox des Agenten.
 
----
+Der 'Parser' nimmt ein Experiment als JSON (siehe 2. Simulationsmodell) und gibt eine Liste an Simulationen zurück. Für jede Simulation wird ein `Manager` instanziiert. 
 
 ## 2. Simulationsmodell (json)
 
@@ -38,23 +38,24 @@ Das folgende Beispiel zeigt die Struktur der Modelldatei für Experiment 1.
 
 ```json
 {
+  "_comment": "Experiment 1 - Kaltstart: Nahrungsversorgung mit verschiedenen Populationsgrößen. 15x15-Grid mit zwei Nahrungsquellen in verschiedenen Entfernungen zum Nest (10 Schritte Manhattan). Zwei partielle Hindernisreihen erzwingen Umwege und machen das Suchverhalten realistischer. Niedrige Verdunstungsrate (0,02) erlaubt langsam aufbauende, stabile Pheromonspuren. Drei Simulationen mit 5, 10 und 20 Ameisen zeigen: kleine Populationen verhungern häufiger bevor Spuren entstehen; mittlere Populationen (10) finden eine Balance; große Populationen (20) bauen schneller Spuren auf, können aber in Engpässen kollidieren. Jede Ameise hat 300 Energie - genug für mehrere Erkundungsrunden.",
   "experiment": {
     "id": "exp1_coldstart_basic",
-    "name": "Experiment 1: Cold Start – Grundlegende Nahrungsversorgung",
-    "description": "Kaltstartexperiment zur Verifikation des Algorithmus. 15x15-Grid mit Hindernisreihen, zwei Nahrungsquellen in unterschiedlicher Entfernung zum Nest. Drei Simulationen mit 5, 10 und 20 Ameisen zeigen den Einfluss der Populationsgröße auf die Versorgungseffizienz.",
-    "max_ticks": 800,
+    "name": "Experiment 1: Cold Start - Grundlegende Nahrungsversorgung",
+    "description": "Kaltstart ohne vorplatzierte Pheromon-Spuren. Zwei Nahrungsquellen bei (2,2) und (12,12) - je 10 Schritte Manhattan vom Nest (7,7) entfernt. Nahrungsquelle A hat 20 Einheiten (kleiner), B hat 40 Einheiten (größer). Bei kleiner Population (5 Ameisen) wird kaum Nahrung gesammelt, da Spuren zu langsam entstehen - das zeigt eine Schwäche bei geringem Ameisenbestand. Mit 10 und 20 Ameisen wird die Nahrungsversorgung zunehmend effizienter.",
+    "max_ticks": 1000,
     "warmstart": false
   },
   "item_types": [
-    { "id": "food",           "name": "Nahrung",          "evaporation_rate": 0.0 },
-    { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.5 },
-    { "id": "pheromone_food", "name": "Nahrung-Pheromon", "evaporation_rate": 0.5 }
+    { "id": "food",           "name": "Nahrung",          "evaporation_rate": 0.0  },
+    { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.02 },
+    { "id": "pheromone_food", "name": "Nahrung-Pheromon", "evaporation_rate": 0.02 }
   ],
   "agent_types": [
     {
       "id": "ant",
       "name": "Ameise",
-      "energy": 120,
+      "energy": 300,
       "perception_range": 4,
       "pheromone_drop_amount": 10.0,
       "capacity": [
@@ -79,14 +80,14 @@ Das folgende Beispiel zeigt die Struktur der Modelldatei für Experiment 1.
     "default_capacity": 5,
     "fields": [
       { "x": 7,  "y": 7,  "capacity": 999, "spawn_id": "nest_main", "items": [] },
-      { "x": 2,  "y": 2,  "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 25 }] },
-      { "x": 12, "y": 12, "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 25 }] },
-      { "x": 4,  "y": 6,  "capacity": 0,   "items": [] },
-      { "x": 5,  "y": 6,  "capacity": 0,   "items": [] },
-      { "x": 6,  "y": 6,  "capacity": 0,   "items": [] },
-      { "x": 8,  "y": 8,  "capacity": 0,   "items": [] },
-      { "x": 9,  "y": 8,  "capacity": 0,   "items": [] },
-      { "x": 10, "y": 8,  "capacity": 0,   "items": [] }
+      { "x": 2,  "y": 2,  "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 20 }] },
+      { "x": 12, "y": 12, "capacity": 5,   "items": [{ "item_type_id": "food", "quantity": 40 }] },
+      { "x": 4,  "y": 5,  "capacity": 0,   "items": [] },
+      { "x": 5,  "y": 5,  "capacity": 0,   "items": [] },
+      { "x": 6,  "y": 5,  "capacity": 0,   "items": [] },
+      { "x": 8,  "y": 9,  "capacity": 0,   "items": [] },
+      { "x": 9,  "y": 9,  "capacity": 0,   "items": [] },
+      { "x": 10, "y": 9,  "capacity": 0,   "items": [] }
     ]
   },
   "logging": {
@@ -113,12 +114,15 @@ Das folgende Beispiel zeigt die Struktur der Modelldatei für Experiment 1.
     }
   ]
 }
+
 ```
 
 Felder, die nicht explizit in `fields` aufgeführt sind, erhalten die für das Grid definierte `default_capacity`.
 Hindernisse werden durch `capacity: 0` ausgedrückt.
 
 Warmstart Szenarien können beliebige Pheromonmengen auf Feldern vorbelegen. Das Feld `description` dient dazu, dass durchgeführte Experiment zu beschreiben.
+
+Wie schon oben erwähnt, wird für jede Simulation ein `Manager` instanziiert, mit der gleichen Gridwelt und Agentenkonfiguration, außer der Anzahl der Agenten, die durch die `spawns`-Konfigurationen festgelegt wird.
 
 ---
 
@@ -152,10 +156,8 @@ Geloggt wird im jsonl-format (eine json-Zeile pro Ereignis). Folgende Ereignisse
 
 ## 5. Forschungsfrage
 
-Was ist der Zusammenhang mit der Größe des Ameisenarmees und der Lebensdauer einer Ameise, bspw. 1 Ameise mit 1000 Lebenszyklen vs 1000 Ameisen mit 1 Lebenszyklus
+Sind wenige Ameisen mit höherer Maximalenergie effizienter in der Ausbeutung der Nahrungsquellen als eine größere Anzahl an Ameisen mit geringerer Maximalenergie?
 
-**experiment 1 (kaltstart, grundversorgung):** 
-
-**experiment 2 (warmstart, spurwiederherstellung):** .
-
-**experiment 3 (skalierung):** .
+**simulation 1 1000 Ameisen mit Energiekapazität x:** 
+**simulation 2 5 Ameisen mit 5000 Energiekapazität:** 
+**simulation 3 500 Ameisen mit Energiekapazität y:** 

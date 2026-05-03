@@ -40,6 +40,9 @@ class Logger:
             "carriers": carrier_count,
         })
 
+    def log_grid_state(self, tick: int, width: int, height: int, fields: list, agents: list) -> None:
+        self._record(tick, "grid_state", {"w": width, "h": height, "fields": fields, "agents": agents})
+
     def save(self) -> None:
         with open(self.output_file, "w") as f:
             for event in self._events:
