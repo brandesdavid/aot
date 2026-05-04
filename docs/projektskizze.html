@@ -471,7 +471,7 @@ Es gibt lediglich zwei Pheremonentypen, Food- und Nestpheremone.</p>
 <p>Felder, die nicht explizit in <code>fields</code> aufgeführt sind, erhalten die für das Grid definierte <code>default_capacity</code>.
 Hindernisse werden durch <code>capacity: 0</code> ausgedrückt.</p>
 <p>Warmstart Szenarien können beliebige Pheromonmengen auf Feldern vorbelegen. Das Feld <code>description</code> dient dazu, dass durchgeführte Experiment zu beschreiben.</p>
-<p>Wie schon oben erwähnt, wird für jede Simulation ein <code>Manager</code> instanziiert, mit der gleichen Gridwelt und Agentenkonfiguration, außer der Anzahl der Agenten, die durch die <code>spawns</code>-Konfigurationen festgelegt wird.</p>
+<p>Unter <code>simulations</code> werden Einstellungen des Experiments überschrieben. So können mehrere Simulationen zu einem Experiment durchgeführt werden, die sich nur in explizit aufgeführten Parametern unterscheiden. In dem obigen Beispiel unterscheiden sich die drei Simulationen des Experiments nur in der Anzahl der gespawnten Agenten.</p>
 <hr>
 <h2 id="3-ablauf-einer-simulation-sequenzdiagramm">3. Ablauf einer Simulation (Sequenzdiagramm)</h2>
 <p><img src="ablaufsim.png" alt="ablaufsim"></p>
@@ -480,16 +480,16 @@ Hindernisse werden durch <code>capacity: 0</code> ausgedrückt.</p>
 In jedem Takt verarbeitet der <code>Manager</code> zuerst die Aktionswarteschlange aus der Vorperiode indem er jede Aktion validiert und das Ergebnis in die Inbox des jeweiligen Agenten legt.
 Konflikte zwischen den Aktionen werden nach dem First-Come-First-Serve Prinzip aufgelöst.
 Anschließend erfolgen Pheromonverdunstung, Todeskontrolle und Energieauffrischung für alle Ant-Agenten, die sich beim Nest oder bei einem Nahrungsfeld befinden. Zu guter Letzt triggert der Manager sequenziell jeden lebenden <code>Agent i</code>, sodass dieser seinen Sense-Reason-Act-Zyklus durchführt.
-<code>Agent i</code> liest seine Wahrnehmung (inklusive Inbox-Feedback), entscheidet probabilistisch und stellt die nächste Aktion in die Warteschlange. Somit wird die in Zyklus /k/ von <code>Agent i</code> beschlossene Aktion erst in Zyklus /k+1/ von dem <code>Manager</code> ausgeführt (oder als ungültig zurückgewiesen).
+<code>Agent i</code> liest seine Wahrnehmung (inklusive Inbox-Feedback), entscheidet probabilistisch und stellt die nächste Aktion in die Warteschlange. Somit wird die in Zyklus <em>k</em> von <code>Agent i</code> beschlossene Aktion erst in Zyklus <em>k+1</em> von dem <code>Manager</code> ausgeführt (oder als ungültig zurückgewiesen).
 Der <code>Logger</code> erhält nach jedem Takt eine Zusammenfassung.</p>
 <hr>
 <h2 id="4-logging">4. Logging</h2>
 <p>Geloggt wird im jsonl-format (eine json-Zeile pro Ereignis). Folgende Ereignisse werden erfasst:</p>
 <ol>
-<li><code>food_found</code>: zeittakt, agent-id, position der nahrungsquelle (&quot;Ant Agent hat Nahrung aufgenommen&quot;)</li>
-<li><code>food_delivered</code>: zeittakt, agent-id, ursprungsposition der nahrung (&quot;Ant Agent hat Nahrung im Nest abgelegt&quot;)</li>
-<li><code>agent_death</code>: zeittakt, agent-id, letzte position (&quot;Ant Agent ist gestorben&quot;)</li>
-<li><code>tick_summary</code>: zeittakt, anzahl lebender agenten, gesamtnahrung im nest, anzahl nahrungssucher, anzahl nahrungsträger (&quot;Ein Zeittakt ist vorbei&quot;)</li>
+<li><code>food_found</code>: Zeittakt, Agent-Id, Position der Nahrungsquelle (&quot;Ant Agent hat Nahrung aufgenommen&quot;)</li>
+<li><code>food_delivered</code>: Zeittakt, Agent-Id, Ursprungsposition der Nahrung (&quot;Ant Agent hat Nahrung im Nest abgelegt&quot;)</li>
+<li><code>agent_death</code>: Zeittakt, Agent-Id, letzte Position (&quot;Ant Agent ist gestorben&quot;)</li>
+<li><code>tick_summary</code>: Zeittakt, Anzahl lebender Agenten, Gesamtnahrung im Nest, Anzahl Nahrungssucher, Anzahl Nahrungsträger (&quot;Ein Zeittakt ist vorbei&quot;)</li>
 </ol>
 <hr>
 <h2 id="5-forschungsfrage">5. Forschungsfrage</h2>
@@ -503,7 +503,7 @@ Die 3 Simulationen pro Experiment unterscheiden sich ausschließlich in der Anza
 <li>Simulation: 40 Ameisen mit einem maximalen Energievorrat von 20</li>
 </ol>
 <blockquote>
-<p>Info: Ameisen haben einen Energievorrat von mindestens 20 damit sie bei einem 20x20 Grid (wo das Nest in der Mitte platziert ist) potentiel eine Futterquelle in einem Eckfeld findenkönnen.</p>
+<p>Info: Ameisen haben einen Energievorrat von mindestens 20 damit sie bei einem 20x20 Grid (wo das Nest in der Mitte platziert ist) potentiel eine Futterquelle in einem Eckfeld finden können.</p>
 </blockquote>
 <p><strong>Experiment 1:</strong>
 Es gibt keine Hindernisse und 4 Futterquellen werden per Zufall auf dem Grid platziert.</p>
