@@ -52,6 +52,6 @@ class Parser:
         if "tick_summary_every_n_ticks" not in logging:
             logging["tick_summary_every_n_ticks"] = 1
         if "output_file" not in logging:
-            exp_id = config.get("experiment", {}).get("id", "sim")
+            exp_id = config.get("id", "sim")
             suffix = f"_{sim_id}" if sim_id else ""
             logging["output_file"] = f"logs/{exp_id}{suffix}.jsonl"

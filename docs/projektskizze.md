@@ -12,7 +12,10 @@
 ### Erläuterung
 
 Der `Manager` ist die zentrale Instanz des Systems.
-Der `Manager` liest die Modelldatei für ein Experiment per `Parser` ein und führt eine Simulation des Experimets durch. Ein `Manager` wird pro Simulation im gleichen Experimentmodelldatei instanziiert. Die relevanten Ereignisse loggt der `Manager` mithilfe des `Logger`.
+Der `Manager` liest die Modelldatei für ein Experiment per `Parser` ein und führt eine Simulation des Experimets durch. 
+Jeweils ein `Manager` wird pro Simulation im gleichen Experiment instanziiert.
+Die relevanten Ereignisse loggt der `Manager` mithilfe des `Logger`.
+
 
 Ein `Grid` ist eine n x m-matrix von `Field`-Objekten. Koordinatenursprung (0,0) ist unten links.
 
@@ -41,14 +44,11 @@ Das folgende Beispiel zeigt die Struktur der Modelldatei für Experiment 1.
 
 ```json
 {
-  "_comment": "Experiment 1 - Kaltstart: Nahrungsversorgung mit verschiedenen Populationsgrößen. 15x15-Grid mit zwei Nahrungsquellen in verschiedenen Entfernungen zum Nest (10 Schritte Manhattan). Zwei partielle Hindernisreihen erzwingen Umwege und machen das Suchverhalten realistischer. Niedrige Verdunstungsrate (0,02) erlaubt langsam aufbauende, stabile Pheromonspuren. Drei Simulationen mit 5, 10 und 20 Ameisen zeigen: kleine Populationen verhungern häufiger bevor Spuren entstehen; mittlere Populationen (10) finden eine Balance; große Populationen (20) bauen schneller Spuren auf, können aber in Engpässen kollidieren. Jede Ameise hat 300 Energie - genug für mehrere Erkundungsrunden.",
-  "experiment": {
-    "id": "exp1_coldstart_basic",
-    "name": "Experiment 1: Cold Start - Grundlegende Nahrungsversorgung",
-    "description": "Kaltstart ohne vorplatzierte Pheromon-Spuren. Zwei Nahrungsquellen bei (2,2) und (12,12) - je 10 Schritte Manhattan vom Nest (7,7) entfernt. Nahrungsquelle A hat 20 Einheiten (kleiner), B hat 40 Einheiten (größer). Bei kleiner Population (5 Ameisen) wird kaum Nahrung gesammelt, da Spuren zu langsam entstehen - das zeigt eine Schwäche bei geringem Ameisenbestand. Mit 10 und 20 Ameisen wird die Nahrungsversorgung zunehmend effizienter.",
-    "max_ticks": 1000,
-    "warmstart": false
-  },
+  "id": "exp1_coldstart_basic",
+  "name": "Experiment 1: Cold Start - Grundlegende Nahrungsversorgung",
+  "max_ticks": 1000,
+  "warmstart": false,
+  "description": "Kaltstart ohne vorplatzierte Pheromon-Spuren. Zwei Nahrungsquellen bei (2,2) und (12,12) - je 10 Schritte Manhattan vom Nest (7,7) entfernt. Nahrungsquelle A hat 20 Einheiten (kleiner), B hat 40 Einheiten (größer). Bei kleiner Population (5 Ameisen) wird kaum Nahrung gesammelt, da Spuren zu langsam entstehen - das zeigt eine Schwäche bei geringem Ameisenbestand. Mit 10 und 20 Ameisen wird die Nahrungsversorgung zunehmend effizienter.",
   "item_types": [
     { "id": "food",           "name": "Nahrung",          "evaporation_rate": 0.0  },
     { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.02 },

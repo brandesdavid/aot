@@ -15,14 +15,14 @@ def main() -> None:
         sys.exit(1)
 
     configs = Parser.load(pos_args[0])
-    exp = configs[0].get("experiment", {}) if configs else {}
+    head = configs[0] if configs else {}
     mode_label = " [visual mode]" if visual_mode else ""
-    print(f"Experiment: {exp.get('name', 'Unnamed')} ({len(configs)} simulation(s)){mode_label}\n")
+    print(f"Experiment: {head.get('name', 'Unnamed')} ({len(configs)} simulation(s)){mode_label}\n")
 
     for config in configs:
         sim = config.get("simulation", {})
         sim_name = sim.get("name") or sim.get("id", "Unnamed")
-        print(f"  Running: {sim_name} ({config.get('experiment', {}).get('max_ticks', '?')} ticks)")
+        print(f"  Running: {sim_name} ({config.get('max_ticks', '?')} ticks)")
 
         manager = Manager()
         manager.load_model(config)

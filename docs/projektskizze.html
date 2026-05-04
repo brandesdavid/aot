@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>projektskizze.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 90vh; max-height: 90vh; margin: 0; padding: 0; text-align: center; box-sizing: border-box;">
+  <h1 style="margin: 0 0 0.5em 0;">Projektskizze</h1>
+  <p style="margin: 0 0 1em 0;">TU Berlin – SoSe 2026 – Agententechnologien - Gruppe 18</p>
+  <p style="margin: 0;">Moritz Clerc 498074, Carlos Driller 495897, David Brandes 495394</p>
+</div>
+<h2 style="page-break-before: always;">1. Systemdesign – Klassendiagramm</h2>
+<p><img src="klassendiag.png" alt="klassendiag"></p>
+<h3 id="erl%C3%A4uterung">Erläuterung</h3>
+<p>Der <code>Manager</code> ist die zentrale Instanz des Systems.
+Der <code>Manager</code> liest die Modelldatei für ein Experiment per <code>Parser</code> ein und führt eine Simulation des Experimets durch.
+Jeweils ein <code>Manager</code> wird pro Simulation im gleichen Experiment instanziiert.
+Die relevanten Ereignisse loggt der <code>Manager</code> mithilfe des <code>Logger</code>.</p>
+<p>Ein <code>Grid</code> ist eine n x m-matrix von <code>Field</code>-Objekten. Koordinatenursprung (0,0) ist unten links.</p>
+<p>Ein <code>Field</code> repräsentiert eine Zelle. <code>capacity == 0</code> bedeutet Hindernis. Felder mit einer <code>spawn_id=&quot;nest_*&quot;</code> sind Nester und frischen die Energie eines eintreffenden <code>AntAgent</code> sofort und kostenlos auf.</p>
+<p>Ein <code>Spawn</code> konfiguriert, welche Agenten in welcher Anzahl erzeugt werden. Für diese Aufgabe gibt es ein <code>Spawn</code> an dem ausschließlich Ant-Agenten gespawnt werden, die Abstraktion erlaubt mehrere Spawnpunkte und auch, dass verschiedene Agententypen an der gleichen Stelle gespawnt werden können.</p>
+<p><code>ItemInstance</code> ist nicht ein einzelnes Item, sondern eine Anzahl von Items, da nicht jedes Item einzeln instantiiert wird. Über <code>item_type</code> wird definiert um welches Item es sich handelt und in den Subklassen von <code>ItemConfig</code> werden die Details zu einem Item definiert. Aktuell sind diese Infos nur <code>id</code> (diese dient zum linken zwischen <code>ItemInstance</code> und der jeweiligen <code>ItemConfig</code>), <code>name</code> und <code>evaporation_rate</code>.</p>
+<blockquote>
+<p>Info: Config Klassen wie ItemConfig werden in Python benutzt für Daten, die nur gespeichert werden. In den ItemConfig Subklassen werden lediglich Daten über die Eigenschaften von Items gespeichert, deswegen wurde diese Namenskonvention gewählt.</p>
+</blockquote>
+<p>Die <code>quantity</code> von einer <code>ItemInstance</code> mit <code>item_type=&quot;food&quot;</code> wird durch Ant-Agenten dekrementiert. Die <code>quantity</code> von einer <code>ItemInstance</code> mit <code>item_type=&quot;pheromone_nest&quot;</code> oder <code>item_type=&quot;pheromone_food&quot;</code> wird in jedem Zeittakt von dem <code>Manager</code> basierend auf ihrer <code>evaporation_rate</code> dekrementiert, bei Stärke 0 wird die Pheromonen-Instanz entfernt.
+Es gibt lediglich zwei Pheremonentypen, Food- und Nestpheremone.</p>
+<p>Die Klasse <code>Agent</code> ist abstrakt, sodass potentiell weitere Agententypen eingeführt werden können. Die konkrete Subklasse <code>AntAgent</code> implementiert den reaktiven Ameisenalgorithmus. Die Wahrnehmung umfasst die Items auf dem eigenen Feld sowie die Pheromonwerte der direkten Nachbarfelder (4-Nachbarschaft). Die Navigation erfolgt probabilistisch.</p>
+<p>Ein <code>AntAgent</code> kann nur in die Richtungen des Enums <code>Direction = {UP, DOWN, LEFT, RIGHT}</code> bewegen. In <code>isFacing</code> wird gespeichert in welche Richtung der <code>AntAgent</code> zuletzt gegangen ist. Beim Wählen des nächsten Zugs wird die entgegengesetzte Richtung probabilistisch benachteiligt, so dass eine sinnlose Vor-und-Zurück-Bewegung unwahrscheinlicher auftritt.</p>
+<p>In einer <code>Action</code> steckt die Absicht eines Agenten. Die konkreten Subklassen der abstrakten <code>Action</code> Klasse sind: <code>MoveAction</code>, <code>PickupAction</code>, <code>DropAction</code>, <code>WaitAction</code>. Der <code>Manager</code> prüft jede Aktion auf Gültigkeit und legt das <code>ActionResult</code> in die Inbox des Agenten.</p>
+<p>Der 'Parser' nimmt ein Experiment als JSON (siehe 2. Simulationsmodell) und gibt eine Liste an Simulationen zurück. Für jede Simulation wird ein <code>Manager</code> instanziiert.</p>
+<h2 id="2-simulationsmodell-json">2. Simulationsmodell (json)</h2>
+<p>Das folgende Beispiel zeigt die Struktur der Modelldatei für Experiment 1.</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"id"</span>: <span class="hljs-string">"exp1_coldstart_basic"</span>,
+  <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Experiment 1: Cold Start - Grundlegende Nahrungsversorgung"</span>,
+  <span class="hljs-attr">"max_ticks"</span>: <span class="hljs-number">1000</span>,
+  <span class="hljs-attr">"warmstart"</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Kaltstart ohne vorplatzierte Pheromon-Spuren. Zwei Nahrungsquellen bei (2,2) und (12,12) - je 10 Schritte Manhattan vom Nest (7,7) entfernt. Nahrungsquelle A hat 20 Einheiten (kleiner), B hat 40 Einheiten (größer). Bei kleiner Population (5 Ameisen) wird kaum Nahrung gesammelt, da Spuren zu langsam entstehen - das zeigt eine Schwäche bei geringem Ameisenbestand. Mit 10 und 20 Ameisen wird die Nahrungsversorgung zunehmend effizienter."</span>,
+  <span class="hljs-attr">"item_types"</span>: [
+    { <span class="hljs-attr">"id"</span>: <span class="hljs-string">"food"</span>,           <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Nahrung"</span>,          <span class="hljs-attr">"evaporation_rate"</span>: <span class="hljs-number">0.0</span>  },
+    { <span class="hljs-attr">"id"</span>: <span class="hljs-string">"pheromone_nest"</span>, <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Nest-Pheromon"</span>,    <span class="hljs-attr">"evaporation_rate"</span>: <span class="hljs-number">0.02</span> },
+    { <span class="hljs-attr">"id"</span>: <span class="hljs-string">"pheromone_food"</span>, <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Nahrung-Pheromon"</span>, <span class="hljs-attr">"evaporation_rate"</span>: <span class="hljs-number">0.02</span> }
+  ],
+  <span class="hljs-attr">"agent_types"</span>: [
+    {
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"ant"</span>,
+      <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Ameise"</span>,
+      <span class="hljs-attr">"energy"</span>: <span class="hljs-number">300</span>,
+      <span class="hljs-attr">"perception_range"</span>: <span class="hljs-number">4</span>,
+      <span class="hljs-attr">"pheromone_drop_amount"</span>: <span class="hljs-number">10.0</span>,
+      <span class="hljs-attr">"capacity"</span>: [
+        { <span class="hljs-attr">"item_type_id"</span>: <span class="hljs-string">"food"</span>,           <span class="hljs-attr">"max"</span>: <span class="hljs-number">1</span>  },
+        { <span class="hljs-attr">"item_type_id"</span>: <span class="hljs-string">"pheromone_nest"</span>, <span class="hljs-attr">"max"</span>: <span class="hljs-number">-1</span> },
+        { <span class="hljs-attr">"item_type_id"</span>: <span class="hljs-string">"pheromone_food"</span>, <span class="hljs-attr">"max"</span>: <span class="hljs-number">-1</span> }
+      ]
+    }
+  ],
+  <span class="hljs-attr">"spawns"</span>: [
+    {
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"nest_main"</span>,
+      <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Hauptnest"</span>,
+      <span class="hljs-attr">"agent_spawns"</span>: [
+        { <span class="hljs-attr">"agent_type_id"</span>: <span class="hljs-string">"ant"</span>, <span class="hljs-attr">"count"</span>: <span class="hljs-number">10</span> }
+      ]
+    }
+  ],
+  <span class="hljs-attr">"grid"</span>: {
+    <span class="hljs-attr">"width"</span>: <span class="hljs-number">15</span>,
+    <span class="hljs-attr">"height"</span>: <span class="hljs-number">15</span>,
+    <span class="hljs-attr">"default_capacity"</span>: <span class="hljs-number">5</span>,
+    <span class="hljs-attr">"fields"</span>: [
+      { <span class="hljs-attr">"x"</span>: <span class="hljs-number">7</span>,  <span class="hljs-attr">"y"</span>: <span class="hljs-number">7</span>,  <span class="hljs-attr">"capacity"</span>: <span class="hljs-number">999</span>, <span class="hljs-attr">"spawn_id"</span>: <span class="hljs-string">"nest_main"</span>, <span class="hljs-attr">"items"</span>: [] },
+      { <span class="hljs-attr">"x"</span>: <span class="hljs-number">2</span>,  <span class="hljs-attr">"y"</span>: <span class="hljs-number">2</span>,  <span class="hljs-attr">"capacity"</span>: <span class="hljs-number">5</span>,   <span class="hljs-attr">"items"</span>: [{ <span class="hljs-attr">"item_type_id"</span>: <span class="hljs-string">"food"</span>, <span class="hljs-attr">"quantity"</span>: <span class="hljs-number">20</span> }] },
+      { <span class="hljs-attr">"x"</span>: <span class="hljs-number">12</span>, <span class="hljs-attr">"y"</span>: <span class="hljs-number">12</span>, <span class="hljs-attr">"capacity"</span>: <span class="hljs-number">5</span>,   <span class="hljs-attr">"items"</span>: [{ <span class="hljs-attr">"item_type_id"</span>: <span class="hljs-string">"food"</span>, <span class="hljs-attr">"quantity"</span>: <span class="hljs-number">40</span> }] },
+      { <span class="hljs-attr">"x"</span>: <span class="hljs-number">4</span>,  <span class="hljs-attr">"y"</span>: <span class="hljs-number">5</span>,  <span class="hljs-attr">"capacity"</span>: <span class="hljs-number">0</span>,   <span class="hljs-attr">"items"</span>: [] },
+      { <span class="hljs-attr">"x"</span>: <span class="hljs-number">5</span>,  <span class="hljs-attr">"y"</span>: <span class="hljs-number">5</span>,  <span class="hljs-attr">"capacity"</span>: <span class="hljs-number">0</span>,   <span class="hljs-attr">"items"</span>: [] },
+      { <span class="hljs-attr">"x"</span>: <span class="hljs-number">6</span>,  <span class="hljs-attr">"y"</span>: <span class="hljs-number">5</span>,  <span class="hljs-attr">"capacity"</span>: <span class="hljs-number">0</span>,   <span class="hljs-attr">"items"</span>: [] },
+      { <span class="hljs-attr">"x"</span>: <span class="hljs-number">8</span>,  <span class="hljs-attr">"y"</span>: <span class="hljs-number">9</span>,  <span class="hljs-attr">"capacity"</span>: <span class="hljs-number">0</span>,   <span class="hljs-attr">"items"</span>: [] },
+      { <span class="hljs-attr">"x"</span>: <span class="hljs-number">9</span>,  <span class="hljs-attr">"y"</span>: <span class="hljs-number">9</span>,  <span class="hljs-attr">"capacity"</span>: <span class="hljs-number">0</span>,   <span class="hljs-attr">"items"</span>: [] },
+      { <span class="hljs-attr">"x"</span>: <span class="hljs-number">10</span>, <span class="hljs-attr">"y"</span>: <span class="hljs-number">9</span>,  <span class="hljs-attr">"capacity"</span>: <span class="hljs-number">0</span>,   <span class="hljs-attr">"items"</span>: [] }
+    ]
+  },
+  <span class="hljs-attr">"logging"</span>: {
+    <span class="hljs-attr">"events"</span>: [<span class="hljs-string">"food_found"</span>, <span class="hljs-string">"food_delivered"</span>, <span class="hljs-string">"agent_death"</span>, <span class="hljs-string">"tick_summary"</span>]
+  },
+  <span class="hljs-attr">"simulations"</span>: [
+    {
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"sim_5ants"</span>,
+      <span class="hljs-attr">"name"</span>: <span class="hljs-string">"5 Ameisen"</span>,
+      <span class="hljs-attr">"spawns"</span>: [
+        { <span class="hljs-attr">"id"</span>: <span class="hljs-string">"nest_main"</span>, <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Hauptnest"</span>, <span class="hljs-attr">"agent_spawns"</span>: [{ <span class="hljs-attr">"agent_type_id"</span>: <span class="hljs-string">"ant"</span>, <span class="hljs-attr">"count"</span>: <span class="hljs-number">5</span> }] }
+      ]
+    },
+    {
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"sim_10ants"</span>,
+      <span class="hljs-attr">"name"</span>: <span class="hljs-string">"10 Ameisen"</span>
+    },
+    {
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"sim_20ants"</span>,
+      <span class="hljs-attr">"name"</span>: <span class="hljs-string">"20 Ameisen"</span>,
+      <span class="hljs-attr">"spawns"</span>: [
+        { <span class="hljs-attr">"id"</span>: <span class="hljs-string">"nest_main"</span>, <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Hauptnest"</span>, <span class="hljs-attr">"agent_spawns"</span>: [{ <span class="hljs-attr">"agent_type_id"</span>: <span class="hljs-string">"ant"</span>, <span class="hljs-attr">"count"</span>: <span class="hljs-number">20</span> }] }
+      ]
+    }
+  ]
+}
+
+</div></code></pre>
+<p>Felder, die nicht explizit in <code>fields</code> aufgeführt sind, erhalten die für das Grid definierte <code>default_capacity</code>.
+Hindernisse werden durch <code>capacity: 0</code> ausgedrückt.</p>
+<p>Warmstart Szenarien können beliebige Pheromonmengen auf Feldern vorbelegen. Das Feld <code>description</code> dient dazu, dass durchgeführte Experiment zu beschreiben.</p>
+<p>Wie schon oben erwähnt, wird für jede Simulation ein <code>Manager</code> instanziiert, mit der gleichen Gridwelt und Agentenkonfiguration, außer der Anzahl der Agenten, die durch die <code>spawns</code>-Konfigurationen festgelegt wird.</p>
+<hr>
+<h2 id="3-ablauf-einer-simulation-sequenzdiagramm">3. Ablauf einer Simulation (Sequenzdiagramm)</h2>
+<p><img src="ablaufsim.png" alt="ablaufsim"></p>
+<h3 id="erl%C3%A4uterung">Erläuterung</h3>
+<p><code>Parser</code> übergibt alle Konfigurationen an den <code>Manager</code>, der daraus die Gridwelt aufbaut und die Agenten spawnt.
+In jedem Takt verarbeitet der <code>Manager</code> zuerst die Aktionswarteschlange aus der Vorperiode indem er jede Aktion validiert und das Ergebnis in die Inbox des jeweiligen Agenten legt.
+Konflikte zwischen den Aktionen werden nach dem First-Come-First-Serve Prinzip aufgelöst.
+Anschließend erfolgen Pheromonverdunstung, Todeskontrolle und Energieauffrischung für alle Ant-Agenten, die sich beim Nest oder bei einem Nahrungsfeld befinden. Zu guter Letzt triggert der Manager sequenziell jeden lebenden <code>Agent i</code>, sodass dieser seinen Sense-Reason-Act-Zyklus durchführt.
+<code>Agent i</code> liest seine Wahrnehmung (inklusive Inbox-Feedback), entscheidet probabilistisch und stellt die nächste Aktion in die Warteschlange. Somit wird die in Zyklus /k/ von <code>Agent i</code> beschlossene Aktion erst in Zyklus /k+1/ von dem <code>Manager</code> ausgeführt (oder als ungültig zurückgewiesen).
+Der <code>Logger</code> erhält nach jedem Takt eine Zusammenfassung.</p>
+<hr>
+<h2 id="4-logging">4. Logging</h2>
+<p>Geloggt wird im jsonl-format (eine json-Zeile pro Ereignis). Folgende Ereignisse werden erfasst:</p>
+<ol>
+<li><code>food_found</code>: zeittakt, agent-id, position der nahrungsquelle (&quot;Ant Agent hat Nahrung aufgenommen&quot;)</li>
+<li><code>food_delivered</code>: zeittakt, agent-id, ursprungsposition der nahrung (&quot;Ant Agent hat Nahrung im Nest abgelegt&quot;)</li>
+<li><code>agent_death</code>: zeittakt, agent-id, letzte position (&quot;Ant Agent ist gestorben&quot;)</li>
+<li><code>tick_summary</code>: zeittakt, anzahl lebender agenten, gesamtnahrung im nest, anzahl nahrungssucher, anzahl nahrungsträger (&quot;Ein Zeittakt ist vorbei&quot;)</li>
+</ol>
+<hr>
+<h2 id="5-forschungsfrage">5. Forschungsfrage</h2>
+<p><em>Sind wenige Ameisen mit höherer Maximalenergie effizienter in der Ausbeutung der Nahrungsquellen als eine größere Anzahl an Ameisen mit geringerer Maximalenergie?</em></p>
+<p>Für jedes Experiment wird ein <code>Grid</code> mit der Größe 20x20 erzeugt und das Nest in der Mitte, auf dem Feld (10,10), platziert.
+Um zu berücksichtigen, dass mehr Ameisen, mehr Futter tragen können, sind die Futterquellen jeweils so groß wie die Ameisenkolonie.
+Die 3 Simulationen pro Experiment unterscheiden sich ausschließlich in der Anzahl der Ameisen und in dem maximalen Energievorrat jeder Ameise (und der aus der Anzahl der Ameisen abgeleiteten Größe einer Futterquelle).</p>
+<ol>
+<li>Simulation: 5 Ameisen mit einem maximalen Energievorrat von 160</li>
+<li>Simulation: 10 Ameisen mit einem maximalen Energievorrat von 80</li>
+<li>Simulation: 40 Ameisen mit einem maximalen Energievorrat von 20</li>
+</ol>
+<blockquote>
+<p>Info: Ameisen haben einen Energievorrat von mindestens 20 damit sie bei einem 20x20 Grid (wo das Nest in der Mitte platziert ist) potentiel eine Futterquelle in einem Eckfeld findenkönnen.</p>
+</blockquote>
+<p><strong>Experiment 1:</strong>
+Es gibt keine Hindernisse und 4 Futterquellen werden per Zufall auf dem Grid platziert.</p>
+<p><strong>Experiment 2:</strong>
+Es gibt feste Positionen für 4 Futterquellen und es werden 4 Hindernisse zufällig auf dem Grid platziert.</p>
+<p><strong>Experiment 3:</strong>
+Es gibt keine Hindernisse und 10 Futterquellen werden per Zufall auf dem Grid platziert.</p>
+<p>Zwischen den Simulationen wird die benötigte Zeit zur kompletten Ausbeutung der Futterquellen verglichen.</p>
+
+</body>
+</html>

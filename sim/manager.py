@@ -31,8 +31,7 @@ class Manager:
         self._tick_summary_every_n_ticks: int = 1
 
     def load_model(self, config: dict) -> None:
-        exp = config.get("experiment", {})
-        self.max_ticks = exp.get("max_ticks", 500)
+        self.max_ticks = config.get("max_ticks", 500)
 
         for item_cfg in config.get("item_types", []):
             ic = ItemConfig(

@@ -1,12 +1,9 @@
 {
-  "_comment": "Experiment 4 - Maze: 100x100-Grid mit zentralem Nest und mehreren Nahrungsquellen hinter Labyrinthwaenden. Mehr Ameisen verbessern die parallele Suche, verursachen aber Staueffekte in schmalen Korridoren.",
-  "experiment": {
-    "id": "exp4_maze_30x30_fair_convergent",
-    "name": "Experiment 4: Maze 30x30 (Fair Convergent)",
-    "description": "Konvergenz ohne Nest-Nahe-Food: entfernte Nahrungsquellen, moderate Pheromonparameter, reduzierte Population und zwei zusaetzliche mittlere Korridor-Verbindungen.",
-    "max_ticks": 3000,
-    "warmstart": false
-  },
+  "id": "exp4_maze_30x30_fair_convergent",
+  "name": "Experiment 4: Maze 30x30 (Fair Convergent)",
+  "max_ticks": 3000,
+  "warmstart": false,
+  "description": "Konvergenz ohne Nest-Nahe-Food: entfernte Nahrungsquellen, moderate Pheromonparameter, reduzierte Population und zwei zusaetzliche mittlere Korridor-Verbindungen.",
   "item_types": [
     {
       "id": "food",

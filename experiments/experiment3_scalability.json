@@ -1,12 +1,9 @@
 {
-  "_comment": "Experiment 3 – Skalierbarkeit: 25×25-Grid mit vier Nahrungsquellen in den Ecken (je 22 Schritte Manhattan vom Nest). Jede Quelle hat 50 Einheiten. Asymmetrische Hindernismauern um das Nest erzeugen Engpässe. Vier Simulationen mit 10, 20, 30 und 39 Ameisen zeigen Chancen und Grenzen der Skalierung: Kleine Populationen (10) finden kaum Ecken in akzeptabler Zeit. Mittlere (20-30) bauen parallele Routen zu mehreren Quellen auf. Größere (39) zeigen Konkurrenz um Engpassfelder und mögliche Trail-Interferenz. Verdunstungsrate 0,04 ist bewusst moderat: Spuren brauchen regelmäßige Verstärkung, bleiben aber stabil genug für parallele Routen.",
-  "experiment": {
-    "id": "exp3_scalability",
-    "name": "Experiment 3: Skalierbarkeit – Populationsgröße vs. Nahrungsausbeute",
-    "description": "Skalierungsexperiment auf 25×25-Grid mit vier Ecknahrungsquellen (je 22 Schritte Manhattan vom Nest). Stärke: Mehr Ameisen parallelisieren die Erkundung und bauen mehrere stabile Routen gleichzeitig auf. Schwäche: Bei 39 Ameisen entstehen Engpässe an den Hindernismauern; konkurrierende Pheromonspuren interferieren miteinander. Zeigt Skalierungsvorteil bis ~30 Ameisen und Diminishing Returns darüber hinaus.",
-    "max_ticks": 1500,
-    "warmstart": false
-  },
+  "id": "exp3_scalability",
+  "name": "Experiment 3: Skalierbarkeit - Populationsgröße vs. Nahrungsausbeute",
+  "max_ticks": 1500,
+  "warmstart": false,
+  "description": "Skalierungsexperiment auf 25 x 25 Grid mit vier Ecknahrungsquellen (je 22 Schritte Manhattan vom Nest). Stärke: Mehr Ameisen parallelisieren die Erkundung und bauen mehrere stabile Routen gleichzeitig auf. Schwäche: Bei 39 Ameisen entstehen Engpässe an den Hindernismauern; konkurrierende Pheromonspuren interferieren miteinander. Zeigt Skalierungsvorteil bis ~30 Ameisen und Diminishing Returns darüber hinaus.",
   "item_types": [
     { "id": "food",           "name": "Nahrung",          "evaporation_rate": 0.0  },
     { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.04 },

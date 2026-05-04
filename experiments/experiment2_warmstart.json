@@ -1,12 +1,9 @@
 {
-  "_comment": "Experiment 2 – Warmstart: Wiederherstellung unterbrochener Pheromonspuren. 12×12-Grid, Nest bei (6,6), Nahrungsquelle bei (0,6) – direkt westlich, 6 Schritte entfernt. Die Pheromonspuren verlaufen entlang y=6 als gültige 4-Richtungs-Pfade (keine Diagonalen). Simulation 1 startet mit vollständiger Spur: Ameisen finden Nahrung sofort ab dem ersten Tick. Simulation 2 hat eine 2-Felder-Lücke bei (3,6) und (4,6): Ameisen müssen die Lücke durch Zufallserkundung schließen und die Spur wiederherstellen. Verdunstungsrate 0,05 hält die vorplatzierten Spuren ~200 Ticks aktiv, sodass Ameisen ausreichend Zeit haben, die Route zu stabilisieren oder zu reparieren.",
-  "experiment": {
-    "id": "exp2_warmstart",
-    "name": "Experiment 2: Warm Start – Wiederherstellung unterbrochener Pheromonspuren",
-    "description": "Warmstartexperiment mit vorplatzierten Pheromonspuren entlang y=6 (4-Richtungs-Pfad). Sim 1 (vollständige Spur): Ameisen bei (6,6) folgen sofort der Nahrungsspur zu (0,6) – zeigt Stärke des Warmstarts. Sim 2 (Lücke bei x=3 und x=4): Ameisen folgen der Spur bis (5,6), dann Zufallserkundung bis sie die andere Spurseite bei (2,6) finden und die Lücke schließen. Demonstriert Selbstreparatur des Ameisenalgorithmus.",
-    "max_ticks": 600,
-    "warmstart": true
-  },
+  "id": "exp2_warmstart",
+  "name": "Experiment 2: Warm Start - Wiederherstellung unterbrochener Pheromonspuren",
+  "max_ticks": 600,
+  "warmstart": true,
+  "description": "Warmstartexperiment mit vorplatzierten Pheromonspuren entlang y=6 (4-Richtungs-Pfad). Sim 1 (vollständige Spur): Ameisen bei (6,6) folgen sofort der Nahrungsspur zu (0,6) – zeigt Stärke des Warmstarts. Sim 2 (Lücke bei x=3 und x=4): Ameisen folgen der Spur bis (5,6), dann Zufallserkundung bis sie die andere Spurseite bei (2,6) finden und die Lücke schließen. Demonstriert Selbstreparatur des Ameisenalgorithmus.",
   "item_types": [
     { "id": "food",           "name": "Nahrung",          "evaporation_rate": 0.0  },
     { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.05 },
