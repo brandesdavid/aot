@@ -125,7 +125,7 @@ Hindernisse werden durch `capacity: 0` ausgedrückt.
 
 Warmstart Szenarien können beliebige Pheromonmengen auf Feldern vorbelegen. Das Feld `description` dient dazu, dass durchgeführte Experiment zu beschreiben.
 
-Wie schon oben erwähnt, wird für jede Simulation ein `Manager` instanziiert, mit der gleichen Gridwelt und Agentenkonfiguration, außer der Anzahl der Agenten, die durch die `spawns`-Konfigurationen festgelegt wird.
+Unter `simulations` werden Einstellungen des Experiments überschrieben. So können mehrere Simulationen zu einem Experiment durchgeführt werden, die sich nur in explizit aufgeführten Parametern unterscheiden. In dem obigen Beispiel unterscheiden sich die drei Simulationen des Experiments nur in der Anzahl der gespawnten Agenten.
 
 ---
 
