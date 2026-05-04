@@ -27,6 +27,8 @@ class Manager:
         self._actions_queue: list[tuple[Agent, Action]] = []
         self._total_food_delivered: int = 0
         self._visual_mode: bool = False
+        self._grid_state_every_n_ticks: int = 1
+        self._tick_summary_every_n_ticks: int = 1
 
     def load_model(self, config: dict) -> None:
         exp = config.get("experiment", {})
@@ -85,6 +87,8 @@ class Manager:
 
         log_cfg = config.get("logging", {})
         self.logger = Logger(log_cfg.get("output_file", "logs/simulation.jsonl"))
+        self._grid_state_every_n_ticks = max(1, int(log_cfg.get("grid_state_every_n_ticks", 1)))
+        self._tick_summary_every_n_ticks = max(1, int(log_cfg.get("tick_summary_every_n_ticks", 1)))
 
     def run(self) -> None:
         for tick in range(1, self.max_ticks + 1):
@@ -149,6 +153,8 @@ class Manager:
         cur.agents.remove(agent)
         target.agents.append(agent)
         agent.position = target
+        if isinstance(agent, AntAgent):
+            agent.remember_position(target.x, target.y)
         agent.energy -= 1
 
         if target.spawn_id or target.get_item_quantity("food") > 0:
@@ -256,14 +262,15 @@ class Manager:
         living = [a for a in self.agents if a.alive]
         carriers = [a for a in living if isinstance(a, AntAgent) and a.carrying is not None]
         searchers = [a for a in living if isinstance(a, AntAgent) and a.carrying is None]
-        self.logger.log_tick_summary(
-            self.tick,
-            alive_count=len(living),
-            food_at_nest=self._total_food_delivered,
-            searcher_count=len(searchers),
-            carrier_count=len(carriers),
-        )
-        if self._visual_mode:
+        if self.tick % self._tick_summary_every_n_ticks == 0:
+            self.logger.log_tick_summary(
+                self.tick,
+                alive_count=len(living),
+                food_at_nest=self._total_food_delivered,
+                searcher_count=len(searchers),
+                carrier_count=len(carriers),
+            )
+        if self._visual_mode and self.tick % self._grid_state_every_n_ticks == 0:
             self._log_grid_state()
 
     def _log_grid_state(self) -> None:

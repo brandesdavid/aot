@@ -47,6 +47,10 @@ class Parser:
     @staticmethod
     def _ensure_log_file(config: dict, sim_id: str | None) -> None:
         logging = config.setdefault("logging", {})
+        if "grid_state_every_n_ticks" not in logging:
+            logging["grid_state_every_n_ticks"] = 1
+        if "tick_summary_every_n_ticks" not in logging:
+            logging["tick_summary_every_n_ticks"] = 1
         if "output_file" not in logging:
             exp_id = config.get("experiment", {}).get("id", "sim")
             suffix = f"_{sim_id}" if sim_id else ""

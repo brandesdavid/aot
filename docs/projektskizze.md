@@ -11,7 +11,7 @@ TU Berlin - SoSe 2026 - Agententechnologien
 ### Erläuterung
 
 Der `Manager` ist die zentrale Instanz des Systems.
-Der `Manager` liest die Modelldatei für ein Experiment per `parser` ein und führt die zu dem Experiment gehörenden Simulationen durch. Die relevanten Ereignisse loggt der `Manager` mithilfe des `Logger`.
+Der `Manager` liest die Modelldatei für ein Experiment per `parser` ein und führt eine Simulation des Experimets durch. Ein `Manager` wird pro Simulation im gleichen Experimentmodelldatei instanziiert. Die relevanten Ereignisse loggt der `Manager` mithilfe des `Logger`.
 
 Ein `Grid` ist eine n x m-matrix von `field`-objekten. Koordinatenursprung (0,0) ist unten links.
 
@@ -27,6 +27,8 @@ Die `quantity` von einer `ItemInstance` mit `item_type="food"` wird durch Ant-Ag
 Es gibt lediglich zwei Pheremonentypen, Food- und Nestpheremone.
 
 Die Klasse `Agent` ist abstrakt, sodass potentiell weitere Agententypen eingeführt werden können. Die konkrete Subklasse `AntAgent` implementiert den reaktiven Ameisenalgorithmus. Die Wahrnehmung umfasst die Items auf dem eigenen Feld sowie die Pheromonwerte der direkten Nachbarfelder (4-Nachbarschaft). Die Navigation erfolgt probabilistisch: Der Agent bewegt sich mit wahrscheinlichkeit 0,8 entlang des stärksten relevanten Pheromons, sonst zufällig.
+
+Ein `AntAgent` kann nur in die Richtungen des Enums `Direction = {UP, DOWN, LEFT, RIGHT}` bewegen. Zusätzlich besitzt der Agent ein Kurzzeitgedächtnis über die zuletzt besuchten Positionen. Beim Wählen des nächsten Zugs werden Richtungen, die in diese kürzlich besuchten Positionen führen, probabilistisch benachteiligt. Dadurch werden kurze Zyklen reduziert, ohne dass eine Richtung strikt verboten wird. Das Drehen in eine andere Richtung kostet keine Energie.
 
 In einer `Action` steckt die Absicht eines Agenten. Die konkreten Subklassen der abstrakten `Action` Klasse sind: `MoveAction`, `PickupAction`, `DropAction`, `WaitAction`. Der `Manager` prüft jede Aktion auf Gültigkeit und legt das `ActionResult` in die Inbox des Agenten.
 
@@ -156,9 +158,9 @@ Geloggt wird im jsonl-format (eine json-Zeile pro Ereignis). Folgende Ereignisse
 
 ## 5. Forschungsfrage
 
-Sind wenige Ameisen mit höherer Maximalenergie effizienter in der Ausbeutung der Nahrungsquellen als eine größere Anzahl an Ameisen mit geringerer Maximalenergie?
+*Sind wenige Ameisen mit höherer Maximalenergie effizienter in der Ausbeutung der Nahrungsquellen als eine größere Anzahl an Ameisen mit geringerer Maximalenergie?*
 
-Für jedes Experiment wird ein Grid mit der Größe 20x20 erzeugt und das Nest in der Mitte, auf dem Feld (10,10), platziert.
+Für jedes Experiment wird ein `Grid` mit der Größe 20x20 erzeugt und das Nest in der Mitte, auf dem Feld (10,10), platziert.
 Um zu berücksichtigen, dass mehr Ameisen, mehr Futter tragen können, sind die Futterquellen jeweils so groß wie die Ameisenkolonie.
 Die 3 Simulationen pro Experiment unterscheiden sich ausschließlich in der Anzahl der Ameisen und in dem maximalen Energievorrat jeder Ameise (und der aus der Anzahl der Ameisen abgeleiteten Größe einer Futterquelle).
 
@@ -168,13 +170,13 @@ Die 3 Simulationen pro Experiment unterscheiden sich ausschließlich in der Anza
 
 > Info: Ameisen haben einen Energievorrat von mindestens 20 damit sie bei einem 20x20 Grid (wo das Nest in der Mitte platziert ist) potentiel eine Futterquelle in einem Eckfeld findenkönnen.
 
-Experiment 1:
+**Experiment 1:**
 Es gibt keine Hindernisse und 4 Futterquellen werden per Zufall auf dem Grid platziert.
 
-Experiment 2:
+**Experiment 2:**
 Es gibt feste Positionen für 4 Futterquellen und es werden 4 Hindernisse zufällig auf dem Grid platziert.
 
-Experiment 3:
+**Experiment 3:**
 Es gibt keine Hindernisse und 10 Futterquellen werden per Zufall auf dem Grid platziert.
 
 Zwischen den Simulationen wird die benötigte Zeit zur kompletten Ausbeutung der Futterquellen verglichen.

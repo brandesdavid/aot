@@ -438,6 +438,7 @@
 const state = {
   summaries:   {},   // tick -> { alive, food_at_nest, searchers, carriers }
   gridStates:  {},   // tick -> { w, h, fields: [], agents: [] }
+  gridTicks:   [],
   tickEvents:  {},   // tick -> [event, ...]
   maxTick:     0,
   currentTick: 1,
@@ -456,6 +457,7 @@ let cellSize   = 24;
 function parseLog(text) {
   state.summaries  = {};
   state.gridStates = {};
+  state.gridTicks  = [];
   state.tickEvents = {};
   state.maxTick    = 0;
   state.hasGrid    = false;
@@ -492,13 +494,14 @@ function parseLog(text) {
       state.tickEvents[t].push(ev);
     }
   }
+  state.gridTicks = Object.keys(state.gridStates).map(Number).sort((a, b) => a - b);
 }
 
 // ══════════════════════════════════════════════════════════════
 // Grid rendering
 // ══════════════════════════════════════════════════════════════
 function renderGrid(tick) {
-  const gs = state.gridStates[tick];
+  const gs = getGridStateForTick(tick);
   if (!gs) return;
 
   const canvas = document.getElementById('grid-canvas');
@@ -604,6 +607,26 @@ function renderGrid(tick) {
       }
     }
   }
+}
+
+function getGridStateForTick(tick) {
+  if (state.gridStates[tick]) return state.gridStates[tick];
+  const ticks = state.gridTicks;
+  if (!ticks.length) return null;
+  let left = 0;
+  let right = ticks.length - 1;
+  let idx = -1;
+  while (left <= right) {
+    const mid = (left + right) >> 1;
+    if (ticks[mid] <= tick) {
+      idx = mid;
+      left = mid + 1;
+    } else {
+      right = mid - 1;
+    }
+  }
+  if (idx < 0) return null;
+  return state.gridStates[ticks[idx]];
 }
 
 function drawAgentDot(ctx, cx, cy, r, isCarrier) {
@@ -791,7 +814,7 @@ function loadFile(file) {
     document.getElementById('viewer').style.display  = 'flex';
     document.getElementById('exp-name').textContent  = file.name;
 
-    const firstGs = state.gridStates[Object.keys(state.gridStates)[0]];
+    const firstGs = state.gridTicks.length ? state.gridStates[state.gridTicks[0]] : null;
 
     if (firstGs) {
       setupCanvas(firstGs.w, firstGs.h);
@@ -861,7 +884,7 @@ document.addEventListener('keydown', e => {
 
 window.addEventListener('resize', () => {
   if (!state.hasGrid) return;
-  const firstGs = state.gridStates[Object.keys(state.gridStates)[0]];
+  const firstGs = state.gridTicks.length ? state.gridStates[state.gridTicks[0]] : null;
   if (!firstGs) return;
   setupCanvas(firstGs.w, firstGs.h);
   renderGrid(state.currentTick);
