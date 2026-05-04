@@ -139,7 +139,7 @@ Wie schon oben erwähnt, wird für jede Simulation ein `Manager` instanziiert, m
 In jedem Takt verarbeitet der `Manager` zuerst die Aktionswarteschlange aus der Vorperiode indem er jede Aktion validiert und das Ergebnis in die Inbox des jeweiligen Agenten legt.
 Konflikte zwischen den Aktionen werden nach dem First-Come-First-Serve Prinzip aufgelöst.
 Anschließend erfolgen Pheromonverdunstung, Todeskontrolle und Energieauffrischung für alle Ant-Agenten, die sich beim Nest oder bei einem Nahrungsfeld befinden. Zu guter Letzt triggert der Manager sequenziell jeden lebenden `Agent i`, sodass dieser seinen Sense-Reason-Act-Zyklus durchführt.
-`Agent i` liest seine Wahrnehmung (inklusive Inbox-Feedback), entscheidet probabilistisch und stellt die nächste Aktion in die Warteschlange. Somit wird die in Zyklus /k/ von `Agent i` beschlossene Aktion erst in Zyklus /k+1/ von dem `Manager` ausgeführt (oder als ungültig zurückgewiesen).
+`Agent i` liest seine Wahrnehmung (inklusive Inbox-Feedback), entscheidet probabilistisch und stellt die nächste Aktion in die Warteschlange. Somit wird die in Zyklus *k* von `Agent i` beschlossene Aktion erst in Zyklus *k+1* von dem `Manager` ausgeführt (oder als ungültig zurückgewiesen).
 Der `Logger` erhält nach jedem Takt eine Zusammenfassung.
 
 ---
@@ -148,10 +148,10 @@ Der `Logger` erhält nach jedem Takt eine Zusammenfassung.
 
 Geloggt wird im jsonl-format (eine json-Zeile pro Ereignis). Folgende Ereignisse werden erfasst:
 
-1. `food_found`: zeittakt, agent-id, position der nahrungsquelle ("Ant Agent hat Nahrung aufgenommen")
-2. `food_delivered`: zeittakt, agent-id, ursprungsposition der nahrung ("Ant Agent hat Nahrung im Nest abgelegt")
-3. `agent_death`: zeittakt, agent-id, letzte position ("Ant Agent ist gestorben")
-4. `tick_summary`: zeittakt, anzahl lebender agenten, gesamtnahrung im nest, anzahl nahrungssucher, anzahl nahrungsträger ("Ein Zeittakt ist vorbei")
+1. `food_found`: Zeittakt, Agent-Id, Position der Nahrungsquelle ("Ant Agent hat Nahrung aufgenommen")
+2. `food_delivered`: Zeittakt, Agent-Id, Ursprungsposition der Nahrung ("Ant Agent hat Nahrung im Nest abgelegt")
+3. `agent_death`: Zeittakt, Agent-Id, letzte Position ("Ant Agent ist gestorben")
+4. `tick_summary`: Zeittakt, Anzahl lebender Agenten, Gesamtnahrung im Nest, Anzahl Nahrungssucher, Anzahl Nahrungsträger ("Ein Zeittakt ist vorbei")
 
 
 
@@ -169,7 +169,7 @@ Die 3 Simulationen pro Experiment unterscheiden sich ausschließlich in der Anza
 2. Simulation: 10 Ameisen mit einem maximalen Energievorrat von 80
 3. Simulation: 40 Ameisen mit einem maximalen Energievorrat von 20
 
-> Info: Ameisen haben einen Energievorrat von mindestens 20 damit sie bei einem 20x20 Grid (wo das Nest in der Mitte platziert ist) potentiel eine Futterquelle in einem Eckfeld findenkönnen.
+> Info: Ameisen haben einen Energievorrat von mindestens 20 damit sie bei einem 20x20 Grid (wo das Nest in der Mitte platziert ist) potentiel eine Futterquelle in einem Eckfeld finden können.
 
 **Experiment 1:**
 Es gibt keine Hindernisse und 4 Futterquellen werden per Zufall auf dem Grid platziert.
