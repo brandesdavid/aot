@@ -1,11 +1,10 @@
-# Projektskizze
-TU Berlin - SoSe 2026 - Agententechnologien
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 90vh; max-height: 90vh; margin: 0; padding: 0; text-align: center; box-sizing: border-box;">
+  <h1 style="margin: 0 0 0.5em 0;">Projektskizze</h1>
+  <p style="margin: 0 0 1em 0;">TU Berlin – SoSe 2026 – Agententechnologien - Gruppe 18</p>
+  <p style="margin: 0;">Moritz Clerc 498074, Carlos Driller 495897, David Brandes 495394</p>
+</div>
 
-Moritz Clerc 498074, Carlos Driller 495897, David Brandes 495394
-
----
-
-## 1. Systemdesign – Klassendiagramm
+<h2 style="page-break-before: always;">1. Systemdesign – Klassendiagramm</h2>
 
 ![klassendiag](klassendiag.png)
 
