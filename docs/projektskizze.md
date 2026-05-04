@@ -1,6 +1,8 @@
 # Projektskizze
 TU Berlin - SoSe 2026 - Agententechnologien
 
+Moritz Clerc 498074, Carlos Driller 495897, David Brandes 495394
+
 ---
 
 ## 1. Systemdesign – Klassendiagramm
@@ -11,9 +13,9 @@ TU Berlin - SoSe 2026 - Agententechnologien
 ### Erläuterung
 
 Der `Manager` ist die zentrale Instanz des Systems.
-Der `Manager` liest die Modelldatei für ein Experiment per `parser` ein und führt eine Simulation des Experimets durch. Ein `Manager` wird pro Simulation im gleichen Experimentmodelldatei instanziiert. Die relevanten Ereignisse loggt der `Manager` mithilfe des `Logger`.
+Der `Manager` liest die Modelldatei für ein Experiment per `Parser` ein und führt eine Simulation des Experimets durch. Ein `Manager` wird pro Simulation im gleichen Experimentmodelldatei instanziiert. Die relevanten Ereignisse loggt der `Manager` mithilfe des `Logger`.
 
-Ein `Grid` ist eine n x m-matrix von `field`-objekten. Koordinatenursprung (0,0) ist unten links.
+Ein `Grid` ist eine n x m-matrix von `Field`-Objekten. Koordinatenursprung (0,0) ist unten links.
 
 Ein `Field` repräsentiert eine Zelle. `capacity == 0` bedeutet Hindernis. Felder mit einer `spawn_id="nest_*"` sind Nester und frischen die Energie eines eintreffenden `AntAgent` sofort und kostenlos auf.
 
@@ -26,9 +28,9 @@ Ein `Spawn` konfiguriert, welche Agenten in welcher Anzahl erzeugt werden. Für 
 Die `quantity` von einer `ItemInstance` mit `item_type="food"` wird durch Ant-Agenten dekrementiert. Die `quantity` von einer `ItemInstance` mit `item_type="pheromone_nest"` oder `item_type="pheromone_food"` wird in jedem Zeittakt von dem `Manager` basierend auf ihrer `evaporation_rate` dekrementiert, bei Stärke 0 wird die Pheromonen-Instanz entfernt.
 Es gibt lediglich zwei Pheremonentypen, Food- und Nestpheremone.
 
-Die Klasse `Agent` ist abstrakt, sodass potentiell weitere Agententypen eingeführt werden können. Die konkrete Subklasse `AntAgent` implementiert den reaktiven Ameisenalgorithmus. Die Wahrnehmung umfasst die Items auf dem eigenen Feld sowie die Pheromonwerte der direkten Nachbarfelder (4-Nachbarschaft). Die Navigation erfolgt probabilistisch: Der Agent bewegt sich mit wahrscheinlichkeit 0,8 entlang des stärksten relevanten Pheromons, sonst zufällig.
+Die Klasse `Agent` ist abstrakt, sodass potentiell weitere Agententypen eingeführt werden können. Die konkrete Subklasse `AntAgent` implementiert den reaktiven Ameisenalgorithmus. Die Wahrnehmung umfasst die Items auf dem eigenen Feld sowie die Pheromonwerte der direkten Nachbarfelder (4-Nachbarschaft). Die Navigation erfolgt probabilistisch.
 
-Ein `AntAgent` kann nur in die Richtungen des Enums `Direction = {UP, DOWN, LEFT, RIGHT}` bewegen. Zusätzlich besitzt der Agent ein Kurzzeitgedächtnis über die zuletzt besuchten Positionen. Beim Wählen des nächsten Zugs werden Richtungen, die in diese kürzlich besuchten Positionen führen, probabilistisch benachteiligt. Dadurch werden kurze Zyklen reduziert, ohne dass eine Richtung strikt verboten wird. Das Drehen in eine andere Richtung kostet keine Energie.
+Ein `AntAgent` kann nur in die Richtungen des Enums `Direction = {UP, DOWN, LEFT, RIGHT}` bewegen. In `isFacing` wird gespeichert in welche Richtung der `AntAgent` zuletzt gegangen ist. Beim Wählen des nächsten Zugs wird die entgegengesetzte Richtung probabilistisch benachteiligt, so dass eine sinnlose Vor-und-Zurück-Bewegung unwahrscheinlicher auftritt.
 
 In einer `Action` steckt die Absicht eines Agenten. Die konkreten Subklassen der abstrakten `Action` Klasse sind: `MoveAction`, `PickupAction`, `DropAction`, `WaitAction`. Der `Manager` prüft jede Aktion auf Gültigkeit und legt das `ActionResult` in die Inbox des Agenten.
 
