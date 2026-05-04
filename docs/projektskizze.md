@@ -33,7 +33,7 @@ Ein `AntAgent` kann nur in die Richtungen des Enums `Direction = {UP, DOWN, LEFT
 
 In einer `Action` steckt die Absicht eines Agenten. Die konkreten Subklassen der abstrakten `Action` Klasse sind: `MoveAction`, `PickupAction`, `DropAction`, `WaitAction`. Der `Manager` prüft jede Aktion auf Gültigkeit und legt das `ActionResult` in die Inbox des Agenten.
 
-Der 'Parser' nimmt ein Experiment als JSON (siehe 2. Simulationsmodell) und gibt eine Liste an Simulationen zurück. Für jede Simulation wird ein `Manager` instanziiert. 
+Der `Parser` nimmt ein Experiment als JSON (siehe 2. Simulationsmodell) und gibt eine Liste an Simulationen zurück. Für jede Simulation wird ein `Manager` instanziiert. 
 
 ## 2. Simulationsmodell (json)
 
