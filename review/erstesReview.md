@@ -2,17 +2,17 @@
 
 Wir bewerten die Projektskizze unter der Annahme, dass wir noch nicht viel über die Aufgabe wissen. Das entstehende Feedback könnte eurer Gruppe helfen, für die Dokumentationen mögliche blinde Flecke in Erklärungen oder Darstellungen aufzuzeigen.
 
-Wir beschreiben zunächst eine Inkonsistents, die uns bezüglich der Pheromonmodelierung aufgefallen ist und gehen dann konkreter auf einzelne Abschnitte eurer Projektskizze ein.
+Wir beschreiben zunächst eine Inkonsistenz, die uns bezüglich der Pheromonmodelierung aufgefallen ist und gehen dann konkreter auf einzelne Abschnitte eurer Projektskizze ein.
 
 
 ## Inkonsistent in der Pheromonmodelierung
-Im Klassendiagramm und der JSON-Erklärung wird Pheromone als int modelliert, Verdunstung als Subtraktion eines festen Wertes (evaporation_amount: 1). In den Experimenten steht jedoch Evaporation: 0.02 — ein Dezimalwert, der eine multiplikative Prozentverdunstung impliziert. Beide Modelle haben sehr unterschiedliches Verhalten: Bei kleinen Pheromonmengen und fixem Abzug fällt der Wert abrupt auf 0. Bei prozentualer Verdunstung hingegen asymptotisch.
-Es sollte eine Entscheidung getroffen werden, und überall vereinheitlicht werden. Integer-Subtraktion ist wohl einfacher und deterministischer umzusetzen.
+Im Klassendiagramm und der JSON-Erklärung wird die Anzahl eines Itemtyps auf einer Cell als int modelliert, Verdunstung als Subtraktion eines festen Wertes (evaporation_amount: 1). In den Experimenten steht jedoch Evaporation: 0.02 — ein Dezimalwert, der eine bruchteilige oder multiplikative Prozentverdunstung impliziert. In beiden Fällen würde das durch den Typunterschied zu ungewolltem verhalten führen.
+Es sollte eine Entscheidung getroffen werden, und überall vereinheitlicht werden.
 
 
 ## 1. Kurzbeschreibung der Simulation
 
-Um diesen Abschnitt sinnvoller und hilfreicher, für das Verständnis von dem Projekt, zu gestalten könntet ihr darauf achten, dass die in diesem Abschnitt aufkommenden Fragen im weiteren Verlauf des Dokuments wieder aufgegriffen werden.
+Um diesen Abschnitt sinnvoller und hilfreicher für das Verständnis des Projekts zu gestalten könntet ihr darauf achten, dass die in diesem Abschnitt aufkommenden Fragen im weiteren Verlauf des Dokuments wieder aufgegriffen werden.
 Beispielsweise könnte der Satz "treffen Entscheidungen auf Basis lokaler Informationen", später genauer geklärt werden. Was zählt alles zu den lokalen Informationen eines Ant-Agents?
 
 ## 2. Hypothese
@@ -29,18 +29,17 @@ Eure Bewertung der Effizienz ist plausibel und passend.
 
 Die Agenten verändern die Welt nicht direkt, sondern senden Aktionen an den Manager. In diesem Zusammenhang wäre es hilfreich, noch einen Satz hinzuzufügen, der das Verhältnis von Inbox und Queue zueinander erläutert und auf deren Funktionsweise hinweist.
 
-- Eine Frage zur Implementierung vom Pheromon decreasing rate und dem Internen Schrittzähler, vielleicht könnte das der Implementation helfen. Hängt die Pheromonverdunstung als von einer AntAgent Instanz ab (also NUR wenn Schrittzähler um eins inkrementiert wird, dann Pheromon einmal dekrementiert)? Wie ist es eigentlich, wenn ein Ameise mehrere Pheromone abgelegt, und dann wieder zum nest geht? verdunstet dann beim resetten des schrittzählers auf 0, das pheromon nicht? 
   - Ich würde vielleicht eher empfehlen, vielleicht einfach mit dem takt die Pheromon Itemanzahl zu dekrementieren global, denn die stepsSinceFood und stepsSinceNest etwas redundant wirkt
 - "Der Manager führt Bewegung und Pheromonablage dann im selben Takt als eine einzige, legale Aktion aus."
-  - wichtig vielleicht zu beachten: wird das pheromon erst abgelegt, dann auf das nächste feld gegangen, oder erst bewegung und dann auf das neue pheromone abgelegt?
-- die manager und agenten aufteilung mit anfrage von aktion an den manager zurück zur bestätigung oder ablehnung der aktion zum agenten finde ich sehr gut aufgeteilt, das hilft besonders bei aktionskonflikten zentral im manager zu lösen
+  - wichtig vielleicht zu beachten: wird das Pheromon erst abgelegt, dann auf das nächste Feld gegangen, oder erst der Agent bewegt und dann auf das neue Feld das Pheromone abgelegt?
+- die Manager- und Agentenaufteilung mit Anfrage von Aktion an den Manager zurück zur Bestätigung oder Ablehnung der Aktion zum Agenten finden wir sehr gut aufgeteilt, das hilft besonders dabei Aktionskonflikten zentral im Manager zu lösen.
 -
 
 ## 5. JSON
 
-Für die Capacity der Felder bezüglich eurer Hypothese wäre es wichtig aufzupassen, dass ihr die Kapazität einer Zelle nicht auf 999 einschränkt, insbesondere beim Nest. Solltet ihr 1200 Ameisen möglicherweise spawnen wollen, stellt sich die Frage ob alle auf das 999 Kapazitätsfeld passen oder nicht.
+Für die Capacity der Felder bezüglich eurer Hypothese wäre es wichtig aufzupassen, dass ihr die Kapazität einer Zelle nicht auf 999 einschränkt, insbesondere beim Nest. Solltet ihr 1200 Ameisen spawnen wollen, stellt sich die Frage ob alle auf das 999 Kapazitätsfeld passen oder nicht.
 
-Wenn ihr die Nachbarschaft in dem JSON File angeben könnt, solltet ihr euch auch überlegen, ob ihr Experimente bezüglich der Nachbarschaften durchführen wollt.
+Wenn ihr die Nachbarschaft in der JSON-Datei angeben könnt, solltet ihr euch auch überlegen, ob ihr Experimente bezüglich der Nachbarschaften durchführen wollt.
 
 Wieso wird in der JSON die besonderen Felder mit einer Kapazität von 0 dargestellt? Das könnte in der Entwicklung irreführend werden, wenn das Nest oder Food als Blockade verstanden wird. wieso müssen die besonderen Felder angegeben werden? Reicht es nicht zu überprüfen, was für ein Item auf der Zelle ist und je nachdem handeln?
 
@@ -49,7 +48,7 @@ Ihr könntet in euer JSON-Schema ein neuen `simulations` key einführen, sodass 
 
 ```json
 { 
-    "agentnts": { "count": 15, ... },
+    "agents": { "count": 15, ... },
     /* Weitere generelle Experiment config */
     /* ... */
     , "simulations": [
