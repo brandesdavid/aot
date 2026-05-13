@@ -35,4 +35,3 @@ Dieser Abschnitt ist für uns überhaupt nicht verständlich. Vor allem wäre es
 Wir hoffen, dass die Anregungen zur Verbesserung der Dokumentation, der Implementierung und der Forschungsfrage helfen können.
 
 Viele Grüße
-Moritz Clerc, Carlos Driller, David Brandes

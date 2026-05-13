@@ -67,4 +67,3 @@ Der von euch definierte Gesamt-Score ergibt Sinn und kann helfen auch ohne GUI e
 Wir finden, dass die Projektskizze gut strukturiert ist und die wichtigsten Komponenten des Projekts adressiert. Wir haben einige Fragen und Anregungen zur Verbesserung der Dokumentation und der Implementierung gegeben und hoffen, dass dieses Feedback euch hilft, die Implementierung und die Forschungsfrage erweitern zu können.
 
 Viele Grüße
-Moritz Clerc, Carlos Driller, David Brandes
