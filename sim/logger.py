@@ -32,13 +32,19 @@ class Logger:
         food_at_nest: float,
         searcher_count: int,
         carrier_count: int,
+        food_sources: dict | None = None,
+        efficiency_pct: float = 0.0,
     ) -> None:
-        self._record(tick, "tick_summary", {
+        data: dict = {
             "alive": alive_count,
             "food_at_nest": food_at_nest,
+            "efficiency_pct": efficiency_pct,
             "searchers": searcher_count,
             "carriers": carrier_count,
-        })
+        }
+        if food_sources:
+            data["food_sources"] = food_sources
+        self._record(tick, "tick_summary", data)
 
     def log_grid_state(self, tick: int, width: int, height: int, fields: list, agents: list) -> None:
         self._record(tick, "grid_state", {"w": width, "h": height, "fields": fields, "agents": agents})

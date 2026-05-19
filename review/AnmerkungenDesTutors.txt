@@ -1,0 +1,3 @@
+überlegen Sie sich ihrer Simulation einen Seed für ihren Zufallsgenerator hinzuzufügen. Das erhöht die Reproduzierbarkeit ihres Experiments.
+Zur Forscungsfrage:
+Woran Messen sie die "Effizienz in der Ausbeutung der Nahrungsquellen"? Insbesondere mit verschieden großen Nahrungsquellen für verschiedene Koloniegrößen ist die Gesammte gesammelte Nahrung vermutich keine gute Metrik.

@@ -26,11 +26,17 @@ class Manager:
         self.logger: Optional[Logger] = None
         self._actions_queue: list[tuple[Agent, Action]] = []
         self._total_food_delivered: int = 0
+        self._food_source_positions: list[tuple[int, int]] = []
         self._visual_mode: bool = False
         self._grid_state_every_n_ticks: int = 1
         self._tick_summary_every_n_ticks: int = 1
+        self._initial_food_total: float = 0.0
 
     def load_model(self, config: dict) -> None:
+        seed = config.get("seed")
+        if seed is not None:
+            random.seed(seed)
+
         self.max_ticks = config.get("max_ticks", 500)
 
         for item_cfg in config.get("item_types", []):
@@ -73,8 +79,17 @@ class Manager:
             if "spawn_id" in field_cfg:
                 f.spawn_id = field_cfg["spawn_id"]
                 self.nest_positions[field_cfg["spawn_id"]] = (x, y)
+            has_food = False
             for item_cfg in field_cfg.get("items", []):
                 f.add_item(item_cfg["item_type_id"], item_cfg["quantity"])
+                if item_cfg["item_type_id"] == "food":
+                    has_food = True
+            if has_food:
+                self._food_source_positions.append((x, y))
+
+        self._initial_food_total = sum(
+            f.get_item_quantity("food") for f in self.grid.get_all_fields()
+        )
 
         for spawn_id, spawn in self.spawns.items():
             nest_pos = self.nest_positions.get(spawn_id)
@@ -147,7 +162,9 @@ class Manager:
 
         if isinstance(agent, AntAgent):
             pheromone_type = "pheromone_food" if agent.carrying else "pheromone_nest"
-            cur.add_item(pheromone_type, agent.pheromone_drop_amount)
+            drop = max(0.5, agent.pheromone_drop_amount * (0.97 ** agent._steps_since_event))
+            cur.add_item(pheromone_type, drop)
+            agent._steps_since_event += 1
 
         cur.agents.remove(agent)
         target.agents.append(agent)
@@ -174,6 +191,7 @@ class Manager:
                 return ActionResult(success=False, action=action, message="already carrying")
             field.remove_item(action.item_type, action.quantity)
             agent.carrying = action.item_type
+            agent._steps_since_event = 0
             if self.logger:
                 self.logger.log_food_found(self.tick, agent.id, field.x, field.y)
         agent.energy -= 1
@@ -188,6 +206,7 @@ class Manager:
         source = agent._last_food_source
         field.add_item(action.item_type, action.quantity)
         agent.carrying = None
+        agent._steps_since_event = 0
         agent.energy -= 1
         if field.spawn_id:
             self._total_food_delivered += 1
@@ -262,12 +281,22 @@ class Manager:
         carriers = [a for a in living if isinstance(a, AntAgent) and a.carrying is not None]
         searchers = [a for a in living if isinstance(a, AntAgent) and a.carrying is None]
         if self.tick % self._tick_summary_every_n_ticks == 0:
+            food_sources = {}
+            for x, y in self._food_source_positions:
+                f = self.grid.get_field(x, y)
+                if f is not None:
+                    food_sources[f"{x},{y}"] = round(f.get_item_quantity("food"), 2)
+            efficiency_pct = round(
+                self._total_food_delivered / self._initial_food_total * 100, 1
+            ) if self._initial_food_total > 0 else 0.0
             self.logger.log_tick_summary(
                 self.tick,
                 alive_count=len(living),
                 food_at_nest=self._total_food_delivered,
                 searcher_count=len(searchers),
                 carrier_count=len(carriers),
+                food_sources=food_sources,
+                efficiency_pct=efficiency_pct,
             )
         if self._visual_mode and self.tick % self._grid_state_every_n_ticks == 0:
             self._log_grid_state()

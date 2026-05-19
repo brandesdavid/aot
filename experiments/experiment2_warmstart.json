@@ -3,11 +3,12 @@
   "name": "Experiment 2: Warm Start - Wiederherstellung unterbrochener Pheromonspuren",
   "max_ticks": 600,
   "warmstart": true,
+  "seed": 42,
   "description": "Warmstartexperiment mit vorplatzierten Pheromonspuren entlang y=6 (4-Richtungs-Pfad). Sim 1 (vollständige Spur): Ameisen bei (6,6) folgen sofort der Nahrungsspur zu (0,6) – zeigt Stärke des Warmstarts. Sim 2 (Lücke bei x=3 und x=4): Ameisen folgen der Spur bis (5,6), dann Zufallserkundung bis sie die andere Spurseite bei (2,6) finden und die Lücke schließen. Demonstriert Selbstreparatur des Ameisenalgorithmus.",
   "item_types": [
     { "id": "food",           "name": "Nahrung",          "evaporation_rate": 0.0  },
-    { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.05 },
-    { "id": "pheromone_food", "name": "Nahrung-Pheromon", "evaporation_rate": 0.05 }
+    { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.04 },
+    { "id": "pheromone_food", "name": "Nahrung-Pheromon", "evaporation_rate": 0.04 }
   ],
   "agent_types": [
     {

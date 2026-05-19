@@ -14,7 +14,7 @@ def main() -> None:
         print("  --visual  Log full grid state per tick (required for visualizer.html)")
         sys.exit(1)
 
-    configs = Parser.load(pos_args[0])
+    configs = Parser.load(pos_args[0], visual_mode=visual_mode)
     head = configs[0] if configs else {}
     mode_label = " [visual mode]" if visual_mode else ""
     print(f"Experiment: {head.get('name', 'Unnamed')} ({len(configs)} simulation(s)){mode_label}\n")

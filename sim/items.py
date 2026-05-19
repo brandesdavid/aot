@@ -14,5 +14,5 @@ class ItemInstance:
     quantity: float
 
     def evaporate(self, rate: float) -> bool:
-        self.quantity = max(0.0, self.quantity - rate)
-        return self.quantity <= 0.0
+        self.quantity = max(0.0, self.quantity * (1.0 - rate))
+        return self.quantity < 0.001

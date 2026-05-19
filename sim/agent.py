@@ -51,6 +51,7 @@ class AntAgent(Agent):
         self._perception: dict = {}
         self._recent_positions: deque[tuple[int, int]] = deque(maxlen=8)
         self._trail: list[tuple[int, int]] = []
+        self._steps_since_event: int = 0
 
     def sense(self, perception: dict) -> None:
         self._perception = perception

@@ -1,0 +1,202 @@
+@startuml systemdesign
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam ArrowColor #555555
+skinparam ClassBorderColor #444444
+skinparam NoteBackgroundColor #FFFDE7
+skinparam NoteBorderColor #BDBDBD
+
+title Systemdesign - Ameisensimulation (AOT SoSe 2026, Gruppe 18)
+
+'--- Infrastruktur ---
+
+class Parser {
+  +load(filepath, visual_mode): list
+  -resolve_simulations(raw, visual_mode): list
+  -deep_merge(base, override): dict
+  -ensure_log_file(config, sim_id, visual_mode)
+}
+
+class Manager {
+  +grid: Grid
+  +agents: list
+  +tick: int
+  +max_ticks: int
+  +logger: Logger
+  -_initial_food_total: float
+  -_food_source_positions: list
+  -_total_food_delivered: int
+  --
+  +load_model(config: dict)
+  +run()
+  -trigger_agents()
+  -process_actions()
+  -apply_action(agent, action): ActionResult
+  -evaporate_pheromones()
+  -check_deaths()
+  -refresh_energy_at_special_fields()
+  -build_perception(agent): dict
+  -log_tick_summary()
+}
+
+class Logger {
+  +output_file: str
+  --
+  +log_food_found(tick, agent_id, x, y)
+  +log_food_delivered(tick, agent_id, src_x, src_y)
+  +log_agent_death(tick, agent_id, x, y)
+  +log_tick_summary(tick, alive, food_at_nest,
+    searchers, carriers, food_sources, efficiency_pct)
+  +save()
+}
+
+note right of Logger
+  Ausgabe: JSONL
+  Normal:  logs/
+  Visual:  logs/visual/
+end note
+
+'--- Gridwelt ---
+
+class Grid {
+  +width: int
+  +height: int
+  +fields: dict
+  --
+  +get_field(x, y): Field
+  +get_neighbors(x, y): list
+  +in_bounds(x, y): bool
+  +get_all_fields(): list
+}
+
+class Field {
+  +x: int
+  +y: int
+  +capacity: int
+  +items: list
+  +agents: list
+  +spawn_id: str
+  --
+  +is_obstacle(): bool
+  +is_full(): bool
+  +get_pheromone_strength(type): float
+  +get_item_quantity(type): float
+  +add_item(type, quantity)
+  +remove_item(type, quantity): bool
+}
+
+note bottom of Field
+  capacity = -1 -> unbegrenzt (Nest)
+  capacity =  0 -> Hindernis
+  capacity =  5 -> Standard
+end note
+
+class ItemInstance {
+  +item_type: str
+  +quantity: float
+  --
+  +evaporate(rate): bool
+}
+
+note right of ItemInstance
+  Verdunstung multiplikativ:
+  quantity = quantity * (1 - rate)
+  Veraltete Spuren verschwinden
+  exponentiell (~60 Ticks bei rate=0.05)
+end note
+
+class Spawn {
+  +id: str
+  +agent_spawn_configs: list
+  --
+  +create_agents(type_configs, field): list
+}
+
+'--- Agenten & Aktionen ---
+
+abstract class Agent {
+  +id: str
+  +energy: int
+  +max_energy: int
+  +position: Field
+  +inbox: list
+  +alive: bool
+  --
+  +{abstract} sense(perception: dict)
+  +{abstract} reason()
+  +{abstract} act(): Action
+}
+
+class AntAgent extends Agent {
+  +carrying: str
+  +pheromone_drop_amount: float
+  -_trail: list
+  -_recent_positions: deque
+  -_steps_since_event: int
+  --
+  +sense(perception)
+  +reason()
+  +act(): Action
+  -climb_gradient(pheromone_type, neighbors): Action
+  -backtrack_to_nest(neighbors, current): Action
+  -remember_position(x, y)
+}
+
+note right of AntAgent
+  Pheromonabgabe abnehmend:
+  drop = max(0.5, base * 0.97^steps)
+
+  Navigation probabilistisch:
+  P(f) = score(f) / Sum(score(f'))
+  score(f) = max(0.01, pheromon(f)
+             + 0.05 - penalty(f))
+
+  Anti-Backtrack via Kurzzeitgedaechtnis
+  (letzte 8 Positionen, penalty_scale=0.45)
+end note
+
+abstract class Action {
+  +agent_id: str
+}
+
+class MoveAction extends Action {
+  +dx: int
+  +dy: int
+}
+
+class PickupAction extends Action {
+  +item_type: str
+}
+
+class DropAction extends Action {
+  +item_type: str
+}
+
+class WaitAction extends Action
+
+class ActionResult {
+  +success: bool
+  +action: Action
+  +message: str
+}
+
+'--- Beziehungen ---
+
+Parser ..> Manager : liefert config
+
+Manager --> Grid
+Manager --> Logger
+Manager --> "1..*" Agent
+Manager --> "1..*" Spawn
+Manager ..> ActionResult
+
+Grid --> "1..*" Field
+Field --> "0..*" ItemInstance
+Field --> "0..*" Agent
+
+Spawn ..> AntAgent : erzeugt
+
+Agent --> Field : position
+Agent --> "0..1" Action : pending_action
+
+@enduml
