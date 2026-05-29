@@ -1,10 +1,15 @@
 @startuml systemdesign
+scale 0.5
 skinparam classAttributeIconSize 0
-skinparam classFontSize 12
+skinparam classFontSize 9
+skinparam classHeaderBackgroundColor #F5F5F5
 skinparam ArrowColor #555555
 skinparam ClassBorderColor #444444
 skinparam NoteBackgroundColor #FFFDE7
 skinparam NoteBorderColor #BDBDBD
+skinparam Padding 2
+skinparam Nodesep 30
+skinparam Ranksep 40
 
 title Systemdesign - Ameisensimulation (AOT SoSe 2026, Gruppe 18)
 
@@ -130,7 +135,6 @@ abstract class Agent {
 class AntAgent extends Agent {
   +carrying: str
   +pheromone_drop_amount: float
-  -_trail: list
   -_recent_positions: deque
   -_steps_since_event: int
   --

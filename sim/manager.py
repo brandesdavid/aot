@@ -260,6 +260,7 @@ class Manager:
                 "dy": nf.y - field.y,
                 "is_obstacle": nf.is_obstacle(),
                 "is_full": nf.is_full(),
+                "is_nest": nf.spawn_id is not None,
                 "pheromone_nest": nf.get_pheromone_strength("pheromone_nest"),
                 "pheromone_food": nf.get_pheromone_strength("pheromone_food"),
             })

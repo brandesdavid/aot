@@ -3,12 +3,12 @@
   "name": "Experiment 1: Cold Start - Grundlegende Nahrungsversorgung",
   "max_ticks": 1000,
   "warmstart": false,
-  "seed": 42,
+  "seed": 2004,
   "description": "Kaltstart ohne vorplatzierte Pheromon-Spuren. Zwei Nahrungsquellen bei (2,2) und (12,12) - je 10 Schritte Manhattan vom Nest (7,7) entfernt. Beide Quellen haben je 30 Einheiten (konstant über alle Simulationen), damit die Ausbeutungsrate zwischen den Populationsgrößen direkt vergleichbar ist. Bei kleiner Population (5 Ameisen) wird kaum Nahrung gesammelt, da Spuren zu langsam entstehen - das zeigt eine Schwäche bei geringem Ameisenbestand. Mit 10 und 20 Ameisen wird die Nahrungsversorgung zunehmend effizienter.",
   "item_types": [
     { "id": "food",           "name": "Nahrung",          "evaporation_rate": 0.0  },
-    { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.05 },
-    { "id": "pheromone_food", "name": "Nahrung-Pheromon", "evaporation_rate": 0.05 }
+    { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.013 },
+    { "id": "pheromone_food", "name": "Nahrung-Pheromon", "evaporation_rate": 0.013 }
   ],
   "agent_types": [
     {
@@ -16,7 +16,7 @@
       "name": "Ameise",
       "energy": 600,
       "perception_range": 4,
-      "pheromone_drop_amount": 10.0,
+      "pheromone_drop_amount": 22.0,
       "capacity": [
         { "item_type_id": "food",           "max": 1  },
         { "item_type_id": "pheromone_nest", "max": -1 },
@@ -68,7 +68,7 @@
           "id": "ant", "name": "Ameise",
           "energy": 300,
           "perception_range": 4,
-          "pheromone_drop_amount": 10.0,
+          "pheromone_drop_amount": 22.0,
           "capacity": [
             { "item_type_id": "food",           "max": 1  },
             { "item_type_id": "pheromone_nest", "max": -1 },
@@ -88,7 +88,7 @@
           "id": "ant", "name": "Ameise",
           "energy": 150,
           "perception_range": 4,
-          "pheromone_drop_amount": 10.0,
+          "pheromone_drop_amount": 22.0,
           "capacity": [
             { "item_type_id": "food",           "max": 1  },
             { "item_type_id": "pheromone_nest", "max": -1 },
