@@ -6,7 +6,45 @@
 
 <h2 style="page-break-before: always;">1. Systemdesign</h2>
 
-noch zu machen, siehe systemdesign.md
+
+## Kernkomponenten
+
+**Parser** liest eine JSON-Modelldatei ein und löst Simulationsvarianten (Override-Mechanismus) auf. Mit dem Flag `--visual` werden Logs in `logs/visual/` statt `logs/` geschrieben, sodass visuelle und reguläre Logs nie überschrieben werden.
+
+Pro Tick führt der **Manager** sequenziell aus: Aktionen anwenden -> Energie auffüllen -> Pheromone verdunsten -> tote Agenten entfernen -> Tick loggen -> Agenten wahrnehmen/entscheiden/handeln lassen.
+
+**Field** speichert Agenten und Items (Nahrung, pheromone_nest, pheromone_food). `capacity = 0` markiert ein Hindernis; `capacity = 999` ist praktisch unbegrenzt (Nest). Pheromone sind reguläre Items mit `evaporation_rate > 0`.
+
+**ItemInstance** verwendet **multiplikative Verdunstung** (`quantity *= 1 − rate`): veraltete Spuren verschwinden exponentiell in ~60 Ticks, aktive Spuren stabilisieren sich auf einem Gleichgewichtswert.
+
+---
+
+## Navigationslogik
+
+Der `AntAgent` setzt den reaktiven Ameisenalgorithmus mit folgenden Designentscheidungen um:
+
+1. **4-Nachbarschaft:** Jedes Feld hat vier Nachbarfelder (oben, unten, links, rechts).
+2. **Probabilistische Navigation:** Die Wahrscheinlichkeit, ein Nachbarfeld zu wählen, ergibt sich aus:
+
+`P(f) = score(f) / sum(score(f') für alle f')` (f' sind alle Nachbarfelder von f)
+
+wobei `score(f) = max(0.01, pheromon(f) + 0.05 − penalty(f))`. Die `penalty` bestraft zuletzt besuchte Felder, um Kurzzyklen zu vermeiden (Kurzzeitgedächtnis der letzten 8 Positionen).
+
+3. **Anti-Backtrack:** Die entgegengesetzte Richtung zum letzten Schritt wird durch die Penalty-Logik probabilistisch benachteiligt.
+4. **Kapazität -1:** Im Kapazitäts-Array eines Agenten steht `"max": -1` für "keine Obergrenze". Diese Konvention betrifft ausschließlich Pheromon-Items, da Ameisen beliebig viel Pheromon ablegen dürfen.
+
+---
+
+## Logging & Effizienzmetrik
+
+Jedes `tick_summary`-Event enthält die absolut gelieferten Einheiten (`food_at_nest`), die normalisierte Effizienz in Prozent (`food_at_nest / initial_total × 100`), die Restmenge pro Quelle sowie den Koloniezustand (lebende Ameisen, Träger, Sucher).
+
+`efficiency_pct` ist die primäre Metrik zur Beantwortung der Forschungsfrage, da sie unabhängig von der absoluten Quellgröße ist.
+
+---
+## Änderungen gegenüber der Projektskizze
+
+Die Pheromonabgabe ist statt eines konstanten Werts nun abnehmend (`base × 0.97^steps`), und die Verdunstung wurde von linear (`quantity − rate`) auf multiplikativ (`quantity × (1−rate)`) umgestellt. Das in der Skizze vorgesehene explizite `isFacing`-Richtungsfeld entfiel zugunsten einer impliziten Penalty auf zuletzt besuchte Positionen. Das Logging wurde um `food_sources` und `efficiency_pct` pro Tick erweitert, und Log-Pfade werden je nach Modus getrennt in `logs/` bzw. `logs/visual/` geschrieben. Für Reproduzierbarkeit wurde ein fester Seed eingeführt. In Experiment 1 sind die Energiewerte nicht mehr gleich, sondern so gesetzt, dass n×E=3000 konstant bleibt (5→600, 10→300, 20→150).
 
 ---
 
@@ -206,7 +244,7 @@ In *Experiment 1* sollten Exploiter früher zum Nest liefern, weil sie Informati
 
 ### Begründung der Wahl
 
-Ein zentraler oder globaler Wissenszustand -- etwa ein Nest-Register aller bekannten Quellen, das jede Ameise abfragen könnte -- wäre potenziell effizienter, weil Information sofort und für alle verfügbar wäre. Trotzdem haben wir uns gegen diesen Weg entschieden.
+Ein zentraler oder globaler Wissenszustand, etwa ein Nest-Register aller bekannten Quellen, das jede Ameise abfragen könnte -- wäre potenziell effizienter, weil Information sofort und für alle verfügbar wäre. Trotzdem haben wir uns gegen diesen Weg entschieden.
 Entscheidend für die gewählte Brokering-Variante ist, dass sie den Fokus auf lokaler Wahrnehmung behält. Exploiter orientieren sich weiterhin an dem, was sie am aktuellen Feld und in der Nachbarschaft sehen -- Pheromone, Nest, Nahrung -- und erhalten Recommendations nur im direkten Kontakt mit einem Explorer auf demselben Feld. Explorer teilen ebenfalls nur Wissen aus eigener Erfahrung mit; niemand liest einen gemeinsamen Weltzustand aus.
 
 Aufgrund dem Fokus auf die lokale Wahrnehmung sind die Informationsasymmetrien groß: Exploiter wissen nicht warum ein Explorer eine gewisse Futterquelle empfiehlt. Explorer wiederrum wissen nicht, ob Exploiter tatsächlich der Recommendation folgen. Auch wissen alle Ameisen nicht, ob an der empfohlenen Stelle noch Futter liegt.
