@@ -379,6 +379,7 @@
         <div class="stat-row"><span class="stat-label">Sucher</span><span class="stat-value" id="s-searchers">&#8211;</span></div>
         <div class="stat-row"><span class="stat-label">Tr&#228;ger</span><span class="stat-value" id="s-carriers">&#8211;</span></div>
         <div class="stat-row"><span class="stat-label">Nahrung im Nest</span><span class="stat-value" id="s-food">&#8211;</span></div>
+        <div class="stat-row"><span class="stat-label">Effizienz</span><span class="stat-value" id="s-efficiency">&#8211;</span></div>
       </div>
 
       <div class="divider"></div>
@@ -486,6 +487,7 @@ function parseLog(text) {
       state.summaries[t] = {
         alive: ev.alive,
         food_at_nest: ev.food_at_nest,
+        efficiency_pct: ev.efficiency_pct,
         searchers: ev.searchers,
         carriers: ev.carriers,
       };
@@ -716,10 +718,11 @@ function renderChart() {
 // ══════════════════════════════════════════════════════════════
 function updateStats(tick) {
   const s = state.summaries[tick];
-  document.getElementById('s-alive').textContent     = s ? s.alive         : '\u2013';
-  document.getElementById('s-searchers').textContent = s ? s.searchers      : '\u2013';
-  document.getElementById('s-carriers').textContent  = s ? s.carriers       : '\u2013';
-  document.getElementById('s-food').textContent      = s ? s.food_at_nest   : '\u2013';
+  document.getElementById('s-alive').textContent      = s ? s.alive                                   : '\u2013';
+  document.getElementById('s-searchers').textContent  = s ? s.searchers                               : '\u2013';
+  document.getElementById('s-carriers').textContent   = s ? s.carriers                                : '\u2013';
+  document.getElementById('s-food').textContent       = s ? s.food_at_nest                            : '\u2013';
+  document.getElementById('s-efficiency').textContent = s && s.efficiency_pct != null ? s.efficiency_pct.toFixed(1) + '\u202f%' : '\u2013';
 
   const evs   = state.tickEvents[tick] || [];
   const evEl  = document.getElementById('events-list');
