@@ -81,6 +81,7 @@ class AntAgent(Agent):
                 cy = current.get("y")
                 if isinstance(cx, int) and isinstance(cy, int):
                     self._trail = [(cx, cy)]
+                self._recent_positions.clear()
                 self.pending_action = DropAction(agent_id=self.id, item_type="food", quantity=1.0)
                 return
             nest_neighbor = next((n for n in neighbors if n.get("is_nest") and not n.get("is_full")), None)
@@ -92,6 +93,7 @@ class AntAgent(Agent):
 
         if has_food_here:
             self._last_food_source = (current.get("x", -1), current.get("y", -1))
+            self._recent_positions.clear()
             self.pending_action = PickupAction(agent_id=self.id, item_type="food")
             return
 
@@ -131,7 +133,7 @@ class AntAgent(Agent):
 
         recent = list(self._recent_positions)
         penalty = {}
-        decay = 0.7
+        decay = 0.8
         for i, pos in enumerate(reversed(recent)):
             penalty[pos] = max(penalty.get(pos, 0), decay ** i)
 
