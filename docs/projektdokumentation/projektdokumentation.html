@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>projektdokumentation.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 90vh; max-height: 90vh; margin: 0; padding: 0; text-align: center; box-sizing: border-box;">
+  <h1 style="margin: 0 0 0.5em 0;">Projektdokumentation</h1>
+  <p style="margin: 0 0 1em 0;">TU Berlin – SoSe 2026 – Agententechnologien - Gruppe 18</p>
+  <p style="margin: 0;">Moritz Clerc 498074, Carlos Driller 495897, David Brandes 495394</p>
+</div>
+<h2 style="page-break-before: always;">1. Systemdesign</h2>
+<h2 id="kernkomponenten">Kernkomponenten</h2>
+<p><strong>Parser</strong> liest eine JSON-Modelldatei ein und löst Simulationsvarianten (Override-Mechanismus) auf. Mit dem Flag <code>--visual</code> werden Logs in <code>logs/visual/</code> statt <code>logs/</code> geschrieben, sodass visuelle und reguläre Logs nie überschrieben werden.</p>
+<p>Pro Tick führt der <strong>Manager</strong> sequenziell aus: Aktionen anwenden -&gt; Energie auffüllen -&gt; Pheromone verdunsten -&gt; tote Agenten entfernen -&gt; Tick loggen -&gt; Agenten wahrnehmen/entscheiden/handeln lassen.</p>
+<p><strong>Field</strong> speichert Agenten und Items (Nahrung, pheromone_nest, pheromone_food). <code>capacity = 0</code> markiert ein Hindernis; <code>capacity = 999</code> ist praktisch unbegrenzt (Nest). Pheromone sind reguläre Items mit <code>evaporation_rate &gt; 0</code>.</p>
+<p><strong>ItemInstance</strong> verwendet <strong>multiplikative Verdunstung</strong> (<code>quantity *= 1 − rate</code>): veraltete Spuren verschwinden exponentiell in ~60 Ticks, aktive Spuren stabilisieren sich auf einem Gleichgewichtswert.</p>
+<hr>
+<h2 id="navigationslogik">Navigationslogik</h2>
+<p>Der <code>AntAgent</code> setzt den reaktiven Ameisenalgorithmus mit folgenden Designentscheidungen um:</p>
+<ol>
+<li><strong>4-Nachbarschaft:</strong> Jedes Feld hat vier Nachbarfelder (oben, unten, links, rechts).</li>
+<li><strong>Probabilistische Navigation:</strong> Die Wahrscheinlichkeit, ein Nachbarfeld zu wählen, ergibt sich aus:</li>
+</ol>
+<p><code>P(f) = score(f) / sum(score(f') für alle f')</code> (f' sind alle Nachbarfelder von f)</p>
+<p>wobei <code>score(f) = max(0.01, pheromon(f) + 0.05 − penalty(f))</code>. Die <code>penalty</code> bestraft zuletzt besuchte Felder, um Kurzzyklen zu vermeiden (Kurzzeitgedächtnis der letzten 12 Positionen).</p>
+<ol start="3">
+<li><strong>Anti-Backtrack:</strong> Die entgegengesetzte Richtung zum letzten Schritt wird durch die Penalty-Logik probabilistisch benachteiligt.</li>
+<li><strong>Kapazität -1:</strong> Im Kapazitäts-Array eines Agenten steht <code>&quot;max&quot;: -1</code> für &quot;keine Obergrenze&quot;. Diese Konvention betrifft ausschließlich Pheromon-Items, da Ameisen beliebig viel Pheromon ablegen dürfen.</li>
+</ol>
+<hr>
+<h2 id="logging--effizienzmetrik">Logging &amp; Effizienzmetrik</h2>
+<p>Jedes <code>tick_summary</code>-Event enthält die absolut gelieferten Einheiten (<code>food_at_nest</code>), die normalisierte Effizienz in Prozent (<code>food_at_nest / initial_total  x  100</code>), die Restmenge pro Quelle sowie den Koloniezustand (lebende Ameisen, Träger, Sucher).</p>
+<p><code>efficiency_pct</code> ist die primäre Metrik zur Beantwortung der Forschungsfrage, da sie unabhängig von der absoluten Quellgröße ist.</p>
+<hr>
+<h2 id="%C3%A4nderungen-gegen%C3%BCber-der-projektskizze">Änderungen gegenüber der Projektskizze</h2>
+<p>Die Pheromonabgabe ist statt eines konstanten Werts nun abnehmend (<code>base  x  0.97^steps</code>), und die Verdunstung wurde von linear (<code>quantity − rate</code>) auf multiplikativ (<code>quantity  x  (1−rate)</code>) umgestellt. Das in der Skizze vorgesehene explizite <code>isFacing</code>-Richtungsfeld entfiel zugunsten einer impliziten Penalty auf zuletzt besuchte Positionen. Das Logging wurde um <code>food_sources</code> und <code>efficiency_pct</code> pro Tick erweitert, und Log-Pfade werden je nach Modus getrennt in <code>logs/</code> bzw. <code>logs/visual/</code> geschrieben. Für Reproduzierbarkeit wurde ein fester Seed eingeführt. In Experiment 1 sind die Energiewerte nicht mehr gleich, sondern so gesetzt, dass n x E=3000 konstant bleibt (5 -&gt; 600, 10 -&gt; 300, 20 -&gt; 150).</p>
+<hr>
+<h2 id="2-forschungsfrage">2. Forschungsfrage</h2>
+<p><em>Sind wenige Ameisen mit höherer Maximalenergie effizienter in der Ausbeutung der Nahrungsquellen als eine größere Anzahl an Ameisen mit geringerer Maximalenergie?</em></p>
+<p><strong>Effizienz</strong> wird gemessen als Ausbeutungsrate: gelieferte Nahrungseinheiten pro Tick, sowie als Tick der vollständigen Ausbeutung aller Quellen. Damit werden sowohl die Geschwindigkeit (Zeit bis zur vollständigen Ausbeutung) als auch der absolute Ertrag (Gesamtmenge) erfasst.</p>
+<p>Um die Gesamtenergie der Kolonie konstant zu halten und einen fairen Vergleich zu ermöglichen, gilt n x E = 3000 für alle Simulationen in Experiment 1:</p>
+<table>
+<thead>
+<tr>
+<th>Simulation</th>
+<th>Ameisen</th>
+<th>Energie</th>
+<th>n x E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sim_5ants</td>
+<td>5</td>
+<td>600</td>
+<td>3000</td>
+</tr>
+<tr>
+<td>sim_10ants</td>
+<td>10</td>
+<td>300</td>
+<td>3000</td>
+</tr>
+<tr>
+<td>sim_20ants</td>
+<td>20</td>
+<td>150</td>
+<td>3000</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="3-experiment-1-nahrungsversorgung">3. Experiment 1: Nahrungsversorgung</h2>
+<h3 id="motivation">Motivation</h3>
+<p>Experiment 1 untersucht direkt die Forschungsfrage: Wie verändert sich die Ausbeutungseffizienz, wenn bei konstanter Kolonie-Gesamtenergie (n x E = 3000) die Anzahl der Ameisen variiert wird? Das Szenario startet kalt ohne vorplatzierte Pheromonspuren. Zwei Nahrungsquellen in entgegengesetzten Ecken erzeugen eine nicht-triviale Herausforderung.</p>
+<h3 id="versuchsaufbau">Versuchsaufbau</h3>
+<ul>
+<li><strong>Grid:</strong> 15 x 15, Nest bei (7,7)</li>
+<li><strong>Nahrungsquellen:</strong> (2,2) und (12,12), je 30 Einheiten (gesamt 60), je 10 Schritte Manhattan-Distanz vom Nest</li>
+<li><strong>Hindernisse:</strong> (4,5), (5,5), (6,5) sowie (8,9), (9,9), (10,9) (zwei kurze Mauern)</li>
+<li><strong>Populationen:</strong> 5 (E=600), 10 (E=300), 20 (E=150) (jeweils n x E=3000)</li>
+<li><strong>Parameter:</strong> Wahrnehmung=4, Pheromon-Abgabe=22.0, Verdunstungsrate Nest=0.013, Verdunstungsrate Nahrung=0.013, max_ticks=1000, seed=2004</li>
+</ul>
+<h3 id="simulationsverlauf">Simulationsverlauf</h3>
+<h4 id="simulation-1-5-ameisen-e600">Simulation 1: 5 Ameisen (E=600)</h4>
+<p>Erste Nahrung gefunden bei T=16. Erste Lieferung ans Nest bei T=135, also 119 Ticks nach dem Fund. Bei T=100 und T=200 sind noch 0% geliefert. Ab T=300 steigt die Effizienz auf 10.0% (6 Einheiten), bis T=500 auf 16.7%. Bei T=750 und T=1000 ist die Simulation bei 18.3% (11 Einheiten) stagniert. 2 Tiere sterben; 3 überleben. Zwischenzeitlich entstehen Routen zwischen den Nahrungsquellen, allerdings ist auffällig, dass Ameisen oft zwar Nahrung finden, aber den Weg zurück zum Nest aufgrund von schwachen Pheromonspuren nicht mehr oder nur sehr langsam bewältigen können.</p>
+<h4 id="simulation-2-10-ameisen-e300">Simulation 2: 10 Ameisen (E=300)</h4>
+<p>Erste Nahrung bei T=22, erste Lieferung bei T=51, also 84 Ticks früher als die 5-Ameisen-Kolonie. Bei T=100 sind bereits 3.3% (2 Einheiten) geliefert. Die Effizienz steigt kontinuierlich: 6.7% bei T=300, 11.7% bei T=500, 18.3% bei T=750 (11 Einheiten). Ab T=750 keine weiteren Fortschritte. 6 Ameisen sterben; 4 überleben. Hier ist ebenfalls zu beobachten, dass Nahrungsträger das Nest oft nicht mehr finden.</p>
+<h4 id="simulation-3-20-ameisen-e150">Simulation 3: 20 Ameisen (E=150)</h4>
+<p>Erste Nahrung bei T=20, erste Lieferung bei T=47, was die kürzeste Zeit zwischen Fund und Lieferung aller drei Simulationen darstellt. Die Ausbeutung steigt rasch: 8.3% bei T=100, 31.7% bei T=200, 48.3% bei T=300. Eine Nahrungsquelle wird wiederholt über eine relativ stabile Route immer wieder ausgebeutet, bis sie bei=278 leer ist - zu der anderen Nahrungsquelle existiert keine Route mehr und sie wird nicht mehr erreicht. Ab T=361 ist die Effizienz bei 50.0% (30 Einheiten) eingefroren. Alle 20 Ameisen sind ab T=512 gestorben.</p>
+<h3 id="ergebnisse">Ergebnisse</h3>
+<table>
+<thead>
+<tr>
+<th>Simulation</th>
+<th>Ameisen</th>
+<th>Energie</th>
+<th>Erste Nahrung</th>
+<th>Erste Lieferung</th>
+<th>Effizienz (T=1000)</th>
+<th>Tode</th>
+<th>Überlebende</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sim_5ants</td>
+<td>5</td>
+<td>600</td>
+<td>T=16</td>
+<td>T=135</td>
+<td>18.3% (11/60)</td>
+<td>2</td>
+<td>3/5</td>
+</tr>
+<tr>
+<td>sim_10ants</td>
+<td>10</td>
+<td>300</td>
+<td>T=22</td>
+<td>T=51</td>
+<td>18.3% (11/60)</td>
+<td>6</td>
+<td>4/10</td>
+</tr>
+<tr>
+<td>sim_20ants</td>
+<td>20</td>
+<td>150</td>
+<td>T=20</td>
+<td>T=47</td>
+<td>50.0% (30/60)</td>
+<td>20</td>
+<td>0/20</td>
+</tr>
+</tbody>
+</table>
+<p>Effizienz-Verlauf:</p>
+<table>
+<thead>
+<tr>
+<th>Tick</th>
+<th>5 Ameisen</th>
+<th>10 Ameisen</th>
+<th>20 Ameisen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T=100</td>
+<td>0.0%</td>
+<td>3.3%</td>
+<td>8.3%</td>
+</tr>
+<tr>
+<td>T=200</td>
+<td>3.3%</td>
+<td>3.3%</td>
+<td>31.7%</td>
+</tr>
+<tr>
+<td>T=300</td>
+<td>10.0%</td>
+<td>6.7%</td>
+<td>48.3%</td>
+</tr>
+<tr>
+<td>T=500</td>
+<td>16.7%</td>
+<td>11.7%</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td>T=750</td>
+<td>18.3%</td>
+<td>18.3%</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td>T=1000</td>
+<td>18.3%</td>
+<td>18.3%</td>
+<td>50.0%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="interpretation">Interpretation</h3>
+<p>Die 20-Ameisen-Kolonie liefert mit 50.0% deutlich mehr als die anderen beiden (je 18.3%), was die Forschungsfrage klar zugunsten größerer Populationen beantwortet. Der entscheidende Unterschied liegt nicht in der Erkundungsgeschwindigkeit (alle drei Kolonien finden Nahrung zwischen T=16 und T=22), sondern in der Rückkehrnavigation: 5 Ameisen brauchen 119 Ticks zwischen Fund und erster Lieferung, 10 Ameisen 29 Ticks, 20 Ameisen nur 27 Ticks. Mehr Ameisen legen mehr Pheromon pro Zeiteinheit ab, was stärkere Nest-Gradienten erzeugt und Träger schneller und zuverlässiger zurückführt.</p>
+<hr>
+<h2 id="4-experiment-2-pheromonspur-unterbrechung">4. Experiment 2: Pheromonspur-Unterbrechung</h2>
+<h3 id="motivation">Motivation</h3>
+<p>Experiment 2 untersucht die Robustheit des Algorithmus gegenüber Unterbrechungen bestehender Pheromonspuren. Durch vorplatzierte Spuren (Warmstart) wird die anfängliche Erkundungsphase übersprungen und der Effekt der Lücke isoliert messbar. Das Experiment zeigt, ob und wie schnell das System eine beschädigte Route selbst repariert.</p>
+<h3 id="versuchsaufbau">Versuchsaufbau</h3>
+<ul>
+<li><strong>Grid:</strong> 12 x 12, Nest bei (6,6)</li>
+<li><strong>Nahrungsquelle:</strong> (0,6), 30 Einheiten, 6 Schritte Manhattan vom Nest</li>
+<li><strong>Vorplatzierte Spuren:</strong> Entlang y=6 von x=0 bis x=5 sind je 10.0 Einheiten Nahrung- und Nest-Pheromon platziert</li>
+<li><strong>Lücke (Sim 2):</strong> Bei x=3 und x=4 sind keine Pheromone vorhanden</li>
+<li><strong>Hindernisse:</strong> (3,9), (4,9), (8,3), (8,4)</li>
+<li><strong>Parameter:</strong> 10 Ameisen, E=200, Wahrnehmung=4, Pheromon-Abgabe=22.0, Verdunstungsrate Nest=0.013, Verdunstungsrate Nahrung=0.013, max_ticks=600, seed=2004</li>
+</ul>
+<h3 id="simulationsverlauf">Simulationsverlauf</h3>
+<h4 id="simulation-1-vollst%C3%A4ndige-pheromonspur-baseline">Simulation 1: Vollständige Pheromonspur (Baseline)</h4>
+<p>Erste Nahrung bei T=10, erste Lieferung bei T=19. Die Ausbeutung steigt schnell: 60.0% bei T=100, 100.0% ab T=162. Ab T=235 sterben die Ameisen durch Energiemangel; bei T=600 sind alle 10 Ameisen tot.</p>
+<h4 id="simulation-2-unterbrochene-pheromonspur-l%C3%BCcke-bei-x34">Simulation 2: Unterbrochene Pheromonspur (Lücke bei x=3,4)</h4>
+<p>Erste Nahrung bei T=33, also 23 Ticks später als in Sim 1. Erste Lieferung bei T=58 (+39 Ticks Verzögerung). Bei T=100 sind erst 13.3% (4 Einheiten) geliefert, gegenüber 60.0% in Sim 1. Die Effizienz steigt danach stetig, als die Spur reetabliert wird: 56.7% bei T=200, 96.7% bei T=300, 100.0% ab T=406 (30 Einheiten). Die vollständige Ausbeutung wird um ~270 Ticks verzögert, aber letztlich erreicht. 9 Ameisen sterben; 1 überlebt.</p>
+<h3 id="ergebnisse">Ergebnisse</h3>
+<table>
+<thead>
+<tr>
+<th>Simulation</th>
+<th>Erste Nahrung</th>
+<th>Erste Lieferung</th>
+<th>T=100</th>
+<th>T=200</th>
+<th>T=300</th>
+<th>T=600</th>
+<th>Erschöpfung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sim_complete</td>
+<td>T=10</td>
+<td>T=19</td>
+<td>60.0%</td>
+<td>100.0%</td>
+<td>100.0%</td>
+<td>100.0%</td>
+<td>T≈200</td>
+</tr>
+<tr>
+<td>sim_gap</td>
+<td>T=33</td>
+<td>T=58</td>
+<td>13.3%</td>
+<td>56.7%</td>
+<td>96.7%</td>
+<td>100.0%</td>
+<td>T≈500</td>
+</tr>
+</tbody>
+</table>
+<h3 id="interpretation">Interpretation</h3>
+<p>Beide Simulationen erreichen 100% Ausbeutung. Der Algorithmus stellt die Route innerhalb der Laufzeit vollständig wieder her. Der Kontrast liegt in der Geschwindigkeit: Die Lücke verzögert die erste Lieferung um 39 Ticks und die vollständige Erschöpfung um ~270 Ticks. Am deutlichsten ist der Unterschied bei T=100, wo die Lücken-Simulation mit 13.3% weniger als ein Viertel der Baseline-Effizienz (60.0%) erreicht. Ab T=200 holt sie auf; bei T=300 ist der Rückstand auf 3.3 Prozentpunkte gesunken.</p>
+<p>Der Algorithmus überbrückt die Lücke durch Erkundung: Ameisen, die die Spur bis x=5 verfolgen und dort keine Pheromonspuren finden, weichen auf Nachbarfelder aus und legen bei Erfolg neue Pfade durch den leeren Bereich. Dieser Prozess dauert an, bis genug Pheromon akkumuliert ist, um stabile Rückrouten zu bilden.</p>
+<hr>
+<h2 id="5-experiment-3-skalierbarkeit">5. Experiment 3: Skalierbarkeit</h2>
+<h3 id="motivation">Motivation</h3>
+<p>Experiment 3 untersucht, wie sich die Effizienz der Kolonie mit steigender Populationsgröße auf einem deutlich größeren Grid entwickelt. Vier Nahrungsquellen in den Ecken des 25 x 25-Grids (je ~22 Schritte vom Nest) stellen hohe Anforderungen an Erkundung und Transportkapazität. Das Experiment zeigt, ab wann Skaleneffekte abnehmen und welche Mindestkoloniegröße für effektive Ausbeutung auf großen Grids erforderlich ist.</p>
+<h3 id="versuchsaufbau">Versuchsaufbau</h3>
+<ul>
+<li><strong>Grid:</strong> 25 x 25, Nest bei (12,12)</li>
+<li><strong>Nahrungsquellen:</strong> (1,1), (23,1), (1,23), (23,23), je 50 Einheiten (gesamt 200)</li>
+<li><strong>Hindernismauern:</strong> (8,10-13), (16,11-14), (11-13,8), (12-14,16), vier kurze Barrieren um das Nest</li>
+<li><strong>Populationen:</strong> 10, 20, 30, 39 Ameisen</li>
+<li><strong>Parameter:</strong> E=500, Wahrnehmung=4, Pheromon-Abgabe=50.0, Verdunstungsrate Nest=0.004, Verdunstungsrate Nahrung=0.004, max_ticks=1500, seed=2004</li>
+</ul>
+<p>Die Pheromon-Parameter weichen bewusst von Experiment 1 ab: Die minimale Manhattan-Distanz zu den Eckenquellen beträgt ~22 Schritte (mehr als doppelt so weit wie in Experiment 1). Mit den Parametern aus Experiment 1 würden die Pheromone entlang so langer Pfade zu stark abbauen, als dass Träger die Steigung zum Nest zuverlässig erkennen könnten. Die Verdunstungsrate wurde daher auf 0.004 reduziert und die Abgabemenge auf 50.0 erhöht, um ausreichend starke Gradienten über die längeren Distanzen sicherzustellen.</p>
+<h3 id="simulationsverlauf">Simulationsverlauf</h3>
+<h4 id="simulation-1-10-ameisen">Simulation 1: 10 Ameisen</h4>
+<p>Erste Nahrung bei T=150, auf dem 25 x 25-Grid dauert die Erkundungsphase mit nur 10 Ameisen länger als in Experiment 1. Erste Lieferung bei T=239. Die Effizienz bleibt durch die gesamte Simulation niedrig: 1.0% bei ca. T=300 bis ca. T=500, 2.0% ab ca. T=750. Alle 10 Ameisen sterben.</p>
+<h4 id="simulation-2-20-ameisen">Simulation 2: 20 Ameisen</h4>
+<p>Erste Nahrung bei T=44, erste Lieferung bei T=207, trotz früherer Entdeckung als bei 10 Ameisen dauert es 163 Ticks bis zur ersten Lieferung, da die Gradienten für zuverlässige Rückkehr noch zu schwach sind. Ab ca. T=500 steigt die Effizienz auf 4.0%, bis ca. T=750 auf 5.5%, bis ca. T=1000 auf 7.5%, danach keine weiteren Fortschritte. 19 Ameisen sterben, 1 überlebt.</p>
+<h4 id="simulation-3-30-ameisen">Simulation 3: 30 Ameisen</h4>
+<p>Erste Nahrung bei T=44, erste Lieferung bei T=203. Trotz identischem Erstfund-Zeitpunkt wie bei 20 Ameisen verläuft der Anstieg ähnlich: 1.5% bei T=300, 6.0% bei T=500, 8.5% bei T=750. Bis T=1000 und T=1500 sind 9.0% (18 Einheiten) geliefert. Alle 30 Ameisen sterben.</p>
+<h4 id="simulation-4-39-ameisen">Simulation 4: 39 Ameisen</h4>
+<p>Erste Nahrung bei T=46, erste Lieferung bei T=149 (hier die früheste erste Lieferung aller vier Simulationen). Ab T=300 steigt die Effizienz deutlich: 7.0% bei T=300, 11.5% bei T=500, 21.5% bei T=750, 25.0% bei T=1000, 28.0% bei T=1500 (56 Einheiten). 31 Ameisen sterben, 8 überleben. Hier ist bemerkenswert, wie in der Nähe der vier Ecknahrungsquellen, ein Pfad zur west-nördlichen Quelle entsteht. Dieser Pfad wird auch von den meisten Ameisen bevorzugt, jedoch sind in den anderen Ecknahrungsquellen zu erkennen, dass einige Ameisen auch weiterhin explorieren, an jeder anderen Ecke.</p>
+<h3 id="ergebnisse">Ergebnisse</h3>
+<table>
+<thead>
+<tr>
+<th>Simulation</th>
+<th>Erste Nahrung</th>
+<th>Erste Lieferung</th>
+<th>Effizienz (T=1500)</th>
+<th>Tode</th>
+<th>Überlebende</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sim_10ants</td>
+<td>T=150</td>
+<td>T=239</td>
+<td>2.0%  (4/200)</td>
+<td>10</td>
+<td>0/10</td>
+</tr>
+<tr>
+<td>sim_20ants</td>
+<td>T=44</td>
+<td>T=207</td>
+<td>7.5%  (15/200)</td>
+<td>19</td>
+<td>1/20</td>
+</tr>
+<tr>
+<td>sim_30ants</td>
+<td>T=44</td>
+<td>T=203</td>
+<td>9.0%  (18/200)</td>
+<td>30</td>
+<td>0/30</td>
+</tr>
+<tr>
+<td>sim_39ants</td>
+<td>T=46</td>
+<td>T=149</td>
+<td>28.0% (56/200)</td>
+<td>31</td>
+<td>8/39</td>
+</tr>
+</tbody>
+</table>
+<p>Effizienz-Verlauf:</p>
+<table>
+<thead>
+<tr>
+<th>Tick</th>
+<th>10 Ameisen</th>
+<th>20 Ameisen</th>
+<th>30 Ameisen</th>
+<th>39 Ameisen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T=300</td>
+<td>1.0%</td>
+<td>1.5%</td>
+<td>1.5%</td>
+<td>7.0%</td>
+</tr>
+<tr>
+<td>T=500</td>
+<td>1.0%</td>
+<td>4.0%</td>
+<td>6.0%</td>
+<td>11.5%</td>
+</tr>
+<tr>
+<td>T=750</td>
+<td>1.5%</td>
+<td>5.5%</td>
+<td>8.5%</td>
+<td>21.5%</td>
+</tr>
+<tr>
+<td>T=1000</td>
+<td>2.0%</td>
+<td>7.5%</td>
+<td>9.0%</td>
+<td>25.0%</td>
+</tr>
+<tr>
+<td>T=1500</td>
+<td>2.0%</td>
+<td>7.5%</td>
+<td>9.0%</td>
+<td>28.0%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="interpretation">Interpretation</h3>
+<p>Die Effizienz steigt monoton mit der Populationsgröße: 2.0% -&gt; 7.5% -&gt; 9.0% -&gt; 28.0%. Der Anstieg ist nicht linear, der Sprung von 30 auf 39 Ameisen (+19 Prozentpunkte) ist deutlich größer als von 10 auf 20 (+5.5) oder 20 auf 30 (+1.5). Das deutet auf eine kritische Schwelle hin: Erst ab ~39 Ameisen entstehen auf dem 25 x 25-Grid schnell genug starke Gradienten für eine stabile Transportroute.</p>
+<p>Aufschlussreich ist der Vergleich der ersten Lieferung: 10 Ameisen liefern erst bei T=239, 39 Ameisen bei T=149. Obwohl 20 und 30 Ameisen ihre Nahrung zum selben Zeitpunkt finden (T=44), liefern sie erst bei T=207 bzw. T=203. Das ist ein Zeichen dafür, dass bei diesen Populationsgrößen auf dem großen Grid zu wenig Pheromon pro Zeiteinheit abgelegt wird, um zuverlässige Rückrouten früh zu etablieren.</p>
+<p>Bezogen auf die Forschungsfrage bestätigt Experiment 3 die Tendenz aus Experiment 1: Mehr Ameisen liefern mehr Nahrung. Die nichtlineare Skalierung zeigt zusätzlich, dass auf großen Grids eine Mindest-Populationsgröße erforderlich ist, unterhalb derer keine stabile Ausbeutung entsteht.</p>
+<p>Bemerkenswert ist dabei das Verhalten bei 39 Ameisen, was schon oben beschrieben wurde. Während die meisten Ameisen sich auf die west-nördliche Nahrung konzentrieren und dort eine dominante Transportroute aufbauen, erkunden einzelne Ameisen weiterhin die anderen Ecken. Dieses spontane Aufteilen in Ausbeutung und Exploration entsteht alleine durch die Pheromonverstärkung der ersten stabilen Route und könnte dem System zusätzliche Robustheit verleihen. Für kleinere Populationen fehlt diese Redundanz, denn sie reichen nicht aus, um gleichzeitig eine stabile Route zu betreiben und neue Quellen zu erkunden.</p>
+<hr>
+<h2 id="6-zusammenfassung-und-ausblick">6. Zusammenfassung und Ausblick</h2>
+<p>Alle drei Experimente zeigen konsistent, dass größere Ameisenkolonien (bei gleicher oder pro-Kopf geringerer Energie) mehr Nahrung liefern als kleinere. In Experiment 1 liefern 5 und 10 Ameisen je 18.3%, während 20 Ameisen 50.0% erreichen; der Unterschied liegt nicht in der Erkundung (erste Nahrung bei T=16-22), sondern in der Rückkehrgeschwindigkeit: 5 Ameisen brauchen 119 Ticks bis zur ersten Lieferung, 20 Ameisen nur 27. In Experiment 2 überbrücken die Ameisen eine vollständige Spurunterbrechung durch Erkundung und erreichen trotz einer Verzögerung von ~300 Ticks am Ende ebenfalls 100% Ausbeutung. In Experiment 3 zeigt sich auf dem 25 x 25-Grid eine nichtlineare Skalierung (2.0% -&gt; 7.5% -&gt; 9.0% -&gt; 28.0%), die auf eine kritische Mindest-Populationsgröße für stabile Gradientenbildung über lange Distanzen hinweist. Die Forschungsfrage ist damit klar zu beantworten: <em>Mehr Ameisen mit geringerer individueller Energie sind effizienter</em>, solange die Pheromondichten für zuverlässige Rücknavigation ausreichen.</p>
+<p>Als sinnvolle Anschlussuntersuchungen bieten sich an: dynamische Hindernisse oder sich verändernde Nahrungsquellen zur Beobachtung von Adaption, mehrere Nester mit geteilter Pheromon-Infrastruktur, alternative Verdunstungsstrategien (z.B. distanzabhängige Raten), sowie eine quantitative Auswertung der Brokering-Variante im Direktvergleich mit der Basis-Implementierung auf denselben Experimentkonfigurationen.</p>
+<hr>
+<h2 id="7-brokering-variante">7. Brokering-Variante</h2>
+<p>Für eine effizientere Ausbeutung der Nahrungsquellen schlagen wir eine Arbeitsaufteilung vor: Explorer erkunden, Exploiter transportieren Nahrung zum Nest. Nahrungsquellen werden zu Item-Agenten (Diensterbringer), die auf einem Feld liegen und bei Kontakt Nahrung bereitstellen, das Aufsammeln von Nahrung wird dadurch zu einer Agenteninteraktion.</p>
+<p>Die Rollen Exploiter und Explorer unterscheiden sich in der Navigation. Exploiter weichen nur mit geringer Wahrscheinlichkeit von Pheromonspuren ab, weil sie nicht erkunden, sondern bekannte Wege zu Nest und Quellen nutzen sollen. Explorer weichen hingegen häufig ab, um neue Futterquellen zu finden.</p>
+<p>Explorer transportieren keine Nahrung. Beim Fund einer Quelle speichern sie deren Lage als relativen Vektor (pro Schritt mit der eigenen Bewegung mitgeführt), wie lange der Fund zurückliegt und wie groß die Quelle beim Fund war. Treffen sich Explorer und Exploiter auf demselben Feld, kann der Explorer den Exploiter fragen wo eine Futterquelle ist. Der Explorer gibt dem Exploiter eine Recommendation mit der Richtung zur Futterquelle. Welche Quelle der Explorer empfiehlt, hängt von seiner Erinnerung ab: War beim Fund noch viel Nahrung übrig, wurde die Futterquelle erst vor wenigen Zeittakten gefunden und liegt in der Nähe? So wird diese Quelle sehr wahrscheinlich genannt. Exploiter dürfen Empfehlungen von den Explorern ignorieren und sich ausschließlich an der Pheromonspur orientieren.</p>
+<h3 id="erwartete-ver%C3%A4nderungen-im-systemverhalten">Erwartete Veränderungen im Systemverhalten</h3>
+<p>In <em>Experiment 1</em> sollten Exploiter früher zum Nest liefern, weil sie Informationen über gefundene Futterquellen untereinander propagieren. Vorallem können sich die Explorer auf das Suchen von Nahrung konzentrieren und nicht zwischen Nahrungs- und Nestsuche hin und her wechseln. Besonders bei kleinen Populationen profitiert die Kolonie von Explorern, die Suchwissen bündeln. In <em>Experiment 2</em> können Explorer eine Orientierung geben wenn aufgrund fehlender Pheromonspur Orientierung fehlt. Die Ausbeutung sollte schneller wieder anlaufen. In <em>Experiment 3</em> werden die Nachteile, dieser dezentralen Brokering Variante offensichtlich: Explorer und Exploiter treffen sich selten auf großen Grids und die Empfehlungen über die Position von Futterquellen sind häufig veraltet.</p>
+<h3 id="begr%C3%BCndung-der-wahl">Begründung der Wahl</h3>
+<p>Ein zentraler oder globaler Wissenszustand, etwa ein Nest-Register aller bekannten Quellen, das jede Ameise abfragen könnte (wäre potenziell effizienter), weil Information sofort und für alle verfügbar wäre. Trotzdem haben wir uns gegen diesen Weg entschieden.
+Entscheidend für die gewählte Brokering-Variante ist, dass sie den Fokus auf lokaler Wahrnehmung behält. Exploiter orientieren sich weiterhin an dem, was sie am aktuellen Feld und in der Nachbarschaft sehen, Pheromone, Nest, Nahrung, und erhalten Recommendations nur im direkten Kontakt mit einem Explorer auf demselben Feld. Explorer teilen ebenfalls nur Wissen aus eigener Erfahrung mit; niemand liest einen gemeinsamen Weltzustand aus.</p>
+<p>Aufgrund dem Fokus auf die lokale Wahrnehmung sind die Informationsasymmetrien groß: Exploiter wissen nicht warum ein Explorer eine gewisse Futterquelle empfiehlt. Explorer wiederrum wissen nicht, ob Exploiter tatsächlich der Recommendation folgen. Auch wissen alle Ameisen nicht, ob an der empfohlenen Stelle noch Futter liegt.</p>
+<p>Wir haben uns für die Recommendation Brokering-Variante entschieden, da sie uns realistisch erscheint und gleichzeitig, wie unter <em>Erwartete Veränderungen im Systemverhalten aufgeführt</em>, begründet erwarten dürfen, dass die Effizienz der Futterausbeutung steigt.</p>
+
+</body>
+</html>

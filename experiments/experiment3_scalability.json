@@ -3,12 +3,12 @@
   "name": "Experiment 3: Skalierbarkeit - Populationsgröße vs. Nahrungsausbeute",
   "max_ticks": 1500,
   "warmstart": false,
-  "seed": 42,
+  "seed": 2004,
   "description": "Skalierungsexperiment auf 25 x 25 Grid mit vier Ecknahrungsquellen (je 22 Schritte Manhattan vom Nest). Stärke: Mehr Ameisen parallelisieren die Erkundung und bauen mehrere stabile Routen gleichzeitig auf. Schwäche: Bei 39 Ameisen entstehen Engpässe an den Hindernismauern; konkurrierende Pheromonspuren interferieren miteinander. Zeigt Skalierungsvorteil bis ~30 Ameisen und Diminishing Returns darüber hinaus.",
   "item_types": [
     { "id": "food",           "name": "Nahrung",          "evaporation_rate": 0.0  },
-    { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.03 },
-    { "id": "pheromone_food", "name": "Nahrung-Pheromon", "evaporation_rate": 0.03 }
+    { "id": "pheromone_nest", "name": "Nest-Pheromon",    "evaporation_rate": 0.004 },
+    { "id": "pheromone_food", "name": "Nahrung-Pheromon", "evaporation_rate": 0.004 }
   ],
   "agent_types": [
     {
@@ -16,7 +16,7 @@
       "name": "Ameise",
       "energy": 500,
       "perception_range": 4,
-      "pheromone_drop_amount": 12.0,
+      "pheromone_drop_amount": 50.0,
       "capacity": [
         { "item_type_id": "food",           "max": 1  },
         { "item_type_id": "pheromone_nest", "max": -1 },

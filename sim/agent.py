@@ -49,7 +49,7 @@ class AntAgent(Agent):
         self.capacity_config: list = capacity_config or []
         self._last_food_source: Optional[tuple[int, int]] = None
         self._perception: dict = {}
-        self._recent_positions: deque[tuple[int, int]] = deque(maxlen=8)
+        self._recent_positions: deque[tuple[int, int]] = deque(maxlen=12)
         self._trail: list[tuple[int, int]] = []
         self._steps_since_event: int = 0
 
@@ -81,17 +81,19 @@ class AntAgent(Agent):
                 cy = current.get("y")
                 if isinstance(cx, int) and isinstance(cy, int):
                     self._trail = [(cx, cy)]
+                self._recent_positions.clear()
                 self.pending_action = DropAction(agent_id=self.id, item_type="food", quantity=1.0)
                 return
-            backtrack_action = self._backtrack_to_nest(neighbors, current)
-            if backtrack_action is not None:
-                self.pending_action = backtrack_action
+            nest_neighbor = next((n for n in neighbors if n.get("is_nest") and not n.get("is_full")), None)
+            if nest_neighbor is not None:
+                self.pending_action = MoveAction(agent_id=self.id, dx=nest_neighbor["dx"], dy=nest_neighbor["dy"])
                 return
-            self.pending_action = self._climb_gradient("pheromone_nest", neighbors, deterministic=True)
+            self.pending_action = self._climb_gradient("pheromone_nest", neighbors, deterministic=False)
             return
 
         if has_food_here:
             self._last_food_source = (current.get("x", -1), current.get("y", -1))
+            self._recent_positions.clear()
             self.pending_action = PickupAction(agent_id=self.id, item_type="food")
             return
 
@@ -131,11 +133,12 @@ class AntAgent(Agent):
 
         recent = list(self._recent_positions)
         penalty = {}
+        decay = 0.8
         for i, pos in enumerate(reversed(recent)):
-            penalty[pos] = max(penalty.get(pos, 0), len(recent) - i)
+            penalty[pos] = max(penalty.get(pos, 0), decay ** i)
 
         scored = []
-        penalty_scale = 0.0 if pheromone_type == "pheromone_nest" else 0.45
+        penalty_scale = 5.0
         for n in candidates:
             if not isinstance(cx, int) or not isinstance(cy, int):
                 target = None
@@ -163,23 +166,3 @@ class AntAgent(Agent):
 
         return MoveAction(agent_id=self.id, dx=chosen["dx"], dy=chosen["dy"])
 
-    def _backtrack_to_nest(self, neighbors: list, current: dict) -> Optional[Action]:
-        from .actions import MoveAction
-        cx = current.get("x")
-        cy = current.get("y")
-        if not isinstance(cx, int) or not isinstance(cy, int):
-            return None
-
-        while self._trail and self._trail[-1] == (cx, cy):
-            self._trail.pop()
-        if not self._trail:
-            return None
-
-        tx, ty = self._trail[-1]
-        for n in neighbors:
-            if n.get("is_obstacle", True) or n.get("is_full", False):
-                continue
-            if cx + n.get("dx", 0) == tx and cy + n.get("dy", 0) == ty:
-                self._trail.pop()
-                return MoveAction(agent_id=self.id, dx=n["dx"], dy=n["dy"])
-        return None
