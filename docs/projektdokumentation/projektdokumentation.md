@@ -38,45 +38,46 @@ Experiment 1 untersucht direkt die Forschungsfrage: Wie verändert sich die Ausb
 - **Nahrungsquellen:** (2,2) und (12,12), je 30 Einheiten (gesamt 60), je 10 Schritte Manhattan-Distanz vom Nest
 - **Hindernisse:** (4,5), (5,5), (6,5) sowie (8,9), (9,9), (10,9) — zwei kurze Mauern
 - **Populationen:** 5 (E=600), 10 (E=300), 20 (E=150) — jeweils n×E=3000
-- **Parameter:** Wahrnehmung=4, Pheromon-Abgabe=10.0, Verdunstungsrate=0.05, max_ticks=1000, seed=42
+- **Parameter:** Wahrnehmung=4, Pheromon-Abgabe=20.0, Verdunstungsrate=0.015, max_ticks=1000, seed=2004
 
 ### Simulationsverlauf
 
 #### Simulation 1: 5 Ameisen (E=600)
 
-Die Kolonie findet die erste Nahrungsquelle bei T=42 und liefert erstmals bei T=83 ans Nest. Der Aufbau stabiler Pheromonspuren geht langsam vonstatten: Bei T=100 sind erst 1.7% der Nahrung geliefert. Es festigt sich zu keinem Zeitpunkt eine effiziente Route. Durch die geringe Ameisenanzahl bauen sich die Spuren nur schwach, verpuffen schnell wieder, und Ameisen bewegen sich wenig Zielstrebig zur Nahrung. Zwischen T=500 und T=750 beschleunigt sich die Ausbeutung merklich auf 23.3%, Ein Tier stirbt; Insgesamt werden bis T=1000 insgesamt 18 Einheiten am Nest abgeliefert(30%).
+Die erste Nahrungsquelle wird bei T=16 gefunden. Die erste Lieferung ans Nest erfolgt erst bei T=223 — 207 Ticks nach dem Fund. Bei T=100 und T=200 sind noch 0% der Nahrung geliefert; der erste Eintrag erscheint erst bei T=300 mit 1.7% (1 Einheit). Bis T=500 steigt die Effizienz auf 8.3% (5 Einheiten) und stagniert dort bis zum Ende der Simulation. 3 Tiere sterben; 2 überleben bis T=1000.
 
 #### Simulation 2: 10 Ameisen (E=300)
 
-Die erste Nahrung wird bei T=24 entdeckt, die erste Lieferung erfolgt bei T=47, also deutlich früher als mit 5 Ameisen. Das Doppelte an Suchern führt zu schnellerem Spuraufbau und gleichmäßigerem Anstieg: 6.7% bei T=100, 16.7% bei T=250, 30% bei T=500, 38.3% bei T=750, 55% bei T=1000. Die Effizienz steigt nahezu linear über den gesamten Simulationszeitraum. 5 Tiere sterben; die überlebenden 5 sind bei T=1000 noch aktiv im Transport (2 Träger).
+Die erste Nahrung wird bei T=22 gefunden, die erste Lieferung erfolgt bei T=51 — deutlich früher als bei 5 Ameisen. Bei T=100 sind bereits 6.7% (4 Einheiten) geliefert. Die Effizienz steigt gleichmäßig: 15.0% bei T=300, 18.3% bei T=500, 25.0% bei T=1000 (15 Einheiten). 7 Tiere sterben; 3 überleben.
 
 #### Simulation 3: 20 Ameisen (E=150)
 
-Die erste Nahrung wird bereits bei T=16 gefunden, die erste Lieferung erfolgt bei T=31, was den schnellste Start aller drei Simulationen darstellt. Die hohe Ameisenanzahl ermöglicht einen schnellen Spuraufbau, sodass bei T=100 bereits 23.3% und bei T=250 43.3% der Nahrung erbeutet wurde. Allerdings reicht die Energie von E=150 bei 10 Schritten Weglänge kaum für mehrere vollständige Runden: Zwischen T=250 und T=500 sterben die meisten Tiere (von 13 auf 3 Überlebende). Ab T=500 stagniert die Ausbeutung bei 55–60%, da kaum noch lebende Träger vorhanden sind. Bis T=1000 überlebt nur 1 Tier; insgesamt werden 36 Einheiten (60%) geliefert.
+Die erste Nahrung wird bei T=20 gefunden, die erste Lieferung bei T=47. Der Anstieg ist der schnellste aller drei Simulationen: 6.7% bei T=100, 20.0% bei T=200, 28.3% bei T=300. Ab T=500 verlangsamt sich die Ausbeutung (40.0%) — die meisten Tiere sind zu diesem Zeitpunkt gestorben. Die Simulation endet bei T=1000 mit 43.3% (26 Einheiten). 19 Tiere sterben; 1 überlebt.
 
 ### Ergebnisse
 
 | Simulation | Ameisen | Energie | Erste Lieferung | Effizienz (T=1000) | Tode | Überlebende |
 |---|---|---|---|---|---|---|
-| sim_5ants  | 5  | 600 | T=83 | 30.0% (18/60) | 1  | 4/5  |
-| sim_10ants | 10 | 300 | T=47 | 55.0% (33/60) | 5  | 5/10 |
-| sim_20ants | 20 | 150 | T=31 | 60.0% (36/60) | 19 | 1/20 |
+| sim_5ants  | 5  | 600 | T=223 | 8.3%  (5/60)  | 3  | 2/5  |
+| sim_10ants | 10 | 300 | T=51  | 25.0% (15/60) | 7  | 3/10 |
+| sim_20ants | 20 | 150 | T=47  | 43.3% (26/60) | 19 | 1/20 |
 
 Effizienz-Verlauf:
 
-| Tick | 5 Ameisen | 10 Ameisen | 20 Ameisen |
+| Tick   | 5 Ameisen | 10 Ameisen | 20 Ameisen |
 |---|---|---|---|
-| T=100  | 1.7%  | 6.7%  | 23.3% |
-| T=250  | 8.3%  | 16.7% | 43.3% |
-| T=500  | 10.0% | 30.0% | 55.0% |
-| T=750  | 23.3% | 38.3% | 60.0% |
-| T=1000 | 30.0% | 55.0% | 60.0% |
+| T=100  | 0.0%  | 6.7%  | 6.7%  |
+| T=200  | 0.0%  | 8.3%  | 20.0% |
+| T=300  | 1.7%  | 15.0% | 28.3% |
+| T=500  | 8.3%  | 18.3% | 40.0% |
+| T=750  | 8.3%  | 21.7% | 41.7% |
+| T=1000 | 8.3%  | 25.0% | 43.3% |
 
 ### Interpretation
 
-Mehr Ameisen führen zu einer höheren Ausbeutungseffizienz, auch wenn jede einzelne Ameise weniger Energie besitzt. Die Forschungsfrage ist damit klar zugunsten größerer Populationen zu beantworten: Größere Kolonien finden Nahrung früher (T=16 vs. T=42) und liefern mehr (60% vs. 30%) — trotz gleicher Gesamtenergie.
+Die Ergebnisse zeigen eine klare monotone Korrelation zwischen Populationsgröße und Ausbeutungseffizienz: 5 Ameisen liefern 8.3%, 10 Ameisen 25.0%, 20 Ameisen 43.3% — bei identischer Kolonie-Gesamtenergie. Die Forschungsfrage ist damit zugunsten größerer Populationen zu beantworten.
 
-Der Algorithmus skaliert gut mit der Ameisenanzahl, solange die individuelle Energie ausreicht, um Hin- und Rückweg zu bewältigen. E=150 liegt bei 10 Schritten Weglänge an der unteren Grenze: Die 20-Ameisen-Kolonie kollabiert nach dem ersten erfolgreichen Ausbeutungsschub fast vollständig. E=300 erlaubt hingegen mehrere Runden und erzeugt eine gleichmäßige, robuste Transportleistung. Der Algorithmus zeigt eine Stärke bei mittleren Populationen: 10 Ameisen liefern pro überlebendem Tier die höchste Ausbeute.
+Der entscheidende Unterschied liegt in der Geschwindigkeit der Spurenbildung. Mit 5 Ameisen dauert es bis T=223, bis die erste Einheit ans Nest gelangt — die Gradienten sind zu schwach für eine zuverlässige Rückkehr. Mit 20 Ameisen gelingt die erste Lieferung bereits bei T=47: Mehr Ameisen legen mehr Pheromon pro Zeiteinheit, wodurch Gradienten früher stark genug werden, um Träger zuverlässig zurück zum Nest zu leiten. Die hohe Sterblichkeit bei 20 Ameisen (19/20) zeigt, dass E=150 bei 10 Schritten Weglänge knapp bemessen ist — die Kolonie liefert den Großteil ihrer Beute in einem frühen Schub, bevor die Population kollabiert.
 
 ---
 
@@ -93,30 +94,30 @@ Experiment 2 untersucht die Robustheit des Algorithmus gegenüber Unterbrechunge
 - **Vorplatzierte Spuren:** Entlang y=6 von x=0 bis x=5 sind je 10.0 Einheiten Nahrung- und Nest-Pheromon platziert
 - **Lücke (Sim 2):** Bei x=3 und x=4 sind keine Pheromone vorhanden
 - **Hindernisse:** (3,9), (4,9), (8,3), (8,4)
-- **Parameter:** 10 Ameisen, E=200, Wahrnehmung=4, Verdunstungsrate=0.04, max_ticks=600, seed=42
+- **Parameter:** 10 Ameisen, E=200, Wahrnehmung=4, Pheromon-Abgabe=20.0, Verdunstungsrate=0.015, max_ticks=600, seed=2004
 
 ### Simulationsverlauf
 
 #### Simulation 1: Vollständige Pheromonspur (Baseline)
 
-Die vorplatzierte Spur entfaltet sofort ihre Wirkung: Bereits bei T=10 tragen 2 Ameisen Nahrung. Die erste Lieferung erfolgt bei T=19. Die Kolonie folgt der vorhandenen Route ohne Erkundungsaufwand und steigert die Effizienz gleichmäßig: 26.7% bei T=50, 43.3% bei T=100, 76.7% bei T=200. Die vollständige Ausbeutung aller 30 Einheiten (100%) ist bei T=255 erreicht. Danach setzt das Absterben durch Energiemangel ein — bei T=600 sind noch 4 von 10 Ameisen am Leben.
+Die erste Nahrung wird bei T=10 gefunden, die erste Lieferung erfolgt bei T=19. Die Ausbeutung steigt rasch: 60.0% bei T=100, 100% bei T=200. Alle 30 Einheiten sind spätestens bei T=200 geliefert. Ab diesem Punkt sterben die Tiere durch Energiemangel; bei T=600 sind alle 10 Ameisen tot.
 
 #### Simulation 2: Unterbrochene Pheromonspur (Lücke bei x=3,4)
 
-Die Ameisen folgen der Spur bis x=5, treffen bei x=3 und x=4 auf keine Pheromonspuren und wechseln in die Zufallserkundung. Die erste Nahrung wird dennoch bei T=15 gefunden (5 Ticks später als in Sim 1), die erste Lieferung bei T=28 (9 Ticks Verzögerung). Der entscheidende Unterschied zeigt sich im Aufbau: Bei T=50 sind erst 3 Einheiten geliefert (10%), gegenüber 8 (26.7%) in Sim 1. Die Lücke wird schrittweise überbrückt, indem Ameisen, die die Quelle über Umwege finden, neue Pheromonspuren durch den leeren Bereich legen. Die Effizienz steigt langsam: 26.7% bei T=100, 30% bei T=200, 66.7% bei T=400. Bis T=600 werden 25 von 30 Einheiten (83.3%) geliefert; die Quelle bleibt unvollständig geleert.
+Die erste Nahrung wird bei T=33 gefunden — 23 Ticks später als in Sim 1. Die erste Lieferung folgt bei T=64 (+45 Ticks Verzögerung). Der Unterschied ist bei T=100 am deutlichsten: nur 13.3% (4 Einheiten) gegenüber 60.0% in Sim 1. Die Kolonie überbrückt die Lücke durch Erkundung und baut neue Pheromonpfade auf: 53.3% bei T=200, 96.7% bei T=300, 100% bei T=500. Die vollständige Ausbeutung aller 30 Einheiten wird damit um ca. 300 Ticks verzögert, aber letztlich erreicht. 9 Tiere sterben; 1 überlebt.
 
 ### Ergebnisse
 
-| Simulation | Erste Lieferung | Effizienz (T=100) | Effizienz (T=200) | Effizienz (T=600) | Erschöpfung |
-|---|---|---|---|---|---|
-| sim_complete | T=19 | 43.3% | 76.7% | 100.0% | T=255 |
-| sim_gap      | T=28 | 26.7% | 30.0% | 83.3%  | nicht erreicht |
+| Simulation | Erste Lieferung | T=100 | T=200 | T=300 | T=600 | Erschöpfung |
+|---|---|---|---|---|---|---|
+| sim_complete | T=19 | 60.0% | 100.0% | 100.0% | 100.0% | T≈200 |
+| sim_gap      | T=64 | 13.3% | 53.3%  | 96.7%  | 100.0% | T≈500 |
 
 ### Interpretation
 
-Der Algorithmus zeigt eine begrenzte Selbstreparaturfähigkeit: Die Lücke wird durch Zufallserkundung überbrückt, aber erheblich langsamer als im Idealfall. Die kritische Schwäche liegt im Zeitraum T=100–T=200: In Sim 2 stagniert die Effizienz bei 30%, während Sim 1 bereits 76.7% erreicht. Die Verdunstungsrate von 0.04 lässt die vorplatzierten Spuren in der Lückenumgebung schnell schwächer werden, ohne dass ausreichend neue Spuren aufgebaut werden. Das Experiment zeigt, dass der Algorithmus robust genug ist, um eine Spur prinzipiell wiederherzustellen, aber bei begrenztem Zeithorizont deutliche Effizienzeinbußen hinnimmt.
+Beide Simulationen erreichen letztlich 100% Ausbeutung — der Algorithmus zeigt vollständige Selbstheilungsfähigkeit bei gegebener Laufzeit. Der Kontrast liegt in der Geschwindigkeit: Die Lücke verschiebt den Zeitpunkt der ersten Lieferung um 45 Ticks und verzögert die vollständige Erschöpfung um rund 300 Ticks. Am prägnantesten ist der Unterschied bei T=100, wo die Lücken-Simulation mit 13.3% knapp ein Viertel der Baseline-Effizienz (60.0%) erreicht.
 
-Im Kontext der Forschungsfrage ist relevant, dass eine größere Population (mehr Ameisen) die Spurlücke schneller schließen würde: Mehr zufällig erkundende Tiere erhöhen die Wahrscheinlichkeit, den Überbrückungspfad früh zu entdecken und durch Pheromonabgabe zu verstärken. Wenige Ameisen mit hoher Energie dagegen erkunden seltener alternative Wege, da sie bevorzugt etablierten Spuren folgen. Robustheit gegenüber Spurunterbrechungen ist damit ein weiterer Vorteil größerer Kolonien.
+Der Algorithmus überbrückt die Lücke durch probabilistische Erkundung: Ameisen, die die Spur bis x=5 verfolgen und dort die Lücke antreffen, erkunden benachbarte Felder und legen bei Erfolg neue Pheromonpfade durch den leeren Bereich. Dieser Prozess braucht Zeit, gelingt aber zuverlässig. Im Kontext der Forschungsfrage zeigt das Experiment, dass Spurrobustheit von der Koloniegröße abhängt: Mehr Ameisen würden die Lücke schneller überbrücken, da mehr Erkundungspfade parallel getestet werden.
 
 ---
 
@@ -124,7 +125,7 @@ Im Kontext der Forschungsfrage ist relevant, dass eine größere Population (meh
 
 ### Motivation
 
-Experiment 3 untersucht, wie sich die Effizienz der Kolonie mit steigender Populationsgröße auf einem deutlich größeren Grid entwickelt. Vier Nahrungsquellen in den Ecken des 25×25-Grids (je ~22 Schritte vom Nest) stellen hohe Anforderungen an Erkundung und Transportkapazität. Das Experiment zeigt, ab wann Diminishing Returns einsetzen und ob die Kolonie bei sehr großen Populationen durch Engpässe an den Hindernismauern limitiert wird.
+Experiment 3 untersucht, wie sich die Effizienz der Kolonie mit steigender Populationsgröße auf einem deutlich größeren Grid entwickelt. Vier Nahrungsquellen in den Ecken des 25×25-Grids (je ~22 Schritte vom Nest) stellen hohe Anforderungen an Erkundung und Transportkapazität. Das Experiment zeigt, ab wann Skaleneffekte abnehmen und welche Mindestkoloniegröße für effektive Ausbeutung auf großen Grids erforderlich ist.
 
 ### Versuchsaufbau
 
@@ -132,60 +133,62 @@ Experiment 3 untersucht, wie sich die Effizienz der Kolonie mit steigender Popul
 - **Nahrungsquellen:** (1,1), (23,1), (1,23), (23,23), je 50 Einheiten (gesamt 200)
 - **Hindernismauern:** (8,10–13), (16,11–14), (11–13,8), (12–14,16) — vier kurze Barrieren um das Nest
 - **Populationen:** 10, 20, 30, 39 Ameisen
-- **Parameter:** E=500, Wahrnehmung=4, Pheromon-Abgabe=12.0, Verdunstungsrate=0.03, max_ticks=1500, seed=42
+- **Parameter:** E=500, Wahrnehmung=4, Pheromon-Abgabe=45.0, Verdunstungsrate=0.005, max_ticks=1500, seed=2004
+
+Die Pheromon-Parameter weichen bewusst von Experiment 1 ab: Die minimale Manhattan-Distanz zu den Eckenquellen beträgt ~22 Schritte — mehr als doppelt so weit wie in Experiment 1. Bei gleicher Verdunstungsrate würden Pheromone entlang langer Pfade so stark abbauen, dass Träger die Steigung zum Nest nicht mehr zuverlässig erkennen können. Die Verdunstungsrate wurde daher von 0.015 auf 0.005 reduziert und die Abgabemenge von 20.0 auf 45.0 erhöht, um ausreichend starke Gradienten über die längeren Distanzen sicherzustellen.
 
 ### Simulationsverlauf
 
 #### Simulation 1: 10 Ameisen
 
-Die geringe Anzahl von Suchern führt zu einer langen Erkundungsphase: Erste Nahrung bei T=66, erste Lieferung bei T=119. Der Spuraufbau ist langsam; bei T=500 sind erst 4.5% (9 Einheiten) geliefert. Die Kolonie wächst organisch in die Aufgabe hinein — bei T=1500 sind 8 von 10 Ameisen noch am Leben, da E=500 auf dem großen Grid für mehrere Runden ausreicht. Insgesamt 28 Einheiten (14%) geliefert.
+Die erste Nahrung wird erst bei T=150 gefunden — die geringe Populationsdichte auf dem 25×25-Grid führt zu einer langen Erkundungsphase. Die erste Lieferung erfolgt bei T=233. Der Anstieg bleibt moderat: 2.5% bei T=500, 5.0% bei T=1000, 5.5% bei T=1500 (11 Einheiten). 7 Tiere sterben; 3 überleben.
 
 #### Simulation 2: 20 Ameisen
 
-Trotz doppelter Ameisenanzahl fällt die erste Lieferung mit T=147 später aus als bei 10 Ameisen (T=119) — ein Hinweis auf stochastische Varianz und die Schwierigkeit, auf dem großen Grid günstige Routen zu etablieren. Ab T=750 übernimmt die Masse: 15 der 20 Träger sind aktiv im Transport. Bei T=1500 sind 47 Einheiten (23.5%) geliefert; 15 Ameisen überleben.
+Die erste Nahrung wird bei T=44 gefunden, die erste Lieferung erfolgt bei T=259 — trotz früherer Entdeckung mit 215 Ticks deutlich verzögert, da die Gradienten zunächst zu schwach für zuverlässige Rückkehr sind. Ab T=500 beschleunigt sich die Ausbeutung: 5.5% bei T=500, 8.0% bei T=750 (16 Einheiten), danach Stagnation. 19 Tiere sterben; 1 überlebt.
 
 #### Simulation 3: 30 Ameisen
 
-Die 30-Ameisen-Kolonie zeigt den besten Start: Erste Nahrung bei T=32 (frühester Fund aller Simulationen), erste Lieferung bei T=63. Die hohe Ameisenanzahl führt zu schnellem parallelen Spuraufbau in mehrere Richtungen: 9% bei T=300, 15.5% bei T=500. Ab T=750 setzen Tode ein (E=500 wird nach vielen Runden erschöpft); dennoch bleibt die Kolonie aktiv und liefert bis T=1500 insgesamt 67 Einheiten (33.5%). 18 von 30 Ameisen überleben.
+Die erste Nahrung wird bei T=44 gefunden, die erste Lieferung folgt deutlich früher als bei 20 Ameisen: T=101. Der Anstieg ist gleichmäßiger und stärker: 5.0% bei T=300, 8.5% bei T=500, 12.5% bei T=1000, 14.0% bei T=1500 (28 Einheiten). 26 Tiere sterben; 4 überleben.
 
 #### Simulation 4: 39 Ameisen
 
-Die größte Population erzielt die höchste Gesamtausbeute. Erste Nahrung bei T=52, erste Lieferung bei T=101. Bei T=300 sind bereits 22 Einheiten (11%) geliefert; der Anstieg ist steil bis T=500 (17.5%) und verlangsamt sich danach durch zunehmende Tode. Ab T=750 sterben viele Tiere (35→20 Überlebende bis T=1500). Insgesamt werden 84 Einheiten (42%) geliefert.
+Die erste Nahrung wird bei T=46 gefunden, die erste Lieferung bei T=119. Der Anstieg ist der stärkste aller vier Simulationen: 8.5% bei T=300, 15.5% bei T=500, 20.0% bei T=750, 30.5% bei T=1500 (61 Einheiten). 24 Tiere sterben; 15 überleben — die höchste Überlebensrate relativ zur Startgröße nach 30 Ameisen.
 
 ### Ergebnisse
 
 | Simulation | Erste Nahrung | Erste Lieferung | Effizienz (T=1500) | Tode | Überlebende |
 |---|---|---|---|---|---|
-| sim_10ants | T=66  | T=119 | 14.0% (28/200) | 2  | 8/10  |
-| sim_20ants | T=74  | T=147 | 23.5% (47/200) | 5  | 15/20 |
-| sim_30ants | T=32  | T=63  | 33.5% (67/200) | 12 | 18/30 |
-| sim_39ants | T=52  | T=101 | 42.0% (84/200) | 19 | 20/39 |
+| sim_10ants | T=150 | T=233 | 5.5%  (11/200) | 7  | 3/10  |
+| sim_20ants | T=44  | T=259 | 8.0%  (16/200) | 19 | 1/20  |
+| sim_30ants | T=44  | T=101 | 14.0% (28/200) | 26 | 4/30  |
+| sim_39ants | T=46  | T=119 | 30.5% (61/200) | 24 | 15/39 |
 
 Effizienz-Verlauf:
 
-| Tick  | 10 Ameisen | 20 Ameisen | 30 Ameisen | 39 Ameisen |
+| Tick   | 10 Ameisen | 20 Ameisen | 30 Ameisen | 39 Ameisen |
 |---|---|---|---|---|
-| T=300  | 2.0%  | 4.0%  | 9.0%  | 11.0% |
-| T=500  | 4.5%  | 6.5%  | 15.5% | 17.5% |
-| T=750  | 8.0%  | 9.5%  | 21.0% | 24.5% |
-| T=1000 | 11.5% | 16.0% | 25.5% | 32.5% |
-| T=1500 | 14.0% | 23.5% | 33.5% | 42.0% |
+| T=300  | 0.5%  | 1.0%  | 5.0%  | 8.5%  |
+| T=500  | 2.5%  | 5.5%  | 8.5%  | 15.5% |
+| T=750  | 4.0%  | 8.0%  | 11.5% | 20.0% |
+| T=1000 | 5.0%  | 8.0%  | 12.5% | 25.5% |
+| T=1500 | 5.5%  | 8.0%  | 14.0% | 30.5% |
 
 ### Interpretation
 
-Die Effizienz steigt monoton mit der Populationsgröße, jedoch mit abnehmenden Zuwächsen: +9.5 Prozentpunkte von 10 auf 20 Ameisen, +10 von 20 auf 30, aber nur +8.5 von 30 auf 39. Echte Diminishing Returns zeigen sich deutlich im Verhältnis gelieferter Einheiten pro Ameise: 10 Ameisen liefern 2.8 Einheiten/Tier, 20 liefern 2.35, 30 liefern 2.23, 39 liefern 2.15.
+Die Effizienz steigt monoton mit der Populationsgröße: 5.5% → 8.0% → 14.0% → 30.5%. Der Zuwachs ist jedoch nicht linear — der Sprung von 30 auf 39 Ameisen (+16.5 Prozentpunkte) ist deutlich größer als der von 10 auf 20 (+2.5) oder 20 auf 30 (+6.0). Das legt eine kritische Schwelle nahe: Erst ab ~35–39 Ameisen baut die Kolonie auf dem 25×25-Grid schnell genug Gradienten auf, um eine selbstverstärkende Transportroutine zu etablieren. Kleinere Kolonien finden zwar Nahrung (Erstfund bei T=44–150), können aber ohne ausreichend starke Pheromonspuren keine effiziente Rückkehrroute stabilisieren.
 
-Die Hindernismauern um das Nest erzwingen Flaschenhälse, die bei großen Populationen zunehmend spürbar werden. Konkurrierende Pheromonspuren zu vier Eckenquellen können sich gegenseitig abschwächen, was den Spuraufbau verlangsamt. Das überraschend späte erste Fund-Ereignis bei 20 Ameisen (T=74 vs. T=66 bei 10 Ameisen) ist auf stochastische Pfadwahl zurückzuführen und zeigt, dass auf dem großen 25×25-Grid der Zufall der frühen Exploration eine größere Rolle spielt als auf kleineren Grids.
+Der Vergleich zwischen 20 und 30 Ameisen ist aufschlussreich: Beide finden Nahrung erstmals bei T=44, aber die erste Lieferung erfolgt bei 20 Ameisen erst T=259, bei 30 Ameisen schon T=101. Mehr parallele Sucher legen schneller genug Pheromon ab, um den Gradienten über die 22-Schritte-Distanz navigierbar zu machen.
 
-Bezogen auf die Forschungsfrage bestätigt Experiment 3 die in Experiment 1 gefundene Tendenz: Auch bei gleicher individueller Energie liefern mehr Ameisen stets mehr Nahrung. Der Skalierungsvorteil ist jedoch nicht linear — die Effizienz pro Ameise nimmt mit steigender Populationsgröße ab (2.8 → 2.15 Einheiten/Tier). Wenige Ameisen mit hoher Energie wären auf diesem Grid noch deutlich im Nachteil, da die langen Distanzen zu den Eckquellen viele Hin- und Rückwege erfordern und ein dünner Spuraufbau die Erkundung kaum parallelisiert.
+Bezogen auf die Forschungsfrage bestätigt Experiment 3 die Tendenz aus Experiment 1: Mehr Ameisen liefern auf größeren Grids mehr Nahrung. Die nichtlineare Skalierung zeigt zudem, dass auf großen Grids eine Mindest-Populationsgröße erforderlich ist, unterhalb derer keine stabile Ausbeutung entsteht.
 
 ---
 
 ## 6. Zusammenfassung und Ausblick
 
-Die Experimente zeigen, dass größere Ameisenkolonien — bei gleicher Gesamtenergie — stets effizienter Nahrung sammeln als kleinere, da parallele Erkundung schnelleren Spuraufbau ermöglicht und frühere Lieferungen erzeugt. Die Forschungsfrage ist klar zu beantworten: *Mehr Ameisen mit geringerer Energie sind effizienter*, solange die individuelle Energie ausreicht, um Hin- und Rückweg zur nächsten Quelle zu bewältigen. An dieser unteren Energiegrenze (Exp1: E=150 bei 10 Schritten Weglänge) kollabiert die Kolonie nach dem ersten Ausbeutungsschub fast vollständig. Der Algorithmus zeigt zudem begrenzte Selbstreparaturfähigkeit bei unterbrochenen Pheromonspuren (Exp2) und skaliert auf größeren Grids mit Diminishing Returns ab ~30 Ameisen (Exp3).
+Alle drei Experimente zeigen konsistent, dass größere Ameisenkolonien — bei gleicher oder pro-Kopf geringerer Energie — mehr Nahrung liefern als kleinere. In Experiment 1 steigt die Effizienz von 8.3% (5 Ameisen) über 25.0% (10 Ameisen) auf 43.3% (20 Ameisen) bei konstantem n×E=3000. In Experiment 2 überbrücken die Ameisen eine vollständige Spurunterbrechung durch Erkundung und erreichen trotz einer Verzögerung von ~300 Ticks am Ende ebenfalls 100% Ausbeutung. In Experiment 3 zeigt sich auf dem großen 25×25-Grid eine nichtlineare Skalierung (5.5% → 8% → 14% → 30.5%), die auf eine kritische Mindest-Populationsgröße für stabile Gradientenbildung über lange Distanzen hinweist. Die Forschungsfrage ist damit klar zu beantworten: *Mehr Ameisen mit geringerer individueller Energie sind effizienter*, solange die Gradienten ausreichend stark für zuverlässige Rücknavigation sind.
 
-Als sinnvolle Anschlussuntersuchungen bieten sich an: dynamische Hindernisse oder sich verändernde Nahrungsquellen zur Beobachtung von Adaption; mehrere Nester mit geteilter Pheromon-Infrastruktur; alternative Verdunstungsstrategien (z.B. kontextabhängige Raten); sowie eine quantitative Auswertung der Brokering-Variante im Direktvergleich mit der Basis-Implementierung auf denselben Experimentkonfigurationen.
+Als sinnvolle Anschlussuntersuchungen bieten sich an: dynamische Hindernisse oder sich verändernde Nahrungsquellen zur Beobachtung von Adaption; mehrere Nester mit geteilter Pheromon-Infrastruktur; alternative Verdunstungsstrategien (z.B. distanzabhängige Raten); sowie eine quantitative Auswertung der Brokering-Variante im Direktvergleich mit der Basis-Implementierung auf denselben Experimentkonfigurationen.
 
 ---
 
